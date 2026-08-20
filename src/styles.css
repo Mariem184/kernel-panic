@@ -93,7 +93,19 @@ body {
   font-family: var(--font-arabic);
 }
 
-[dir="rtl"] .hero-actions,
+/* Brand Logos ALWAYS maintain exact LTR order (Icon + KERNEL + PANIC) */
+.brand-logo,
+.footer-logo,
+.brand-name,
+.brand-title,
+.brand-tag,
+.brand-subtitle,
+.logo-text,
+.est-badge {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+}
+
 [dir="rtl"] .footer-links li a:hover {
   transform: translateX(-3px);
 }

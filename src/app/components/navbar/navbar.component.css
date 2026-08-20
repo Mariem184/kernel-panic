@@ -32,14 +32,17 @@
   margin: 0 auto;
 }
 
-/* Brand Logo pushed to the far left */
+/* Brand Logo (Strict LTR Lockup regardless of language) */
 .brand-logo {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   align-items: center;
   gap: 12px;
   text-decoration: none;
   user-select: none;
   flex-shrink: 0;
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
 }
 
 .logo-mark {
@@ -56,10 +59,13 @@
 }
 
 .logo-text {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
   justify-content: center;
   gap: 3px;
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate !important;
 }
 
 .brand-name {
@@ -67,9 +73,12 @@
   font-weight: 800;
   letter-spacing: -0.01em;
   line-height: 1.1;
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   gap: 5px;
   margin: 0;
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
 }
 
 .brand-dark { color: var(--dark-navy); }
@@ -82,6 +91,8 @@
   color: var(--text-muted);
   line-height: 1;
   margin-top: 1px;
+  direction: ltr !important;
+  text-align: left !important;
 }
 
 /* Nav Menu Centered with generous spacing */

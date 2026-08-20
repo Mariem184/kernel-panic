@@ -19,12 +19,15 @@
   flex-direction: column;
 }
 
-/* Significantly Enlarged KP Logo Image Mark */
+/* Significantly Enlarged KP Logo Image Mark (Always LTR) */
 .footer-logo {
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   align-items: center;
   gap: 16px;
   margin-bottom: 1.5rem;
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
 }
 
 .logo-mark {
@@ -42,19 +45,25 @@
 }
 
 .logo-text {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
   justify-content: center;
   gap: 4px;
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate !important;
 }
 
 .brand-name {
   font-size: 1.625rem;
   font-weight: 800;
   line-height: 1.1;
-  display: flex;
+  display: flex !important;
+  flex-direction: row !important;
   gap: 6px;
   margin: 0;
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
 }
 
 .brand-dark { color: var(--dark-navy); }
@@ -67,6 +76,8 @@
   color: var(--text-muted);
   line-height: 1;
   margin: 0;
+  direction: ltr !important;
+  text-align: left !important;
 }
 
 .footer-motto {
