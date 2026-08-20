@@ -28,7 +28,7 @@
   height: 100%;
 }
 
-/* Brand Logo perfectly aligned in height and vertically centered */
+/* Brand Logo perfectly centered */
 .brand-logo {
   display: flex;
   align-items: center;
@@ -41,7 +41,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 42px;
 }
 
 .brand-logo-img {
@@ -54,17 +53,17 @@
 .logo-text {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 36px;
+  justify-content: center;
+  gap: 3px;
 }
 
 .brand-name {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 800;
   letter-spacing: -0.01em;
-  line-height: 1;
+  line-height: 1.1;
   display: flex;
-  gap: 4px;
+  gap: 5px;
   margin: 0;
 }
 
@@ -72,12 +71,12 @@
 .brand-blue { color: var(--primary-blue); }
 
 .brand-tag {
-  font-size: 0.65rem;
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.24em;
   color: var(--text-muted);
   line-height: 1;
-  margin: 0;
+  margin-top: 1px;
 }
 
 /* Nav Menu */
