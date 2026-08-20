@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-footer',
@@ -9,6 +10,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './footer.component.css'
 })
 export class FooterComponent {
+  public ts = inject(TranslationService);
+
   scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }

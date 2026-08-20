@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { TranslationService } from '../../services/translation.service';
 
 interface ProblemSolutionItem {
   problem: string;
@@ -15,22 +16,24 @@ interface ProblemSolutionItem {
   styleUrl: './sound-familiar.component.css'
 })
 export class SoundFamiliarComponent {
-  items: ProblemSolutionItem[] = [
+  public ts = inject(TranslationService);
+
+  items = computed<ProblemSolutionItem[]>(() => [
     {
-      problem: 'Your systems are vulnerable.',
-      solution: 'Strengthen your cybersecurity.'
+      problem: this.ts.t('soundFamiliar.card1.title'),
+      solution: this.ts.t('soundFamiliar.card1.desc')
     },
     {
-      problem: 'Your network is slow or unreliable.',
-      solution: 'Build a stable and secure network infrastructure.'
+      problem: this.ts.t('soundFamiliar.card2.title'),
+      solution: this.ts.t('soundFamiliar.card2.desc')
     },
     {
-      problem: 'Your business needs custom software.',
-      solution: 'Develop software tailored to your workflow.'
+      problem: this.ts.t('soundFamiliar.card3.title'),
+      solution: this.ts.t('soundFamiliar.card3.desc')
     },
     {
-      problem: 'Your team needs stronger technical skills.',
-      solution: 'Train with practical, career-focused programs.'
+      problem: this.ts.t('soundFamiliar.card4.title'),
+      solution: this.ts.t('soundFamiliar.card4.desc')
     }
-  ];
+  ]);
 }

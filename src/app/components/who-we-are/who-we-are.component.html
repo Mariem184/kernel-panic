@@ -15,29 +15,25 @@
 
         <!-- Floating Egyptian Est. Badge -->
         <div class="est-badge">
-          <div class="est-tag">EST. EGYPT</div>
-          <div class="est-motto">Zero Panic. Full Control.</div>
+          <div class="est-tag">{{ ts.t('whoWeAre.badgeText') }}</div>
+          <div class="est-motto">{{ ts.t('footer.motto') }}</div>
         </div>
       </div>
     </div>
 
-    <!-- Right Side: Content & 4 Key Capability Cards -->
+    <!-- Right Side: Content & Key Capabilities -->
     <div class="content-col" appScrollReveal [revealDelay]="150">
-      <span class="section-tag">WHO WE ARE</span>
+      <span class="section-tag">{{ ts.t('whoWeAre.tag') }}</span>
       <h2 class="section-title who-title">
-        Technology That Solves Real <br class="desktop-br"/>Business Problems.
+        {{ ts.t('whoWeAre.title') }}
       </h2>
 
       <p class="who-paragraph">
-        At Kernel Panic, we transform technology into powerful solutions. Our mission is to deliver
-        innovative, secure, and reliable IT services that help businesses grow, adapt, and lead in a
-        digital world.
+        {{ ts.t('whoWeAre.desc1') }}
       </p>
 
       <p class="who-paragraph secondary">
-        We bring together technical expertise across cybersecurity, networking, software development,
-        IT infrastructure, and professional training to provide practical solutions tailored to each
-        client's needs.
+        {{ ts.t('whoWeAre.desc2') }}
       </p>
 
       <!-- 2x2 Feature Highlights -->
@@ -49,7 +45,7 @@
               <path d="m9 12 2 2 4-4"/>
             </svg>
           </div>
-          <span class="feature-text">End-to-end cybersecurity & risk reduction</span>
+          <span class="feature-text">{{ ts.t('services.item1.title') }}</span>
         </div>
 
         <div class="feature-card">
@@ -62,7 +58,7 @@
               <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
             </svg>
           </div>
-          <span class="feature-text">Reliable, scalable network infrastructure</span>
+          <span class="feature-text">{{ ts.t('services.item2.title') }}</span>
         </div>
 
         <div class="feature-card">
@@ -72,7 +68,7 @@
               <polyline points="8 6 2 12 8 18"/>
             </svg>
           </div>
-          <span class="feature-text">Custom software built around your workflow</span>
+          <span class="feature-text">{{ ts.t('services.item3.title') }}</span>
         </div>
 
         <div class="feature-card">
@@ -82,7 +78,7 @@
               <path d="M6 12v5c3 3 9 3 12 0v-5"/>
             </svg>
           </div>
-          <span class="feature-text">Practical, career-focused technical training</span>
+          <span class="feature-text">{{ ts.t('services.item5.title') }}</span>
         </div>
       </div>
     </div>

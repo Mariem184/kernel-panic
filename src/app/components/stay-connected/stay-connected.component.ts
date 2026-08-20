@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { TranslationService } from '../../services/translation.service';
 
 interface SocialLink {
   name: string;
@@ -17,6 +18,8 @@ interface SocialLink {
   styleUrl: './stay-connected.component.css'
 })
 export class StayConnectedComponent {
+  public ts = inject(TranslationService);
+
   socialLinks: SocialLink[] = [
     { 
       name: 'WhatsApp', 

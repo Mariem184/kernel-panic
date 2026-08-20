@@ -17,8 +17,8 @@
           </div>
         </div>
 
-        <div class="footer-motto">ZERO PANIC. FULL CONTROL.</div>
-        <p class="footer-subtext">Secure Technology. Reliable Infrastructure. Smarter Solutions.</p>
+        <div class="footer-motto">{{ ts.t('footer.motto') }}</div>
+        <p class="footer-subtext">{{ ts.t('footer.subtext') }}</p>
 
         <!-- Social Circle Icon Buttons -->
         <div class="footer-socials">
@@ -47,30 +47,30 @@
 
       <!-- Column 2: Company -->
       <div class="footer-col">
-        <h4 class="col-title">Company</h4>
+        <h4 class="col-title">{{ ts.t('footer.colCompany') }}</h4>
         <ul class="footer-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#why-us">Why Us</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#about">{{ ts.t('footer.linkAbout') }}</a></li>
+          <li><a href="#services">{{ ts.t('footer.linkServices') }}</a></li>
+          <li><a href="#why-us">{{ ts.t('footer.linkWhyUs') }}</a></li>
+          <li><a href="#contact">{{ ts.t('footer.linkContact') }}</a></li>
         </ul>
       </div>
 
       <!-- Column 3: Services -->
       <div class="footer-col">
-        <h4 class="col-title">Services</h4>
+        <h4 class="col-title">{{ ts.t('footer.colServices') }}</h4>
         <ul class="footer-links">
-          <li><a href="#services">Cybersecurity</a></li>
-          <li><a href="#services">Networking</a></li>
-          <li><a href="#services">Software Development</a></li>
-          <li><a href="#services">IT Infrastructure</a></li>
-          <li><a href="#services">Courses & Training</a></li>
+          <li><a href="#services">{{ ts.t('services.item1.title') }}</a></li>
+          <li><a href="#services">{{ ts.t('services.item2.title') }}</a></li>
+          <li><a href="#services">{{ ts.t('services.item3.title') }}</a></li>
+          <li><a href="#services">{{ ts.t('services.item4.title') }}</a></li>
+          <li><a href="#services">{{ ts.t('services.item5.title') }}</a></li>
         </ul>
       </div>
 
       <!-- Column 4: Connect -->
       <div class="footer-col">
-        <h4 class="col-title">Connect</h4>
+        <h4 class="col-title">{{ ts.t('footer.colConnect') }}</h4>
         <ul class="footer-links">
           <li><a href="https://wa.me/201091610085" target="_blank" rel="noopener noreferrer">WhatsApp (01091610085)</a></li>
           <li><a href="https://whatsapp.com/channel/0029VbD9n5YLikg6FPSg3f2Q" target="_blank" rel="noopener noreferrer">WhatsApp Channel</a></li>
@@ -86,11 +86,11 @@
     <!-- Footer Bottom Bar -->
     <div class="footer-bottom">
       <div class="copyright">
-        © 2026 Kernel Panic IT Team. All Rights Reserved.
+        {{ ts.t('footer.copyright') }}
       </div>
       <button class="back-to-top" (click)="scrollToTop()" aria-label="Back to top">
         <span class="arrow-up">↑</span>
-        <span>BACK TO TOP</span>
+        <span>{{ ts.t('footer.backToTop') }}</span>
       </button>
     </div>
   </div>

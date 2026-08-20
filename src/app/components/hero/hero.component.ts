@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-hero',
@@ -8,4 +9,6 @@ import { CommonModule } from '@angular/common';
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.css'
 })
-export class HeroComponent {}
+export class HeroComponent {
+  public ts = inject(TranslationService);
+}

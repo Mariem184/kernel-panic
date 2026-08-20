@@ -2,30 +2,28 @@
   <div class="container hero-container">
     <!-- Left Content -->
     <div class="hero-content">
-      <!-- Main Bold Headline with black dot after ZERO PANIC. -->
+      <!-- Main Bold Headline with translations -->
       <h1 class="hero-title">
-        <span class="title-dark">ZERO PANIC.</span>
-        <span class="title-blue">FULL CONTROL.</span>
+        <span class="title-dark">{{ ts.t('hero.titleDark') }}</span>
+        <span class="title-blue">{{ ts.t('hero.titleBlue') }}</span>
       </h1>
 
       <!-- Description -->
       <p class="hero-desc">
-        We deliver cybersecurity, networking / IT infrastructure, software
-        development, and professional training solutions designed to help
-        businesses operate smarter, safer, and more efficiently.
+        {{ ts.t('hero.desc') }}
       </p>
 
       <!-- Action Buttons -->
       <div class="hero-actions">
         <a href="#contact" class="btn btn-primary hero-btn-primary">
-          <span>Get a Free Consultation</span>
+          <span>{{ ts.t('hero.btnConsultation') }}</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
         </a>
         <a href="#services" class="btn btn-secondary hero-btn-secondary">
-          <span>Explore Our Services</span>
+          <span>{{ ts.t('hero.btnServices') }}</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <polyline points="19 12 12 19 5 12"></polyline>
@@ -35,17 +33,17 @@
 
       <!-- Tech Breadcrumb -->
       <div class="hero-breadcrumbs">
-        <span>Security</span>
+        <span>{{ ts.t('hero.crumbs.security') }}</span>
         <span class="dot">•</span>
-        <span>Networking</span>
+        <span>{{ ts.t('hero.crumbs.networking') }}</span>
         <span class="dot">•</span>
-        <span>Software</span>
+        <span>{{ ts.t('hero.crumbs.software') }}</span>
         <span class="dot">•</span>
-        <span>Infrastructure</span>
+        <span>{{ ts.t('hero.crumbs.infrastructure') }}</span>
       </div>
     </div>
 
-    <!-- Right Side Futuristic Technology Visualization (Shifted Right) -->
+    <!-- Right Side Futuristic Technology Visualization -->
     <div class="hero-visual-wrapper">
       <div class="tech-globe-container">
         <!-- Center Radial Glow -->

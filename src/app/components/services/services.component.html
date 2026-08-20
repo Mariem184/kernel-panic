@@ -2,20 +2,19 @@
   <div class="container">
     <!-- Section Header -->
     <div class="section-header" appScrollReveal>
-      <span class="section-tag">WHAT WE DO</span>
+      <span class="section-tag">{{ ts.t('services.tag') }}</span>
       <h2 class="section-title">
-        Technology Solutions Designed Around Your Needs.
+        {{ ts.t('services.title') }}
       </h2>
       <p class="section-desc">
-        From securing your systems to building software and infrastructure, we provide the
-        technical expertise your business needs to move forward.
+        {{ ts.t('services.desc') }}
       </p>
     </div>
 
     <!-- 5 Services Grid (3 top, 2 bottom centered) -->
     <div class="services-grid">
       <div 
-        *ngFor="let item of services; let i = index" 
+        *ngFor="let item of services(); let i = index" 
         class="service-card card-base"
         [class.row-2-item]="i >= 3"
         appScrollReveal

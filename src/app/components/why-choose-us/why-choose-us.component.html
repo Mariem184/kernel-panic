@@ -2,16 +2,19 @@
   <div class="container">
     <!-- Section Header -->
     <div class="section-header" appScrollReveal>
-      <span class="section-tag">WHY CHOOSE US</span>
+      <span class="section-tag">{{ ts.t('whyUs.tag') }}</span>
       <h2 class="section-title">
-        Why Businesses Choose <span class="highlight-blue">Kernel Panic</span>
+        {{ ts.t('whyUs.title') }}
       </h2>
+      <p class="section-desc">
+        {{ ts.t('whyUs.desc') }}
+      </p>
     </div>
 
     <!-- 4 Column Benefit Cards -->
     <div class="why-grid">
       <div 
-        *ngFor="let item of reasons; let i = index" 
+        *ngFor="let item of reasons(); let i = index" 
         class="why-card card-base"
         appScrollReveal
         [revealDelay]="i * 90"

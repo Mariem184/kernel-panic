@@ -35,10 +35,10 @@
           <span class="online-indicator"></span>
         </div>
         <div class="bot-details">
-          <div class="bot-name">Kernel Panic Assistant</div>
+          <div class="bot-name">{{ ts.t('chatbot.assistantName') }}</div>
           <div class="bot-status">
             <span class="status-dot"></span>
-            <span>Online | مساعدك الذكي</span>
+            <span>{{ ts.t('chatbot.onlineStatus') }}</span>
           </div>
         </div>
       </div>
@@ -83,7 +83,7 @@
 
       <!-- Quick Action Suggestion Chips -->
       <div class="quick-chips" *ngIf="messages.length <= 2">
-        <div class="quick-title">اختر استفسارًا سريعًا:</div>
+        <div class="quick-title">{{ ts.t('chatbot.quickTitle') }}</div>
         <div class="chips-list">
           <button *ngFor="let chip of quickSuggestions" class="chip-btn" (click)="handleSuggestion(chip)">
             {{ chip.label }}
@@ -99,7 +99,7 @@
           type="text" 
           [(ngModel)]="userInput" 
           name="userInput"
-          placeholder="اكتب استفسارك هنا... / Ask anything..."
+          [placeholder]="ts.t('chatbot.placeholder')"
           class="chat-input"
           autocomplete="off"
         />

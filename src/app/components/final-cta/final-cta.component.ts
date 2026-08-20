@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-final-cta',
@@ -9,4 +10,6 @@ import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive'
   templateUrl: './final-cta.component.html',
   styleUrl: './final-cta.component.css'
 })
-export class FinalCtaComponent {}
+export class FinalCtaComponent {
+  public ts = inject(TranslationService);
+}

@@ -1,9 +1,10 @@
-<section class="process-section">
+<section id="process" class="process-section">
   <div class="container">
     <!-- Section Header -->
     <div class="section-header" appScrollReveal>
-      <span class="section-tag">HOW WE WORK</span>
-      <h2 class="section-title">Our Proven Process</h2>
+      <span class="section-tag">{{ ts.t('process.tag') }}</span>
+      <h2 class="section-title">{{ ts.t('process.title') }}</h2>
+      <p class="section-desc">{{ ts.t('process.desc') }}</p>
     </div>
 
     <!-- 4 Step Connected Horizontal Flow -->
@@ -12,7 +13,7 @@
       
       <div class="steps-grid">
         <div 
-          *ngFor="let step of steps; let i = index" 
+          *ngFor="let step of steps(); let i = index" 
           class="step-item"
           appScrollReveal
           [revealDelay]="i * 120"

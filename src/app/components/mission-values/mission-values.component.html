@@ -2,13 +2,8 @@
   <div class="container">
     <!-- Section Header -->
     <div class="section-header" appScrollReveal>
-      <span class="section-tag">WHAT DRIVES US</span>
-      <h2 class="section-title">
-        Our Mission, Vision & <span class="highlight-blue">Values</span>
-      </h2>
-      <p class="section-desc">
-        The principles behind every solution we build and every partnership we form.
-      </p>
+      <span class="section-tag">{{ ts.t('missionValues.tag') }}</span>
+      <h2 class="section-title">{{ ts.t('missionValues.title') }}</h2>
     </div>
 
     <!-- 3 Pillar Cards -->
@@ -25,13 +20,11 @@
           </div>
           <span class="pillar-number">01</span>
         </div>
-        <h3 class="pillar-title">Our Mission</h3>
-        <p class="pillar-desc">
-          To provide innovative IT solutions that empower organizations to achieve their goals.
-        </p>
+        <h3 class="pillar-title">{{ ts.t('missionValues.missionTitle') }}</h3>
+        <p class="pillar-desc">{{ ts.t('missionValues.missionDesc') }}</p>
       </div>
 
-      <!-- Card 02: Vision -->
+      <!-- Card 02: Precision -->
       <div class="pillar-card card-base" appScrollReveal [revealDelay]="120">
         <div class="card-top-row">
           <div class="pillar-icon">
@@ -42,13 +35,11 @@
           </div>
           <span class="pillar-number">02</span>
         </div>
-        <h3 class="pillar-title">Our Vision</h3>
-        <p class="pillar-desc">
-          To be a trusted IT partner and a driving force in digital transformation.
-        </p>
+        <h3 class="pillar-title">{{ ts.t('missionValues.val1Title') }}</h3>
+        <p class="pillar-desc">{{ ts.t('missionValues.val1Desc') }}</p>
       </div>
 
-      <!-- Card 03: Values -->
+      <!-- Card 03: Integrity -->
       <div class="pillar-card card-base" appScrollReveal [revealDelay]="240">
         <div class="card-top-row">
           <div class="pillar-icon">
@@ -58,10 +49,8 @@
           </div>
           <span class="pillar-number">03</span>
         </div>
-        <h3 class="pillar-title">Our Values</h3>
-        <p class="pillar-desc">
-          Integrity, innovation, excellence, and commitment to our clients.
-        </p>
+        <h3 class="pillar-title">{{ ts.t('missionValues.val2Title') }}</h3>
+        <p class="pillar-desc">{{ ts.t('missionValues.val2Desc') }}</p>
       </div>
     </div>
   </div>

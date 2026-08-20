@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { TranslationService } from '../../services/translation.service';
 
 interface ProcessStep {
   stepNumber: string;
@@ -16,26 +17,28 @@ interface ProcessStep {
   styleUrl: './process.component.css'
 })
 export class ProcessComponent {
-  steps: ProcessStep[] = [
+  public ts = inject(TranslationService);
+
+  steps = computed<ProcessStep[]>(() => [
     {
-      stepNumber: '01',
-      title: 'Understand',
-      description: 'We listen to your business needs and technical challenges.'
+      stepNumber: this.ts.t('process.step1Num'),
+      title: this.ts.t('process.step1Title'),
+      description: this.ts.t('process.step1Desc')
     },
     {
-      stepNumber: '02',
-      title: 'Analyze',
-      description: 'We assess your current environment and identify opportunities for improvement.'
+      stepNumber: this.ts.t('process.step2Num'),
+      title: this.ts.t('process.step2Title'),
+      description: this.ts.t('process.step2Desc')
     },
     {
-      stepNumber: '03',
-      title: 'Build',
-      description: 'We design and implement the right technology solution.'
+      stepNumber: this.ts.t('process.step3Num'),
+      title: this.ts.t('process.step3Title'),
+      description: this.ts.t('process.step3Desc')
     },
     {
-      stepNumber: '04',
-      title: 'Support',
-      description: 'We continue to help you maintain, improve, and scale your solution.'
+      stepNumber: this.ts.t('process.step4Num'),
+      title: this.ts.t('process.step4Title'),
+      description: this.ts.t('process.step4Desc')
     }
-  ];
+  ]);
 }

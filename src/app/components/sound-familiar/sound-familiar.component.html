@@ -2,16 +2,19 @@
   <div class="container">
     <!-- Section Header -->
     <div class="section-header" appScrollReveal>
-      <span class="section-tag">SOUND FAMILIAR?</span>
+      <span class="section-tag">{{ ts.t('soundFamiliar.tag') }}</span>
       <h2 class="section-title">
-        Technology Should Solve Problems — <span class="highlight-blue">Not Create Them.</span>
+        {{ ts.t('soundFamiliar.title') }}
       </h2>
+      <p class="section-desc">
+        {{ ts.t('soundFamiliar.desc') }}
+      </p>
     </div>
 
     <!-- 2x2 Problem / Solution Grid -->
     <div class="problem-solution-grid">
       <div 
-        *ngFor="let item of items; let i = index" 
+        *ngFor="let item of items(); let i = index" 
         class="ps-card card-base"
         appScrollReveal
         [revealDelay]="i * 100"

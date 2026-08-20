@@ -94,7 +94,7 @@
 
 .nav-list li a {
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-secondary);
   text-decoration: none;
   padding: 0.375rem 0.125rem;
@@ -127,6 +127,37 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+/* Language Switcher Button */
+.lang-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 42px;
+  padding: 0 1rem;
+  background-color: #FFFFFF;
+  color: var(--dark-navy);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.lang-switch-btn:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  background-color: var(--primary-blue-light);
+  transform: translateY(-2px);
+}
+
+.lang-switch-btn svg {
+  color: var(--primary-blue);
 }
 
 /* Uniform Size & Shape for Buttons */
@@ -220,7 +251,8 @@
 
 @media (max-width: 960px) {
   .header-wa-btn,
-  .header-cta-btn {
+  .header-cta-btn,
+  .header-actions .lang-switch-btn {
     display: none;
   }
 
@@ -266,6 +298,7 @@
     margin-top: 1rem;
   }
 
+  .mobile-actions .lang-switch-btn,
   .mobile-actions .header-wa-btn,
   .mobile-actions .header-cta-btn {
     display: inline-flex;

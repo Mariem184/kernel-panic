@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-mission-values',
@@ -9,4 +10,6 @@ import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive'
   templateUrl: './mission-values.component.html',
   styleUrl: './mission-values.component.css'
 })
-export class MissionValuesComponent {}
+export class MissionValuesComponent {
+  public ts = inject(TranslationService);
+}
