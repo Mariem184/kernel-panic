@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: var(--bg-page);
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

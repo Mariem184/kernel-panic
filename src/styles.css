@@ -1,1 +1,292 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Theme & Design System for Kernel Panic IT Team */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  /* Brand Colors extracted from Screenshots */
+  --primary-blue: #0062FF;
+  --primary-blue-dark: #004ECC;
+  --primary-blue-light: #EBF3FF;
+  --primary-blue-subtle: #F0F6FF;
+  --primary-blue-glow: rgba(0, 98, 255, 0.15);
+  
+  --dark-navy: #0B1528;
+  --dark-navy-soft: #182235;
+  
+  --text-primary: #0B1528;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+  --text-light: #94A3B8;
+  
+  --bg-page: #F5F8FC;
+  --bg-page-alt: #EDF3FA;
+  --bg-section-tint: #F0F5FC;
+  
+  --card-bg: #FFFFFF;
+  --card-border: #E2EAF4;
+  --card-border-hover: #BFD7FE;
+  
+  --whatsapp-green: #25D366;
+  --whatsapp-green-hover: #1EBE5D;
+  --whatsapp-bg: #EAF8EF;
+  --whatsapp-glow: rgba(37, 211, 102, 0.25);
+  
+  --danger-red: #EF4444;
+  --danger-bg: #FFF5F5;
+  --danger-border: #FEE2E2;
+  
+  --success-blue: #0062FF;
+  --success-bg: #F0F6FF;
+  --success-border: #DBEAFE;
+
+  /* Typography */
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(11, 21, 40, 0.04);
+  --shadow-md: 0 6px 20px -2px rgba(11, 21, 40, 0.05);
+  --shadow-lg: 0 12px 32px -4px rgba(11, 21, 40, 0.08);
+  --shadow-card-hover: 0 14px 34px -4px rgba(0, 98, 255, 0.12);
+  --shadow-blue-btn: 0 6px 18px rgba(0, 98, 255, 0.28);
+  --shadow-whatsapp: 0 6px 20px rgba(37, 211, 102, 0.35);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Global Container */
+.container {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+}
+
+/* Section Header Shared Styles */
+.section-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 3rem auto;
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary-blue);
+  margin-bottom: 0.625rem;
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: 800;
+  color: var(--dark-navy);
+  line-height: 1.25;
+  margin-bottom: 0.875rem;
+  letter-spacing: -0.02em;
+}
+
+.section-title .highlight-blue {
+  color: var(--primary-blue);
+}
+
+.section-desc {
+  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
+  color: var(--text-secondary);
+  line-height: 1.65;
+  margin: 0 auto;
+}
+
+/* Common Card Base */
+.card-base {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
+}
+
+.card-base:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--card-border-hover);
+}
+
+/* Common Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-main);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  padding: 0.75rem 1.375rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--primary-blue);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-blue-btn);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-blue-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 98, 255, 0.38);
+}
+
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: var(--dark-navy);
+  border-color: var(--card-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  background-color: var(--primary-blue-light);
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  transform: translateY(-2px);
+}
+
+.btn-whatsapp-pill {
+  background-color: #FFFFFF;
+  color: var(--text-primary);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-pill);
+  padding: 0.5rem 1.125rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-whatsapp-pill:hover {
+  border-color: var(--whatsapp-green);
+  color: var(--whatsapp-green-hover);
+  box-shadow: 0 4px 14px var(--whatsapp-glow);
+  transform: translateY(-1px);
+}
+
+/* Floating WhatsApp Button */
+.whatsapp-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 54px;
+  height: 54px;
+  background-color: var(--whatsapp-green);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-whatsapp);
+  z-index: 999;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  animation: pulse-whatsapp 2.5s infinite;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  background-color: var(--whatsapp-green-hover);
+}
+
+@keyframes pulse-whatsapp {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+/* Scroll Reveal Base Class */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-init.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delay utilities */
+.delay-1 { transition-delay: 0.1s !important; }
+.delay-2 { transition-delay: 0.2s !important; }
+.delay-3 { transition-delay: 0.3s !important; }
+.delay-4 { transition-delay: 0.4s !important; }
+.delay-5 { transition-delay: 0.5s !important; }
+.delay-6 { transition-delay: 0.6s !important; }
+.delay-7 { transition-delay: 0.7s !important; }
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal-init {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

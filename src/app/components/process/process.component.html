@@ -1,0 +1,32 @@
+<section class="process-section">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="section-header" appScrollReveal>
+      <span class="section-tag">HOW WE WORK</span>
+      <h2 class="section-title">Our Proven Process</h2>
+    </div>
+
+    <!-- 4 Step Connected Horizontal Flow -->
+    <div class="process-timeline">
+      <div class="timeline-line"></div>
+      
+      <div class="steps-grid">
+        <div 
+          *ngFor="let step of steps; let i = index" 
+          class="step-item"
+          appScrollReveal
+          [revealDelay]="i * 120"
+        >
+          <div class="step-circle-wrapper">
+            <div class="step-circle">
+              <span class="step-num">{{ step.stepNumber }}</span>
+            </div>
+          </div>
+
+          <h3 class="step-title">{{ step.title }}</h3>
+          <p class="step-desc">{{ step.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

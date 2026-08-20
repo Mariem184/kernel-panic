@@ -1,0 +1,52 @@
+<section id="why-us" class="why-choose-section">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="section-header" appScrollReveal>
+      <span class="section-tag">WHY CHOOSE US</span>
+      <h2 class="section-title">
+        Why Businesses Choose <span class="highlight-blue">Kernel Panic</span>
+      </h2>
+    </div>
+
+    <!-- 4 Column Benefit Cards -->
+    <div class="why-grid">
+      <div 
+        *ngFor="let item of reasons; let i = index" 
+        class="why-card card-base"
+        appScrollReveal
+        [revealDelay]="i * 90"
+      >
+        <div class="card-header-line">
+          <div class="why-icon">
+            <!-- Star Icon -->
+            <svg *ngIf="item.iconType === 'star'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+
+            <!-- Shield Icon -->
+            <svg *ngIf="item.iconType === 'shield'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+
+            <!-- Globe / Settings Icon -->
+            <svg *ngIf="item.iconType === 'globe'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+
+            <!-- Heart / Partnership Icon -->
+            <svg *ngIf="item.iconType === 'heart'" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+          </div>
+        </div>
+
+        <span class="why-subnumber">{{ item.number }}</span>
+        <h3 class="why-card-title">{{ item.title }}</h3>
+        <p class="why-card-desc">{{ item.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>

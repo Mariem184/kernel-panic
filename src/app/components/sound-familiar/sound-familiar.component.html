@@ -1,0 +1,44 @@
+<section class="sound-familiar-section">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="section-header" appScrollReveal>
+      <span class="section-tag">SOUND FAMILIAR?</span>
+      <h2 class="section-title">
+        Technology Should Solve Problems — <span class="highlight-blue">Not Create Them.</span>
+      </h2>
+    </div>
+
+    <!-- 2x2 Problem / Solution Grid -->
+    <div class="problem-solution-grid">
+      <div 
+        *ngFor="let item of items; let i = index" 
+        class="ps-card card-base"
+        appScrollReveal
+        [revealDelay]="i * 100"
+      >
+        <!-- Problem Row -->
+        <div class="ps-row problem-row">
+          <div class="ps-icon-circle problem-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <span class="problem-text">{{ item.problem }}</span>
+        </div>
+
+        <!-- Solution Row -->
+        <div class="ps-row solution-row">
+          <div class="ps-icon-circle solution-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <span class="solution-text">{{ item.solution }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

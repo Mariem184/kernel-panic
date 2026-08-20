@@ -1,0 +1,76 @@
+<section id="services" class="services-section">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="section-header" appScrollReveal>
+      <span class="section-tag">WHAT WE DO</span>
+      <h2 class="section-title">
+        Technology Solutions Designed Around Your Needs.
+      </h2>
+      <p class="section-desc">
+        From securing your systems to building software and infrastructure, we provide the
+        technical expertise your business needs to move forward.
+      </p>
+    </div>
+
+    <!-- 5 Services Grid (3 top, 2 bottom centered) -->
+    <div class="services-grid">
+      <div 
+        *ngFor="let item of services; let i = index" 
+        class="service-card card-base"
+        [class.row-2-item]="i >= 3"
+        appScrollReveal
+        [revealDelay]="i * 100"
+      >
+        <div class="card-top-row">
+          <div class="service-icon-box">
+            <!-- Shield Icon -->
+            <svg *ngIf="item.iconType === 'shield'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+
+            <!-- Network Icon -->
+            <svg *ngIf="item.iconType === 'network'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="5" r="3"/>
+              <circle cx="5" cy="19" r="3"/>
+              <circle cx="19" cy="19" r="3"/>
+              <line x1="7.5" y1="17" x2="10.5" y2="7.5"/>
+              <line x1="16.5" y1="17" x2="13.5" y2="7.5"/>
+            </svg>
+
+            <!-- Software Icon -->
+            <svg *ngIf="item.iconType === 'software'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/>
+              <polyline points="8 6 2 12 8 18"/>
+            </svg>
+
+            <!-- Infrastructure Icon -->
+            <svg *ngIf="item.iconType === 'infra'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
+              <line x1="6" y1="6" x2="6.01" y2="6"/>
+              <line x1="6" y1="18" x2="6.01" y2="18"/>
+            </svg>
+
+            <!-- Training Icon -->
+            <svg *ngIf="item.iconType === 'training'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+          <span class="service-number">{{ item.number }}</span>
+        </div>
+
+        <h3 class="service-title">{{ item.title }}</h3>
+        <p class="service-desc">{{ item.description }}</p>
+
+        <a [href]="item.linkUrl" class="service-link">
+          <span>{{ item.linkText }}</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
