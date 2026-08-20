@@ -83,6 +83,12 @@
 .nav-menu {
   display: flex;
   align-items: center;
+  margin-right: 1.75rem;
+}
+
+[dir="rtl"] .nav-menu {
+  margin-right: 0;
+  margin-left: 1.75rem;
 }
 
 .nav-list {
@@ -126,16 +132,16 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.875rem;
 }
 
-/* Language Switcher Button */
+/* Language Switcher Button with comfortable spacing */
 .lang-switch-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   height: 42px;
-  padding: 0 1rem;
+  padding: 0 1.125rem;
   background-color: #FFFFFF;
   color: var(--dark-navy);
   border: 1px solid var(--card-border);
@@ -147,6 +153,12 @@
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
   white-space: nowrap;
+  margin-right: 0.25rem;
+}
+
+[dir="rtl"] .lang-switch-btn {
+  margin-right: 0;
+  margin-left: 0.25rem;
 }
 
 .lang-switch-btn:hover {
@@ -273,6 +285,11 @@
     transform: translateY(-120%);
     transition: transform var(--transition-normal);
     border-bottom: 1px solid var(--card-border);
+    margin-right: 0;
+  }
+
+  [dir="rtl"] .nav-menu {
+    margin-left: 0;
   }
 
   .nav-menu.open {
@@ -304,5 +321,6 @@
     display: inline-flex;
     width: 100%;
     justify-content: center;
+    margin: 0;
   }
 }

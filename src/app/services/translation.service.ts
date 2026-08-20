@@ -21,7 +21,7 @@ export class TranslationService {
         process: 'Process',
         whyUs: 'Why Us',
         contact: 'Contact',
-        whatsappBtn: 'WhatsApp (01091610085)',
+        whatsappBtn: 'WhatsApp',
         ctaBtn: 'Get Free Consultation',
         switchLang: 'العربية'
       },
@@ -194,7 +194,7 @@ export class TranslationService {
         process: 'منهجية العمل',
         whyUs: 'لماذا تختارنا',
         contact: 'تواصل معنا',
-        whatsappBtn: 'واتساب (01091610085)',
+        whatsappBtn: 'واتساب',
         ctaBtn: 'احجز استشارة مجانية',
         switchLang: 'English'
       },
