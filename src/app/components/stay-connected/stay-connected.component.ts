@@ -42,7 +42,7 @@ export class StayConnectedComponent {
     { 
       name: 'LinkedIn', 
       subtitle: 'Kernel Panic', 
-      link: 'https://linkedin.com/company/kernel-panic', 
+      link: 'https://www.linkedin.com/company/kernel-panik/', 
       iconType: 'linkedin' 
     },
     { 
