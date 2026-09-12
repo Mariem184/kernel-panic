@@ -14,8 +14,33 @@
       </div>
     </a>
 
-    <!-- Desktop Navigation Links -->
+    <!-- Sidebar Overlay Backdrop for Mobile -->
+    <div class="sidebar-backdrop" [class.open]="isMobileMenuOpen" (click)="closeMobileMenu()"></div>
+
+    <!-- Navigation Menu (Sidebar Drawer on Mobile) -->
     <nav class="nav-menu" [class.open]="isMobileMenuOpen">
+      <!-- Mobile Sidebar Header -->
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <div class="logo-mark">
+            <img src="assets/images/kp-logo.png" alt="Kernel Panic Logo" class="brand-logo-img" />
+          </div>
+          <div class="logo-text">
+            <div class="brand-name">
+              <span class="brand-dark">KERNEL</span>
+              <span class="brand-blue">PANIC</span>
+            </div>
+            <div class="brand-tag">IT TEAM</div>
+          </div>
+        </div>
+        <button class="sidebar-close-btn" (click)="closeMobileMenu()" aria-label="Close navigation menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
       <ul class="nav-list">
         <li><a href="#hero" [class.active]="activeSection === 'hero'" (click)="setActive('hero'); closeMobileMenu()">{{ ts.t('nav.home') }}</a></li>
         <li><a href="#about" [class.active]="activeSection === 'about'" (click)="setActive('about'); closeMobileMenu()">{{ ts.t('nav.about') }}</a></li>
