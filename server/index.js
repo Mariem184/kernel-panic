@@ -57,18 +57,20 @@ app.use((err, req, res, next) => {
   });
 });
 
-const server = app.listen(config.port, () => {
-  console.log(`\n======================================================`);
-  console.log(` Kernel Panic AI Assistant Backend`);
-  console.log(` Running on: http://localhost:${config.port}`);
-  console.log(` Health check: http://localhost:${config.port}/api/health`);
-  console.log(` Chat API: POST http://localhost:${config.port}/api/chat`);
-  console.log(`======================================================\n`);
+if (!process.env.VERCEL) {
+  const server = app.listen(config.port, () => {
+    console.log(`\n======================================================`);
+    console.log(` Kernel Panic AI Assistant Backend`);
+    console.log(` Running on: http://localhost:${config.port}`);
+    console.log(` Health check: http://localhost:${config.port}/api/health`);
+    console.log(` Chat API: POST http://localhost:${config.port}/api/chat`);
+    console.log(`======================================================\n`);
 
-  const { valid, warnings } = validateConfig();
-  if (!valid) {
-    warnings.forEach((w) => console.warn(`[CONFIG WARNING] ${w}`));
-  }
-});
+    const { valid, warnings } = validateConfig();
+    if (!valid) {
+      warnings.forEach((w) => console.warn(`[CONFIG WARNING] ${w}`));
+    }
+  });
+}
 
 export default app;
