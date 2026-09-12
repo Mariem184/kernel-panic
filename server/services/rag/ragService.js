@@ -31,14 +31,14 @@ function getLocalFallbackIndex() {
 /**
  * Performs local similarity search using in-memory cosine similarity.
  */
-function searchLocalFallback(queryEmbedding, topK = 5, minScore = 0.32) {
+function searchLocalFallback(queryEmbedding, topK = 5, minScore = 0.20) {
   const localIndex = getLocalFallbackIndex();
   if (!localIndex || !Array.isArray(localIndex.chunks) || localIndex.chunks.length === 0) {
     return [];
   }
 
   const scored = localIndex.chunks.map((chunk) => {
-    const score = cosineSimilarity(queryEmbedding, chunk.vector);
+    const score = queryEmbedding ? cosineSimilarity(queryEmbedding, chunk.vector) : 0;
     return {
       id: chunk.id,
       score,
@@ -51,10 +51,26 @@ function searchLocalFallback(queryEmbedding, topK = 5, minScore = 0.32) {
     };
   });
 
-  return scored
+  const filtered = scored
     .filter((item) => item.score >= minScore)
     .sort((a, b) => b.score - a.score)
     .slice(0, topK);
+
+  if (filtered.length > 0) {
+    return filtered;
+  }
+
+  // Fallback: If no vector matches above minScore, return top company overview chunks
+  return localIndex.chunks.slice(0, topK).map((chunk) => ({
+    id: chunk.id,
+    score: 0.5,
+    payload: {
+      text: chunk.text,
+      title: chunk.title,
+      section: chunk.section,
+      source: chunk.source
+    }
+  }));
 }
 
 /**
@@ -67,32 +83,40 @@ function searchLocalFallback(queryEmbedding, topK = 5, minScore = 0.32) {
  */
 export async function retrieveContext(query, limit = 4) {
   try {
-    const queryEmbedding = await generateEmbedding(query);
+    let queryEmbedding = null;
+    try {
+      queryEmbedding = await generateEmbedding(query);
+    } catch (embErr) {
+      console.warn('[RAG] Local embedding generation failed, using local fallback:', embErr.message);
+    }
+
     let matchedResults = [];
     let usedFallback = false;
 
     // 1. Try Qdrant retrieval
-    try {
-      const client = getQdrantClient();
-      const response = await client.query(config.qdrant.collection, {
-        query: queryEmbedding,
-        limit,
-        with_payload: true,
-        score_threshold: 0.32
-      });
+    if (queryEmbedding) {
+      try {
+        const client = getQdrantClient();
+        const response = await client.query(config.qdrant.collection, {
+          query: queryEmbedding,
+          limit,
+          with_payload: true,
+          score_threshold: 0.20
+        });
 
-      const points = response?.points || [];
-      if (Array.isArray(points) && points.length > 0) {
-        matchedResults = points;
+        const points = response?.points || [];
+        if (Array.isArray(points) && points.length > 0) {
+          matchedResults = points;
+        }
+      } catch (qdrantErr) {
+        console.warn('[RAG] Qdrant search unavailable, using local fallback index:', qdrantErr.message);
+        usedFallback = true;
       }
-    } catch (qdrantErr) {
-      console.warn('[RAG] Qdrant search unavailable, using local fallback index:', qdrantErr.message);
-      usedFallback = true;
     }
 
     // 2. If Qdrant had no results or failed, try local fallback
     if (matchedResults.length === 0) {
-      matchedResults = searchLocalFallback(queryEmbedding, limit, 0.32);
+      matchedResults = searchLocalFallback(queryEmbedding, limit, 0.20);
       if (matchedResults.length > 0) {
         usedFallback = true;
       }
