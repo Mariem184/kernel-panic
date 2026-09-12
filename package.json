@@ -12,6 +12,7 @@
     "ingest": "node server/scripts/ingest.js"
   },
   "private": true,
+  "type": "module",
   "packageManager": "npm@11.11.0",
   "dependencies": {
     "@angular/common": "^21.2.0",
