@@ -1,0 +1,57 @@
+<section id="mission" class="mission-section">
+  <div class="container">
+    <!-- Section Header -->
+    <div class="section-header" appScrollReveal>
+      <span class="section-tag">{{ ts.t('missionValues.tag') }}</span>
+      <h2 class="section-title">{{ ts.t('missionValues.title') }}</h2>
+    </div>
+
+    <!-- 3 Pillar Cards -->
+    <div class="pillars-grid">
+      <!-- Card 01: Mission -->
+      <div class="pillar-card card-base" appScrollReveal [revealDelay]="0">
+        <div class="card-top-row">
+          <div class="pillar-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <circle cx="12" cy="12" r="6"/>
+              <circle cx="12" cy="12" r="2"/>
+            </svg>
+          </div>
+          <span class="pillar-number">01</span>
+        </div>
+        <h3 class="pillar-title">{{ ts.t('missionValues.missionTitle') }}</h3>
+        <p class="pillar-desc">{{ ts.t('missionValues.missionDesc') }}</p>
+      </div>
+
+      <!-- Card 02: Precision -->
+      <div class="pillar-card card-base" appScrollReveal [revealDelay]="120">
+        <div class="card-top-row">
+          <div class="pillar-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <span class="pillar-number">02</span>
+        </div>
+        <h3 class="pillar-title">{{ ts.t('missionValues.val1Title') }}</h3>
+        <p class="pillar-desc">{{ ts.t('missionValues.val1Desc') }}</p>
+      </div>
+
+      <!-- Card 03: Integrity -->
+      <div class="pillar-card card-base" appScrollReveal [revealDelay]="240">
+        <div class="card-top-row">
+          <div class="pillar-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+          </div>
+          <span class="pillar-number">03</span>
+        </div>
+        <h3 class="pillar-title">{{ ts.t('missionValues.val2Title') }}</h3>
+        <p class="pillar-desc">{{ ts.t('missionValues.val2Desc') }}</p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,68 @@
+.sound-familiar-section {
+  padding: 70px 0 90px 0;
+  background-color: var(--bg-page);
+}
+
+.problem-solution-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.ps-card {
+  padding: 1.25rem 1.5rem;
+  background-color: #FFFFFF;
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.ps-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.problem-row {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px dashed #E2E8F0;
+}
+
+.ps-icon-circle {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.problem-icon {
+  background-color: #FEE2E2;
+}
+
+.solution-icon {
+  background-color: #DBEAFE;
+}
+
+.problem-text {
+  font-size: 0.875rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.solution-text {
+  font-size: 0.9375rem;
+  color: var(--dark-navy);
+  font-weight: 700;
+}
+
+@media (max-width: 768px) {
+  .problem-solution-grid {
+    grid-template-columns: 1fr;
+  }
+}
