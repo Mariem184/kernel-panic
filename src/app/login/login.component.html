@@ -1,0 +1,90 @@
+<!-- نضيف كلاس للاتجاه حسب اللغة -->
+<div class="login-container" [ngClass]="currentLang === 'ar' ? 'rtl' : 'ltr'">
+  
+  <!-- خلفية الشبكة -->
+  <div class="network-bg">
+    <svg viewBox="0 0 1440 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <style>
+          .net-line { stroke: #60a5fa; stroke-width: 1; fill: none; opacity: 0.25; }
+          .net-node { fill: #3b82f6; opacity: 0.5; }
+          .net-node-big { fill: #0056ff; opacity: 0.7; }
+        </style>
+      </defs>
+      <line x1="50" y1="550" x2="200" y2="450" class="net-line"/>
+      <line x1="200" y1="450" x2="350" y2="500" class="net-line"/>
+      <line x1="350" y1="500" x2="500" y2="400" class="net-line"/>
+      <line x1="500" y1="400" x2="650" y2="480" class="net-line"/>
+      <line x1="650" y1="480" x2="800" y2="420" class="net-line"/>
+      <line x1="800" y1="420" x2="950" y2="500" class="net-line"/>
+      <line x1="950" y1="500" x2="1100" y2="430" class="net-line"/>
+      <line x1="1100" y1="430" x2="1250" y2="510" class="net-line"/>
+      <line x1="1250" y1="510" x2="1400" y2="460" class="net-line"/>
+      <circle cx="50" cy="550" r="4" class="net-node-big"/>
+      <circle cx="200" cy="450" r="3" class="net-node"/>
+      <circle cx="350" cy="500" r="5" class="net-node-big"/>
+      <circle cx="500" cy="400" r="3" class="net-node"/>
+      <circle cx="650" cy="480" r="4" class="net-node-big"/>
+      <circle cx="800" cy="420" r="3" class="net-node"/>
+      <circle cx="950" cy="500" r="5" class="net-node-big"/>
+      <circle cx="1100" cy="430" r="3" class="net-node"/>
+      <circle cx="1250" cy="510" r="4" class="net-node-big"/>
+      <circle cx="1400" cy="460" r="3" class="net-node"/>
+    </svg>
+  </div>
+
+  <!-- زرار تغيير اللغة -->
+  <button type="button" class="lang-toggle" (click)="toggleLang()">
+    {{ currentLang === 'ar' ? 'English' : 'عربي' }}
+  </button>
+
+  <!-- بطاقة تسجيل الدخول -->
+  <div class="login-card">
+    
+    <!-- اللوجو -->
+    <div class="logo-section">
+      <img src="assets/images/kp-logo.png" alt="Kernel Panic Logo" class="brand-logo round-logo">
+    </div>
+
+    <!-- العنوان والوصف حسب اللغة -->
+       <!-- العنوان حسب اللغة -->
+    <ng-container *ngIf="currentLang === 'ar'; else englishContent">
+      <h1>تسجيل الدخول</h1>
+    </ng-container>
+    <ng-template #englishContent>
+      <h1>Sign In</h1>
+    </ng-template>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      
+      <!-- البريد الإلكتروني -->
+      <div class="form-group">
+        <label for="email">{{ currentLang === 'ar' ? 'البريد الإلكتروني' : 'Email Address' }}</label>
+        <input id="email" type="email" formControlName="email" placeholder="example@email.com" />
+        <span class="error" *ngIf="email?.invalid && email?.touched">
+          {{ currentLang === 'ar' ? 'من فضلك أدخل بريد إلكتروني صحيح' : 'Please enter a valid email' }}
+        </span>
+      </div>
+
+      <!-- كلمة المرور -->
+      <div class="form-group">
+        <label for="password">{{ currentLang === 'ar' ? 'كلمة المرور' : 'Password' }}</label>
+        <input id="password" type="password" formControlName="password" placeholder="••••••••" />
+        <span class="error" *ngIf="password?.invalid && password?.touched">
+          {{ currentLang === 'ar' ? 'كلمة المرور لازم تكون 6 أحرف على الأقل' : 'Password must be at least 6 characters' }}
+        </span>
+      </div>
+
+      <div class="error general-error" *ngIf="errorMessage" style="text-align: center; margin-bottom: 1rem;">
+        {{ errorMessage() }}
+      </div>
+
+      <!-- زر الدخول -->
+      <button type="submit" [disabled]="isLoading()">
+        {{ isLoading() 
+            ? (currentLang === 'ar' ? 'جاري الدخول...' : 'Signing in...') 
+            : (currentLang === 'ar' ? 'دخول' : 'Sign In') }}
+      </button>
+    </form>
+  </div>
+</div>
