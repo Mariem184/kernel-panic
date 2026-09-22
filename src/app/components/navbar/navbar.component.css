@@ -235,6 +235,58 @@
   box-shadow: 0 8px 22px rgba(0, 98, 255, 0.38);
 }
 
+/* Compact icon-only pills (desktop header): language, WhatsApp, admin logout.
+   Keeping these icon-only — instead of the wide text pills — is what keeps the
+   header from feeling crowded once Projects/News/logout share the row with CTA. */
+.icon-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  position: relative;
+  width: 42px;
+  height: 42px;
+  background-color: #FFFFFF;
+  color: var(--dark-navy);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  text-decoration: none;
+}
+.icon-pill svg { color: var(--primary-blue); flex-shrink: 0; }
+.icon-pill:hover {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+  background-color: var(--primary-blue-light);
+  transform: translateY(-2px);
+}
+.wa-icon-pill:hover {
+  border-color: var(--whatsapp-green);
+  background-color: var(--whatsapp-bg);
+  box-shadow: 0 4px 14px var(--whatsapp-glow);
+}
+.admin-logout-btn.icon-pill {
+  border-color: #BBF7D0;
+  background-color: #F0FDF4;
+}
+.admin-logout-btn.icon-pill svg { color: #166534; }
+.admin-logout-btn.icon-pill:hover {
+  border-color: #16A34A;
+  background-color: #DCFCE7;
+}
+.admin-logout-btn.icon-pill .admin-dot {
+  position: absolute;
+  top: 5px;
+  inset-inline-end: 5px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #16A34A;
+  box-shadow: 0 0 0 2px #F0FDF4;
+}
+
 .mobile-actions {
   display: none;
 }
@@ -301,16 +353,26 @@
   display: none;
 }
 
-@media (max-width: 1040px) {
-  .nav-list {
-    gap: 1.1rem;
-  }
+/* Two extra permanent links (Projects, News) share the row with Home/About/etc.,
+   so the gap tapers progressively before things collapse to the hamburger menu. */
+@media (max-width: 1220px) {
+  .navbar-container { padding: 0 20px; }
+  .nav-list { gap: 1.1rem; }
+}
+
+@media (max-width: 1130px) {
+  .nav-list { gap: 0.75rem; }
+  .header-actions { gap: 0.5rem; }
+}
+
+@media (max-width: 1010px) {
+  .nav-list li a { font-size: 0.875rem; }
+  .header-cta-btn { padding: 0 0.9rem; font-size: 0.8125rem; }
 }
 
 @media (max-width: 960px) {
-  .header-wa-btn,
-  .header-cta-btn,
-  .header-actions .lang-switch-btn {
+  .header-actions .icon-pill,
+  .header-cta-btn {
     display: none;
   }
 
@@ -442,3 +504,9 @@
     margin: 0;
   }
 }
+
+/* Admin session indicator (mobile drawer keeps the full text pill; the desktop
+   icon-only version's dot is styled above, next to .icon-pill). */
+.mobile-actions .admin-logout-btn { color: #166534; border-color: #BBF7D0; background-color: #F0FDF4; }
+.mobile-actions .admin-logout-btn:hover { color: #14532D; border-color: #16A34A; background-color: #DCFCE7; }
+.mobile-actions .admin-dot { width: 8px; height: 8px; border-radius: 50%; background: #16A34A; box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2); }

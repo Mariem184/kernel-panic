@@ -1,0 +1,172 @@
+<section id="news" class="news-section">
+  <div class="container">
+
+    <div class="section-header" appScrollReveal>
+      <span class="section-tag">{{ t('news.tag') }}</span>
+      <h2 class="section-title">{{ t('news.title') }}</h2>
+      <p class="section-desc">{{ t('news.desc') }}</p>
+    </div>
+
+    @if (auth.isLoggedIn()) {
+      <div class="kp-admin-toolbar">
+        <button type="button" class="kp-btn kp-btn-primary" (click)="startCreate()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          {{ t('admin.addNews') }}
+        </button>
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="news-grid">
+        @for (s of skeletons; track s) {
+          <div class="news-card card-base skeleton">
+            <div class="kp-skel media-skel"></div>
+            <div class="body">
+              <div class="kp-skel" style="height:12px;width:40%"></div>
+              <div class="kp-skel" style="height:20px;width:90%"></div>
+              <div class="kp-skel" style="height:14px;width:100%"></div>
+              <div class="kp-skel" style="height:14px;width:70%"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (failed() && !items().length) {
+      <div class="kp-state">
+        <p>{{ t('news.loadError') }}</p>
+        <button type="button" class="kp-btn kp-btn-ghost" (click)="load()">{{ t('news.retry') }}</button>
+      </div>
+    } @else if (!items().length) {
+      <div class="kp-state">
+        <p>{{ auth.isLoggedIn() ? t('news.emptyAdmin') : t('news.empty') }}</p>
+        @if (auth.isLoggedIn()) {
+          <button type="button" class="kp-btn kp-btn-primary" (click)="startCreate()">{{ t('admin.addNews') }}</button>
+        }
+      </div>
+    } @else {
+      <div class="news-grid">
+        @for (n of visible(); track n.id; let i = $index) {
+          <article
+            class="news-card card-base"
+            [class.is-featured]="n.isFeatured"
+            [class.is-draft]="n.status === 'draft'"
+            appScrollReveal
+            [revealDelay]="(i % 3) * 100"
+            tabindex="0"
+            role="button"
+            [attr.aria-label]="loc(n.titleAr, n.titleEn)"
+            (click)="openDetail(n)"
+            (keydown.enter)="onCardKey($event, n)"
+          >
+            <div class="media">
+              <svg class="placeholder" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 5h13a2 2 0 0 1 2 2v12H6a2 2 0 0 1-2-2V5z"/><path d="M19 9h1a1 1 0 0 1 1 1v7a2 2 0 0 1-2 2"/><path d="M8 9h7M8 13h7M8 17h4"/>
+              </svg>
+              @if (n.mainImageUrl) {
+                <img [src]="thumb(n.mainImageUrl)" [alt]="loc(n.titleAr, n.titleEn)" loading="lazy" decoding="async" (error)="onThumbError($event, n.mainImageUrl)" />
+              }
+
+              <div class="badges">
+                @if (n.isFeatured) { <span class="kp-badge featured">★ {{ t('news.featured') }}</span> }
+                @if (auth.isLoggedIn() && n.status === 'draft') { <span class="kp-badge draft">{{ t('admin.draft') }}</span> }
+              </div>
+
+              @if (auth.isLoggedIn()) {
+                <div class="admin-actions">
+                  <button type="button" class="kp-icon-btn edit" [attr.aria-label]="t('admin.edit')" [attr.title]="t('admin.edit')" [disabled]="loadingEditId() === n.id" (click)="startEdit(n, $event)">
+                    @if (loadingEditId() === n.id) { <span class="kp-spinner dark"></span> }
+                    @else {
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                    }
+                  </button>
+                  <button type="button" class="kp-icon-btn del" [attr.aria-label]="t('admin.delete')" [attr.title]="t('admin.delete')" (click)="askDelete(n, $event)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+                  </button>
+                </div>
+              }
+            </div>
+
+            <div class="body">
+              <div class="meta">
+                @if (loc(n.categoryAr, n.categoryEn)) { <span class="cat">{{ loc(n.categoryAr, n.categoryEn) }}</span> }
+                <span class="date">{{ fmtDate(n.publishedAt) }}</span>
+              </div>
+              <h3 class="title">{{ loc(n.titleAr, n.titleEn) }}</h3>
+              @if (loc(n.excerptAr, n.excerptEn)) { <p class="excerpt">{{ loc(n.excerptAr, n.excerptEn) }}</p> }
+              <div class="foot">
+                <span class="read-time">{{ n.readingTimeMinutes }} {{ t('news.minRead') }}</span>
+                <span class="more">
+                  {{ t('news.readMore') }}
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </span>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+
+      @if (items().length > visibleCount()) {
+        <div class="kp-more"><button type="button" class="kp-btn kp-btn-ghost" (click)="showMore()">{{ t('news.showMore') }}</button></div>
+      } @else if (items().length > pageSize) {
+        <div class="kp-more"><button type="button" class="kp-btn kp-btn-ghost" (click)="showLess()">{{ t('news.showLess') }}</button></div>
+      }
+    }
+  </div>
+</section>
+
+<!-- Read-only article modal -->
+@if (viewing(); as v) {
+  <div class="kp-modal-backdrop" (click)="closeDetail()">
+    <article class="kp-modal detail" role="dialog" aria-modal="true" [attr.aria-label]="loc(v.titleAr, v.titleEn)" (click)="$event.stopPropagation()">
+      <button type="button" class="kp-icon-btn detail-close" [attr.aria-label]="t('admin.close')" (click)="closeDetail()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="kp-modal-body detail-body">
+        @if (v.mainImageUrl) { <img class="detail-img" [src]="v.mainImageUrl" alt="" (error)="onImgError($event)" /> }
+        <div class="meta">
+          @if (loc(v.categoryAr, v.categoryEn)) { <span class="cat">{{ loc(v.categoryAr, v.categoryEn) }}</span> }
+          <span class="date">{{ fmtDate(v.publishedAt) }}</span>
+          <span class="date">· {{ v.readingTimeMinutes }} {{ t('news.minRead') }}</span>
+        </div>
+        <h2 class="detail-title">{{ loc(v.titleAr, v.titleEn) }}</h2>
+        @if (loc(v.authorNameAr, v.authorNameEn)) { <p class="author">{{ t('news.by') }} {{ loc(v.authorNameAr, v.authorNameEn) }}</p> }
+
+        @if (viewDetail(); as d) {
+          @if (loc(d.contentArHtml, d.contentEnHtml)) {
+            <p class="prose">{{ loc(d.contentArHtml, d.contentEnHtml) }}</p>
+          } @else if (loc(d.excerptAr, d.excerptEn)) {
+            <p class="prose">{{ loc(d.excerptAr, d.excerptEn) }}</p>
+          }
+          @if (d.externalUrl) {
+            <a class="kp-btn kp-btn-primary ext-btn" [href]="d.externalUrl" target="_blank" rel="noopener noreferrer">{{ t('news.readOriginal') }} ↗</a>
+          }
+        } @else {
+          <div class="kp-skel" style="height:14px;margin-top:1.25rem;margin-bottom:.6rem"></div>
+          <div class="kp-skel" style="height:14px;width:92%;margin-bottom:.6rem"></div>
+          <div class="kp-skel" style="height:14px;width:75%"></div>
+        }
+      </div>
+    </article>
+  </div>
+}
+
+@if (formOpen()) {
+  <!-- Form code is lazy-loaded: visitors never download it, admins get it on first click. -->
+  @defer (on immediate) {
+    <app-news-form [news]="editing()" (saved)="onSaved()" (closed)="closeForm()" />
+  } @loading {
+    <div class="kp-modal-backdrop"><span class="kp-spinner"></span></div>
+  }
+}
+
+@if (deleting(); as d) {
+  <app-confirm-dialog
+    [title]="t('admin.confirmTitle')"
+    [message]="t('admin.confirmNews')"
+    [itemName]="loc(d.titleAr, d.titleEn)"
+    [confirmLabel]="deleteBusy() ? t('admin.deleting') : t('admin.confirmYes')"
+    [cancelLabel]="t('admin.cancel')"
+    [busy]="deleteBusy()"
+    (confirmed)="confirmDelete()"
+    (cancelled)="deleting.set(null)"
+  />
+}

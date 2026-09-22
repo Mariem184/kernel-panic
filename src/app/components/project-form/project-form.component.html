@@ -1,0 +1,282 @@
+<div class="kp-modal-backdrop">
+  <div class="kp-modal kp-modal-lg" role="dialog" aria-modal="true" [attr.aria-label]="isEdit ? t('admin.editProjectTitle') : t('admin.newProjectTitle')">
+
+    <div class="kp-modal-header">
+      <h3 class="kp-modal-title">{{ isEdit ? t('admin.editProjectTitle') : t('admin.newProjectTitle') }}</h3>
+      <button type="button" class="kp-icon-btn plain" [attr.aria-label]="t('admin.close')" [disabled]="saving()" (click)="closed.emit()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="kp-tabs" role="tablist">
+      @for (tb of tabs; track tb) {
+        <button type="button" role="tab" class="kp-tab" [class.active]="tab() === tb" [attr.aria-selected]="tab() === tb" (click)="tab.set(tb)">
+          {{ tabLabel(tb) }}@if (tabHasError(tb)) { <span class="dot"></span> }
+        </button>
+      }
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate style="display:contents">
+      <div class="kp-modal-body">
+
+        @if (formError()) { <div class="kp-form-error" role="alert">{{ formError() }}</div> }
+
+        <!-- ───────────── TAB 1: BASIC ───────────── -->
+        @if (tab() === 'basic') {
+          <div class="kp-grid-2">
+            <div class="kp-field">
+              <label class="kp-label" for="pf-nameEn">{{ t('admin.f.nameEn') }}</label>
+              <input id="pf-nameEn" class="kp-input" [class.invalid]="invalid('nameEn') || nameMissing" formControlName="nameEn" dir="ltr" />
+              @if (invalid('nameEn')) { <span class="kp-error">{{ errorText('nameEn') }}</span> }
+            </div>
+            <div class="kp-field">
+              <label class="kp-label" for="pf-nameAr">{{ t('admin.f.nameAr') }}</label>
+              <input id="pf-nameAr" class="kp-input" [class.invalid]="invalid('nameAr') || nameMissing" formControlName="nameAr" dir="rtl" />
+              @if (invalid('nameAr')) { <span class="kp-error">{{ errorText('nameAr') }}</span> }
+            </div>
+            @if (nameMissing) {
+              <span class="kp-error kp-span-2" style="margin-top:-0.5rem">{{ t('admin.f.needOneName') }}</span>
+            } @else {
+              <span class="kp-hint kp-span-2" style="margin-top:-0.5rem">{{ t('admin.f.oneLanguageOk') }}</span>
+            }
+
+            <div class="kp-field kp-span-2">
+              <label class="kp-label" for="pf-slug">{{ t('admin.f.slug') }}<span class="req">*</span></label>
+              <input id="pf-slug" class="kp-input" [class.invalid]="invalid('slug')" formControlName="slug" dir="ltr" (input)="onSlugInput()" />
+              @if (invalid('slug')) { <span class="kp-error">{{ errorText('slug') }}</span> }
+              @else { <span class="kp-hint">{{ t('admin.f.slugHint') }}</span> }
+            </div>
+
+            <div class="kp-field">
+              <label class="kp-label" for="pf-shortEn">{{ t('admin.f.shortEn') }}</label>
+              <textarea id="pf-shortEn" class="kp-textarea" [class.invalid]="invalid('shortDescriptionEn')" formControlName="shortDescriptionEn" dir="ltr" rows="3"></textarea>
+              @if (invalid('shortDescriptionEn')) { <span class="kp-error">{{ errorText('shortDescriptionEn') }}</span> }
+            </div>
+            <div class="kp-field">
+              <label class="kp-label" for="pf-shortAr">{{ t('admin.f.shortAr') }}</label>
+              <textarea id="pf-shortAr" class="kp-textarea" [class.invalid]="invalid('shortDescriptionAr')" formControlName="shortDescriptionAr" dir="rtl" rows="3"></textarea>
+              @if (invalid('shortDescriptionAr')) { <span class="kp-error">{{ errorText('shortDescriptionAr') }}</span> }
+            </div>
+
+            <div class="kp-field kp-span-2">
+              <label class="kp-label" for="pf-image">{{ t('admin.f.imageUrl') }}</label>
+              <div class="kp-image-row">
+                <input id="pf-image" class="kp-input" [class.invalid]="invalid('mainImageUrl')" formControlName="mainImageUrl" dir="ltr" placeholder="https://…" />
+                <input #pfFile type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden (change)="onImageFileSelected($event)" />
+                <button type="button" class="kp-btn kp-btn-ghost kp-btn-sm kp-upload-btn" [disabled]="uploadingImage()" (click)="pfFile.click()">
+                  @if (uploadingImage()) { <span class="kp-spinner dark"></span> {{ t('admin.f.uploading') }} }
+                  @else { {{ t('admin.f.uploadImage') }} }
+                </button>
+              </div>
+              @if (invalid('mainImageUrl')) { <span class="kp-error">{{ errorText('mainImageUrl') }}</span> }
+              @else { <span class="kp-hint">{{ t('admin.f.imageHint') }}</span> }
+              @if (form.controls.mainImageUrl.value && form.controls.mainImageUrl.valid) {
+                <img class="preview" [src]="form.controls.mainImageUrl.value" alt="" (error)="$any($event.target).style.display='none'" (load)="$any($event.target).style.display='block'" />
+              }
+            </div>
+
+            <div class="kp-field kp-span-2">
+              <label class="kp-label" for="pf-more-img">{{ t('admin.f.additionalImages') }}</label>
+              <textarea id="pf-more-img" class="kp-textarea" formControlName="additionalImagesText" dir="ltr" rows="3" placeholder="https://…"></textarea>
+              <div class="kp-image-row" style="margin-top: 0.375rem;">
+                <input #pfGalleryFiles type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden (change)="onGalleryFilesSelected($event)" />
+                <button type="button" class="kp-btn kp-btn-ghost kp-btn-sm kp-upload-btn" [disabled]="uploadingGallery()" (click)="pfGalleryFiles.click()">
+                  @if (uploadingGallery()) { <span class="kp-spinner dark"></span> {{ t('admin.f.uploading') }} }
+                  @else { {{ t('admin.f.uploadImages') }} }
+                </button>
+                <span class="kp-hint" style="align-self:center;">{{ t('admin.f.oneLinkPerLine') }}</span>
+              </div>
+            </div>
+
+            <div class="kp-field">
+              <label class="kp-label" for="pf-status">{{ t('admin.f.status') }}</label>
+              <select id="pf-status" class="kp-select" formControlName="status">
+                <option value="published">{{ t('admin.published') }}</option>
+                <option value="draft">{{ t('admin.draft') }}</option>
+              </select>
+            </div>
+          </div>
+        }
+
+        <!-- ───────────── TAB 2: DETAILS ───────────── -->
+        @if (tab() === 'details') {
+          <div class="kp-grid-2">
+            <div class="kp-field">
+              <label class="kp-label" for="pf-detEn">{{ t('admin.f.detailedEn') }}</label>
+              <textarea id="pf-detEn" class="kp-textarea tall" formControlName="detailedDescriptionEn" dir="ltr"></textarea>
+            </div>
+            <div class="kp-field">
+              <label class="kp-label" for="pf-detAr">{{ t('admin.f.detailedAr') }}</label>
+              <textarea id="pf-detAr" class="kp-textarea tall" formControlName="detailedDescriptionAr" dir="rtl"></textarea>
+            </div>
+
+            <div class="kp-field">
+              <label class="kp-label" for="pf-typeEn">{{ t('admin.f.typeEn') }}</label>
+              <input id="pf-typeEn" class="kp-input" formControlName="typeEn" dir="ltr" />
+            </div>
+            <div class="kp-field">
+              <label class="kp-label" for="pf-typeAr">{{ t('admin.f.typeAr') }}</label>
+              <input id="pf-typeAr" class="kp-input" formControlName="typeAr" dir="rtl" />
+            </div>
+
+            <div class="kp-field">
+              <label class="kp-label" for="pf-roleEn">{{ t('admin.f.roleEn') }}</label>
+              <input id="pf-roleEn" class="kp-input" formControlName="roleEn" dir="ltr" />
+            </div>
+            <div class="kp-field">
+              <label class="kp-label" for="pf-roleAr">{{ t('admin.f.roleAr') }}</label>
+              <input id="pf-roleAr" class="kp-input" formControlName="roleAr" dir="rtl" />
+            </div>
+
+            <div class="kp-field">
+              <label class="kp-label" for="pf-clientEn">{{ t('admin.f.clientEn') }}</label>
+              <input id="pf-clientEn" class="kp-input" formControlName="clientEn" dir="ltr" />
+            </div>
+            <div class="kp-field">
+              <label class="kp-label" for="pf-clientAr">{{ t('admin.f.clientAr') }}</label>
+              <input id="pf-clientAr" class="kp-input" formControlName="clientAr" dir="rtl" />
+            </div>
+
+            <div class="kp-field">
+              <label class="kp-label" for="pf-durEn">{{ t('admin.f.durationEn') }}</label>
+              <input id="pf-durEn" class="kp-input" formControlName="durationEn" dir="ltr" placeholder="3 months" />
+            </div>
+            <div class="kp-field">
+              <label class="kp-label" for="pf-durAr">{{ t('admin.f.durationAr') }}</label>
+              <input id="pf-durAr" class="kp-input" formControlName="durationAr" dir="rtl" placeholder="٣ أشهر" />
+            </div>
+
+          </div>
+        }
+
+        <!-- ───────────── TAB 3: TECH & TEAM ───────────── -->
+        @if (tab() === 'tech') {
+          <div class="kp-grid-2">
+            <div class="kp-field kp-span-2">
+              <span class="kp-label">{{ t('admin.f.categories') }}</span>
+              <app-tag-input [(values)]="categories" [placeholder]="t('admin.f.tagsHint')" />
+            </div>
+            <div class="kp-field kp-span-2">
+              <span class="kp-label">{{ t('admin.f.technologies') }}</span>
+              <app-tag-input [(values)]="technologies" [placeholder]="t('admin.f.tagsHint')" />
+            </div>
+            <div class="kp-field">
+              <span class="kp-label">{{ t('admin.f.frontendTech') }}</span>
+              <app-tag-input [(values)]="frontendTech" [placeholder]="t('admin.f.tagsHint')" />
+            </div>
+            <div class="kp-field">
+              <span class="kp-label">{{ t('admin.f.backendTech') }}</span>
+              <app-tag-input [(values)]="backendTech" [placeholder]="t('admin.f.tagsHint')" />
+            </div>
+
+            <div class="kp-field kp-span-2">
+              <span class="kp-label">{{ t('admin.f.team') }}</span>
+              @if (teamLoading()) {
+                <div class="kp-skel" style="height:40px;width:60%"></div>
+              } @else if (!team().length) {
+                <span class="kp-hint">{{ t('admin.f.teamEmpty') }}</span>
+              } @else {
+                <div class="team-grid">
+                  @for (m of team(); track m.id) {
+                    <button type="button" class="member" [class.on]="selectedTeam().includes(m.id)" [attr.aria-pressed]="selectedTeam().includes(m.id)" (click)="toggleMember(m.id)">
+                      @if (m.avatarUrl) { <img class="avatar" [src]="m.avatarUrl" alt="" /> }
+                      @else { <span class="avatar">{{ loc(m.nameAr, m.nameEn).charAt(0) }}</span> }
+                      {{ loc(m.nameAr, m.nameEn) }}
+                      @if (selectedTeam().includes(m.id)) { <span class="check">✓</span> }
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- ───────────── TAB 4: FEATURES & RESULTS ───────────── -->
+        @if (tab() === 'extras') {
+          <div class="kp-grid-2">
+            <div class="kp-field">
+              <label class="kp-label" for="pf-ppEn">{{ t('admin.f.painPointsEn') }}</label>
+              <textarea id="pf-ppEn" class="kp-textarea" formControlName="painPointsEnText" dir="ltr" rows="4"></textarea>
+              <span class="kp-hint">{{ t('admin.f.onePerLine') }}</span>
+            </div>
+            <div class="kp-field">
+              <label class="kp-label" for="pf-ppAr">{{ t('admin.f.painPointsAr') }}</label>
+              <textarea id="pf-ppAr" class="kp-textarea" formControlName="painPointsArText" dir="rtl" rows="4"></textarea>
+              <span class="kp-hint">{{ t('admin.f.onePerLine') }}</span>
+            </div>
+          </div>
+
+          <hr class="divider" />
+
+          <!-- Key features -->
+          <div class="rep-head">
+            <h4 class="kp-section-title">{{ t('admin.f.keyFeatures') }}</h4>
+            <button type="button" class="kp-btn kp-btn-ghost kp-btn-sm" (click)="addFeature()">+ {{ t('admin.f.addFeature') }}</button>
+          </div>
+          @for (g of keyFeatures.controls; track g; let i = $index) {
+            <div class="rep-card" [formGroup]="g">
+              <button type="button" class="kp-icon-btn del rep-remove" [attr.aria-label]="t('admin.remove')" (click)="removeAt(keyFeatures, i)">×</button>
+              <span class="idx">{{ i + 1 }}</span>
+              <div class="kp-grid-2">
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.titleEn') }}</label><input class="kp-input" formControlName="titleEn" dir="ltr" /></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.titleAr') }}</label><input class="kp-input" formControlName="titleAr" dir="rtl" /></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.descEn') }}</label><textarea class="kp-textarea" rows="2" formControlName="descriptionEn" dir="ltr"></textarea></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.descAr') }}</label><textarea class="kp-textarea" rows="2" formControlName="descriptionAr" dir="rtl"></textarea></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.featureIcon') }}</label><input class="kp-input" formControlName="icon" dir="ltr" placeholder="shield" /></div>
+              </div>
+            </div>
+          }
+
+          <hr class="divider" />
+
+          <!-- Execution steps -->
+          <div class="rep-head">
+            <h4 class="kp-section-title">{{ t('admin.f.steps') }}</h4>
+            <button type="button" class="kp-btn kp-btn-ghost kp-btn-sm" (click)="addStep()">+ {{ t('admin.f.addStep') }}</button>
+          </div>
+          @for (g of executionSteps.controls; track g; let i = $index) {
+            <div class="rep-card" [formGroup]="g">
+              <button type="button" class="kp-icon-btn del rep-remove" [attr.aria-label]="t('admin.remove')" (click)="removeAt(executionSteps, i)">×</button>
+              <span class="idx">{{ i + 1 }}</span>
+              <div class="kp-grid-2">
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.titleEn') }}</label><input class="kp-input" formControlName="titleEn" dir="ltr" /></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.titleAr') }}</label><input class="kp-input" formControlName="titleAr" dir="rtl" /></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.descEn') }}</label><textarea class="kp-textarea" rows="2" formControlName="descriptionEn" dir="ltr"></textarea></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.descAr') }}</label><textarea class="kp-textarea" rows="2" formControlName="descriptionAr" dir="rtl"></textarea></div>
+              </div>
+            </div>
+          }
+
+          <hr class="divider" />
+
+          <!-- Results -->
+          <div class="rep-head">
+            <h4 class="kp-section-title">{{ t('admin.f.results') }}</h4>
+            <button type="button" class="kp-btn kp-btn-ghost kp-btn-sm" (click)="addResult()">+ {{ t('admin.f.addResult') }}</button>
+          </div>
+          @for (g of results.controls; track g; let i = $index) {
+            <div class="rep-card" [formGroup]="g">
+              <button type="button" class="kp-icon-btn del rep-remove" [attr.aria-label]="t('admin.remove')" (click)="removeAt(results, i)">×</button>
+              <span class="idx">{{ i + 1 }}</span>
+              <div class="kp-grid-2">
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.titleEn') }}</label><input class="kp-input" formControlName="titleEn" dir="ltr" /></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.titleAr') }}</label><input class="kp-input" formControlName="titleAr" dir="rtl" /></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.descEn') }}</label><textarea class="kp-textarea" rows="2" formControlName="descriptionEn" dir="ltr"></textarea></div>
+                <div class="kp-field"><label class="kp-label">{{ t('admin.f.descAr') }}</label><textarea class="kp-textarea" rows="2" formControlName="descriptionAr" dir="rtl"></textarea></div>
+              </div>
+            </div>
+          }
+        }
+      </div>
+
+      <div class="kp-modal-footer">
+        <button type="button" class="kp-btn kp-btn-ghost" [disabled]="saving()" (click)="closed.emit()">{{ t('admin.cancel') }}</button>
+        <button type="submit" class="kp-btn kp-btn-primary" [disabled]="saving()">
+          @if (translating()) { <span class="kp-spinner"></span> {{ t('admin.translating') }} }
+          @else if (saving()) { <span class="kp-spinner"></span> {{ t('admin.saving') }} }
+          @else { {{ isEdit ? t('admin.saveChanges') : t('admin.create') }} }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,3 +1,58 @@
 :host {
   display: block;
 }
+
+/* Same size, motion and glow language as the chatbot launcher (.chatbot-launcher in
+   chatbot.component.css) — just green instead of blue, and stacked right above it so
+   the two floating actions read as a matched pair rather than two different widgets. */
+.whatsapp-float {
+  position: fixed;
+  bottom: 106px;
+  right: 28px;
+  z-index: 999;
+  width: 62px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25D366 0%, #1DA851 100%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 25px -4px rgba(37, 211, 102, 0.45), 0 4px 12px rgba(11, 21, 40, 0.15);
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  animation: wa-pulse-glow 2.8s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 14px 30px -4px rgba(37, 211, 102, 0.55), 0 6px 16px rgba(11, 21, 40, 0.2);
+}
+
+.whatsapp-float:active {
+  transform: scale(0.95);
+}
+
+@keyframes wa-pulse-glow {
+  0%   { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5), 0 8px 24px rgba(37, 211, 102, 0.3); }
+  70%  { box-shadow: 0 0 0 18px rgba(37, 211, 102, 0), 0 8px 24px rgba(37, 211, 102, 0.3); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 8px 24px rgba(37, 211, 102, 0.3); }
+}
+
+:host-context([dir="rtl"]) .whatsapp-float,
+:host-context(.rtl-mode) .whatsapp-float {
+  right: auto;
+  left: 28px;
+}
+
+@media (max-width: 480px) {
+  .whatsapp-float {
+    bottom: 94px;
+    right: 20px;
+  }
+  :host-context([dir="rtl"]) .whatsapp-float,
+  :host-context(.rtl-mode) .whatsapp-float {
+    right: auto;
+    left: 20px;
+  }
+}

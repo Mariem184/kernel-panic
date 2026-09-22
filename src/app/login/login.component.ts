@@ -25,6 +25,11 @@ export class LoginComponent {
   isLoading = signal(false);
   currentLang: 'ar' | 'en' = 'ar';
 
+  constructor() {
+    // Already logged in? Go straight to the landing page (admin mode).
+    if (this.auth.isLoggedIn()) this.router.navigate(['/']);
+  }
+
   toggleLang(): void {
     this.currentLang = this.currentLang === 'ar' ? 'en' : 'ar';
   }

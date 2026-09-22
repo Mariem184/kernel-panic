@@ -1,6 +1,7 @@
 import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslationService } from '../../services/translation.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -11,11 +12,12 @@ import { TranslationService } from '../../services/translation.service';
 })
 export class NavbarComponent implements OnInit {
   public ts = inject(TranslationService);
+  public auth = inject(AuthService);
   isScrolled = false;
   isMobileMenuOpen = false;
   activeSection = 'hero';
 
-  sections = ['hero', 'about', 'services', 'process', 'why-us', 'contact'];
+  sections = ['hero', 'about', 'services', 'projects', 'why-us', 'process', 'news', 'contact'];
 
   ngOnInit() {
     this.updateActiveSection();
@@ -29,6 +31,11 @@ export class NavbarComponent implements OnInit {
 
   setActive(sectionId: string) {
     this.activeSection = sectionId;
+  }
+
+  logout() {
+    this.auth.logout();
+    this.closeMobileMenu();
   }
 
   toggleMobileMenu() {

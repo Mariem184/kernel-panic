@@ -1,0 +1,138 @@
+<div class="kp-modal-backdrop">
+  <div class="kp-modal" role="dialog" aria-modal="true" [attr.aria-label]="isEdit ? t('admin.editNewsTitle') : t('admin.newNewsTitle')">
+
+    <div class="kp-modal-header">
+      <h3 class="kp-modal-title">{{ isEdit ? t('admin.editNewsTitle') : t('admin.newNewsTitle') }}</h3>
+      <button type="button" class="kp-icon-btn plain" [attr.aria-label]="t('admin.close')" [disabled]="saving()" (click)="closed.emit()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="form-wrap" novalidate style="display:contents">
+      <div class="kp-modal-body">
+
+        @if (formError()) { <div class="kp-form-error" role="alert">{{ formError() }}</div> }
+
+        <div class="kp-grid-2">
+          <div class="kp-field">
+            <label class="kp-label" for="nf-titleEn">{{ t('admin.f.titleEn') }}</label>
+            <input id="nf-titleEn" class="kp-input" [class.invalid]="invalid('titleEn') || titleMissing" formControlName="titleEn" dir="ltr" />
+            @if (invalid('titleEn')) { <span class="kp-error">{{ errorText('titleEn') }}</span> }
+          </div>
+          <div class="kp-field">
+            <label class="kp-label" for="nf-titleAr">{{ t('admin.f.titleAr') }}</label>
+            <input id="nf-titleAr" class="kp-input" [class.invalid]="invalid('titleAr') || titleMissing" formControlName="titleAr" dir="rtl" />
+            @if (invalid('titleAr')) { <span class="kp-error">{{ errorText('titleAr') }}</span> }
+          </div>
+          @if (titleMissing) {
+            <span class="kp-error kp-span-2" style="margin-top:-0.5rem">{{ t('admin.f.needOneTitle') }}</span>
+          } @else {
+            <span class="kp-hint kp-span-2" style="margin-top:-0.5rem">{{ t('admin.f.oneLanguageOk') }}</span>
+          }
+
+          <div class="kp-field kp-span-2">
+            <label class="kp-label" for="nf-slug">{{ t('admin.f.slug') }}<span class="req">*</span></label>
+            <input id="nf-slug" class="kp-input" [class.invalid]="invalid('slug')" formControlName="slug" dir="ltr" (input)="onSlugInput()" />
+            @if (invalid('slug')) { <span class="kp-error">{{ errorText('slug') }}</span> }
+            @else { <span class="kp-hint">{{ t('admin.f.slugHint') }}</span> }
+          </div>
+
+          <div class="kp-field">
+            <label class="kp-label" for="nf-excerptEn">{{ t('admin.f.excerptEn') }}</label>
+            <textarea id="nf-excerptEn" class="kp-textarea" [class.invalid]="invalid('excerptEn')" formControlName="excerptEn" dir="ltr" rows="3"></textarea>
+            @if (invalid('excerptEn')) { <span class="kp-error">{{ errorText('excerptEn') }}</span> }
+          </div>
+          <div class="kp-field">
+            <label class="kp-label" for="nf-excerptAr">{{ t('admin.f.excerptAr') }}</label>
+            <textarea id="nf-excerptAr" class="kp-textarea" [class.invalid]="invalid('excerptAr')" formControlName="excerptAr" dir="rtl" rows="3"></textarea>
+            @if (invalid('excerptAr')) { <span class="kp-error">{{ errorText('excerptAr') }}</span> }
+          </div>
+
+          <div class="kp-field">
+            <label class="kp-label" for="nf-contentEn">{{ t('admin.f.contentEn') }}</label>
+            <textarea id="nf-contentEn" class="kp-textarea tall" formControlName="contentEnHtml" dir="ltr"></textarea>
+          </div>
+          <div class="kp-field">
+            <label class="kp-label" for="nf-contentAr">{{ t('admin.f.contentAr') }}</label>
+            <textarea id="nf-contentAr" class="kp-textarea tall" formControlName="contentArHtml" dir="rtl"></textarea>
+          </div>
+          <span class="kp-hint kp-span-2" style="margin-top:-0.5rem">{{ t('admin.f.contentHint') }}</span>
+          <!-- Plain text only — no HTML tags needed. Paragraph breaks (blank lines) are kept when the article is shown. -->
+
+          <div class="kp-field kp-span-2">
+            <label class="kp-label" for="nf-image">{{ t('admin.f.imageUrl') }}</label>
+            <div class="kp-image-row">
+              <input id="nf-image" class="kp-input" [class.invalid]="invalid('mainImageUrl')" formControlName="mainImageUrl" dir="ltr" placeholder="https://…" />
+              <input #nfFile type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden (change)="onImageFileSelected($event)" />
+              <button type="button" class="kp-btn kp-btn-ghost kp-btn-sm kp-upload-btn" [disabled]="uploadingImage()" (click)="nfFile.click()">
+                @if (uploadingImage()) { <span class="kp-spinner dark"></span> {{ t('admin.f.uploading') }} }
+                @else { {{ t('admin.f.uploadImage') }} }
+              </button>
+            </div>
+            @if (invalid('mainImageUrl')) { <span class="kp-error">{{ errorText('mainImageUrl') }}</span> }
+            @else { <span class="kp-hint">{{ t('admin.f.imageHint') }}</span> }
+            @if (form.controls.mainImageUrl.value && form.controls.mainImageUrl.valid) {
+              <img class="preview" [src]="form.controls.mainImageUrl.value" alt="" (error)="$any($event.target).style.display='none'" (load)="$any($event.target).style.display='block'" />
+            }
+          </div>
+
+          <div class="kp-field">
+            <label class="kp-label" for="nf-catEn">{{ t('admin.f.categoryEn') }}</label>
+            <input id="nf-catEn" class="kp-input" formControlName="categoryEn" dir="ltr" />
+          </div>
+          <div class="kp-field">
+            <label class="kp-label" for="nf-catAr">{{ t('admin.f.categoryAr') }}</label>
+            <input id="nf-catAr" class="kp-input" formControlName="categoryAr" dir="rtl" />
+          </div>
+
+          <div class="kp-field">
+            <label class="kp-label" for="nf-authEn">{{ t('admin.f.authorEn') }}</label>
+            <input id="nf-authEn" class="kp-input" formControlName="authorNameEn" dir="ltr" />
+          </div>
+          <div class="kp-field">
+            <label class="kp-label" for="nf-authAr">{{ t('admin.f.authorAr') }}</label>
+            <input id="nf-authAr" class="kp-input" formControlName="authorNameAr" dir="rtl" />
+          </div>
+
+          <div class="kp-field">
+            <label class="kp-label" for="nf-read">{{ t('admin.f.readingTime') }}</label>
+            <input id="nf-read" type="number" min="1" max="240" class="kp-input" [class.invalid]="invalid('readingTimeMinutes')" formControlName="readingTimeMinutes" />
+          </div>
+          <div class="kp-field">
+            <label class="kp-label" for="nf-date">{{ t('admin.f.publishedDate') }}</label>
+            <input id="nf-date" type="date" class="kp-input" formControlName="publishedDate" />
+          </div>
+
+          <div class="kp-field kp-span-2">
+            <label class="kp-label" for="nf-ext">{{ t('admin.f.externalUrl') }}</label>
+            <input id="nf-ext" class="kp-input" [class.invalid]="invalid('externalUrl')" formControlName="externalUrl" dir="ltr" placeholder="https://…" />
+            @if (invalid('externalUrl')) { <span class="kp-error">{{ errorText('externalUrl') }}</span> }
+          </div>
+
+          <div class="kp-field">
+            <label class="kp-label" for="nf-status">{{ t('admin.f.status') }}</label>
+            <select id="nf-status" class="kp-select" formControlName="status">
+              <option value="published">{{ t('admin.published') }}</option>
+              <option value="draft">{{ t('admin.draft') }}</option>
+            </select>
+          </div>
+          <div class="kp-field" style="justify-content:flex-end">
+            <label class="kp-check">
+              <input type="checkbox" formControlName="isFeatured" />
+              {{ t('admin.f.featured') }}
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="kp-modal-footer">
+        <button type="button" class="kp-btn kp-btn-ghost" [disabled]="saving()" (click)="closed.emit()">{{ t('admin.cancel') }}</button>
+        <button type="submit" class="kp-btn kp-btn-primary" [disabled]="saving()">
+          @if (translating()) { <span class="kp-spinner"></span> {{ t('admin.translating') }} }
+          @else if (saving()) { <span class="kp-spinner"></span> {{ t('admin.saving') }} }
+          @else { {{ isEdit ? t('admin.saveChanges') : t('admin.create') }} }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+.news-section {
+  padding: 70px 0 90px 0;
+  background-color: var(--bg-page);
+}
+
+.news-grid {
+  display: grid;
+  /* auto-fit (not auto-fill) collapses empty tracks, so 1 or 2 cards stretch to
+     fill the row instead of sitting in a narrow column with a blank gap beside
+     them — while still wrapping to fewer columns on narrower screens on its own. */
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.news-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+}
+.news-card:focus-visible { box-shadow: 0 0 0 3px var(--primary-blue-glow); border-color: var(--primary-blue); }
+.news-card.is-featured { border-color: var(--card-border-hover); }
+.news-card.is-draft { border-style: dashed; }
+.news-card.skeleton { cursor: default; pointer-events: none; }
+.news-card.skeleton:hover { transform: none; }
+
+.media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #93B4E8;
+  background: linear-gradient(135deg, #E8F0FE 0%, #D6E4FB 100%);
+  overflow: hidden;
+}
+.media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.news-card:hover .media img { transform: scale(1.04); }
+.media-skel { aspect-ratio: 16 / 9; border-radius: 0; }
+
+.badges {
+  position: absolute;
+  top: 10px;
+  inset-inline-start: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  z-index: 2;
+}
+
+.admin-actions {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 1.25rem 1.375rem 1.375rem;
+  flex: 1;
+}
+
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.75rem; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+.cat { color: var(--primary-blue); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.title {
+  font-size: 1.1875rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--dark-navy);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.excerpt {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.foot {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.8125rem;
+}
+.read-time { color: var(--text-muted); font-weight: 600; }
+.more { display: inline-flex; align-items: center; gap: 6px; color: var(--primary-blue); font-weight: 700; transition: transform var(--transition-fast); }
+.news-card:hover .more { transform: translateX(4px); }
+:host-context([dir='rtl']) .news-card:hover .more { transform: translateX(-4px); }
+:host-context([dir='rtl']) .more svg { transform: scaleX(-1); }
+
+/* ── Details modal ── */
+.detail { max-width: 780px; position: relative; }
+.detail-close { position: absolute; top: 12px; inset-inline-end: 12px; z-index: 3; }
+.detail-body { padding: 0; }
+.detail-img { display: block; width: 100%; max-height: 360px; object-fit: cover; }
+.detail-body .meta, .detail-body .detail-title, .detail-body .author, .detail-body .prose, .detail-body .ext-btn, .detail-body .kp-skel { margin-inline: 1.75rem; }
+.detail-body .meta { margin-top: 1.5rem; }
+.detail-title { font-size: clamp(1.4rem, 3vw, 1.85rem); font-weight: 800; line-height: 1.3; color: var(--dark-navy); margin-top: 0.5rem; margin-bottom: 0.5rem; }
+.author { font-size: 0.875rem; color: var(--text-muted); font-weight: 600; }
+/* Plain text content — no HTML is rendered. white-space: pre-line keeps the admin's own
+   line breaks and blank lines (paragraph spacing) without needing any markup. */
+.prose { margin-top: 1.25rem; font-size: 1rem; line-height: 1.85; color: var(--text-secondary); overflow-wrap: anywhere; white-space: pre-line; }
+.ext-btn { margin-top: 1.5rem; margin-bottom: 1.75rem; text-decoration: none; }
+.detail-body > :last-child { margin-bottom: 1.75rem; }
+
+@media (max-width: 640px) {
+  .detail-body .meta, .detail-body .detail-title, .detail-body .author, .detail-body .prose, .detail-body .ext-btn, .detail-body .kp-skel { margin-inline: 1.125rem; }
+}

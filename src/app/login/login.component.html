@@ -75,7 +75,7 @@
         </span>
       </div>
 
-      <div class="error general-error" *ngIf="errorMessage" style="text-align: center; margin-bottom: 1rem;">
+      <div class="error general-error" *ngIf="errorMessage()" style="text-align: center; margin-bottom: 1rem;">
         {{ errorMessage() }}
       </div>
 
