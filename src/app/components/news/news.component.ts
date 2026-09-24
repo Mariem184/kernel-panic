@@ -64,6 +64,9 @@ export class NewsComponent {
   }
 
   /** Card grid uses the small generated thumbnail instead of the full-size image. */
+  /** Card grid always uses the small generated thumbnail — now that 1 and 2-card
+   *  layouts are both width-capped by CSS (instead of stretching edge-to-edge), the
+   *  thumbnail's resolution is enough in every case, so no exception is needed here. */
   thumb = thumbUrl;
 
   fmtDate(iso: string): string {

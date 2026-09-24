@@ -255,6 +255,19 @@
   transition: all var(--transition-fast);
   text-decoration: none;
 }
+
+/* Language toggle carries a text label ("AR"/"EN") alongside the globe icon, so it
+   needs to be a pill rather than the fixed square other icon-pill buttons use. */
+.lang-pill {
+  width: auto;
+  gap: 5px;
+  padding: 0 11px;
+}
+.lang-code {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
 .icon-pill svg { color: var(--primary-blue); flex-shrink: 0; }
 .icon-pill:hover {
   border-color: var(--primary-blue);

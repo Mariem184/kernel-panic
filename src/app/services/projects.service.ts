@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { API_BASE } from '../core/api.config';
 import {
-  PagedResult, ProjectCreatePayload, ProjectDetail, ProjectItem, ProjectUpdatePayload, TeamMember
+  PagedResult, ProjectCreatePayload, ProjectDetail, ProjectItem, ProjectUpdatePayload
 } from '../models/content.models';
 
 @Injectable({ providedIn: 'root' })
@@ -31,8 +31,4 @@ export class ProjectsService {
     return this.http.delete<{ message: string }>(`${this.url}/${id}`);
   }
 
-  /** Used by the project form to pick which team members worked on a project. */
-  teamMembers(): Observable<TeamMember[]> {
-    return this.http.get<PagedResult<TeamMember>>(`${API_BASE}/teammembers`).pipe(map(r => r.items));
-  }
 }

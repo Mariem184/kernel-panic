@@ -61,7 +61,18 @@
                 <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
               </svg>
               @if (p.mainImageUrl) {
-                <img [src]="thumb(p.mainImageUrl)" [alt]="loc(p.nameAr, p.nameEn)" loading="lazy" decoding="async" (error)="onThumbError($event, p.mainImageUrl)" />
+                @if (backdropSrc(p.id); as bg) {
+                  <img class="backdrop" [src]="bg" alt="" aria-hidden="true" decoding="async" />
+                }
+                <img
+                  [class.contain]="!!backdropSrc(p.id)"
+                  [src]="thumb(p.mainImageUrl)"
+                  [alt]="loc(p.nameAr, p.nameEn)"
+                  loading="lazy"
+                  decoding="async"
+                  (load)="onCardImgLoad($event, p.id)"
+                  (error)="onThumbError($event, p.mainImageUrl)"
+                />
               }
 
               @if (auth.isLoggedIn() && p.status === 'draft') {
@@ -125,7 +136,14 @@
       </button>
 
       <div class="kp-modal-body detail-body">
-        @if (activeImage()) { <img class="detail-img" [src]="activeImage()" alt="" (error)="onImgError($event)" /> }
+        @if (activeImage()) {
+          <div class="detail-media" [class.is-portrait]="activePortrait()">
+            @if (activePortrait()) {
+              <img class="detail-backdrop" [src]="activeImage()" alt="" aria-hidden="true" decoding="async" />
+            }
+            <img class="detail-img" [src]="activeImage()" alt="" (load)="onDetailImgLoad($event)" (error)="onImgError($event)" />
+          </div>
+        }
 
         <div class="pad">
           @if (loc(v.typeAr, v.typeEn)) { <span class="type">{{ loc(v.typeAr, v.typeEn) }}</span> }
@@ -142,6 +160,17 @@
                   <button type="button" class="thumb" [class.on]="activeImage() === img" (click)="activeImage.set(img)">
                     <img [src]="thumb(img)" alt="" loading="lazy" decoding="async" (error)="onThumbError($event, img)" />
                   </button>
+                }
+              </div>
+            }
+
+            @if (videoEmbed(d.videoUrl); as ve) {
+              <h4 class="block-title">{{ t('projects.video') }}</h4>
+              <div class="video-wrap">
+                @if (ve.kind === 'iframe') {
+                  <iframe [src]="ve.safeUrl" title="Project video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                } @else {
+                  <video [src]="ve.url" controls preload="metadata"></video>
                 }
               </div>
             }
@@ -220,7 +249,7 @@
             @if (d.teamMembers.length) {
               <h4 class="block-title">{{ t('projects.team') }}</h4>
               <div class="team">
-                @for (m of d.teamMembers; track m.id) {
+                @for (m of d.teamMembers; track $index) {
                   <div class="member">
                     @if (m.avatarUrl) { <img class="avatar" [src]="m.avatarUrl" alt="" (error)="onImgError($event)" /> }
                     @else { <span class="avatar">{{ initial(loc(m.nameAr, m.nameEn)) }}</span> }

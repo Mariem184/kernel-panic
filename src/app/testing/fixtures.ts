@@ -1,4 +1,4 @@
-import { NewsDetail, NewsItem, ProjectDetail, ProjectItem, TeamMember } from '../models/content.models';
+import { NewsDetail, NewsItem, ProjectDetail, ProjectItem, ProjectTeamMember } from '../models/content.models';
 
 /** Minimal-but-valid JWT (unsigned) whose `exp` is `secondsFromNow` away. */
 export function fakeJwt(secondsFromNow: number): string {
@@ -40,17 +40,17 @@ export function mkProject(id: number, name: string, status: 'published' | 'draft
   };
 }
 
-export function mkTeam(id: number, name: string): TeamMember {
-  return { id, name: { ar: name, en: name }, nameAr: name, nameEn: name, avatarUrl: '', jobTitle: { ar: '', en: '' }, isActive: true };
+export function mkTeam(name: string): ProjectTeamMember {
+  return { nameAr: name, nameEn: name, avatarUrl: '', jobTitleAr: '', jobTitleEn: '' };
 }
 
-export function mkProjectDetail(id: number, name: string, teamIds: number[] = []): ProjectDetail {
+export function mkProjectDetail(id: number, name: string, teamCount = 0): ProjectDetail {
   return {
     ...mkProject(id, name),
     detailedDescription: { ar: '', en: 'Long text' }, detailedDescriptionAr: '', detailedDescriptionEn: 'Long text',
-    additionalImageUrls: [], teamMembers: teamIds.map(i => mkTeam(i, 'Member ' + i)),
+    additionalImageUrls: [], teamMembers: Array.from({ length: teamCount }, (_, i) => mkTeam('Member ' + (i + 1))),
     frontendTech: ['Angular'], backendTech: ['.NET'],
-    duration: { ar: '', en: '' }, durationAr: '', durationEn: '', sourceCodeUrl: null,
+    duration: { ar: '', en: '' }, durationAr: '', durationEn: '', sourceCodeUrl: null, videoUrl: null,
     painPointsAr: [], painPointsEn: ['Slow'],
     keyFeatures: [{ icon: 'shield', titleAr: '', titleEn: 'Secure', descriptionAr: '', descriptionEn: 'Very' }],
     executionSteps: [{ order: 2, titleAr: '', titleEn: 'Build', descriptionAr: '', descriptionEn: '' },

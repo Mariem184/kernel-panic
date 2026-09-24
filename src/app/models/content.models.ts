@@ -80,6 +80,16 @@ export interface KeyFeature {
   descriptionEn: string;
 }
 
+/** A team member as listed on ONE project — embedded, not a reference to a shared
+ *  directory. Each project has its own independent list. */
+export interface ProjectTeamMember {
+  nameAr: string;
+  nameEn: string;
+  avatarUrl: string;
+  jobTitleAr: string;
+  jobTitleEn: string;
+}
+
 export interface ExecutionStep {
   order: number;
   titleAr: string;
@@ -103,6 +113,14 @@ export interface TeamMember {
   avatarUrl: string;
   jobTitle: LocalizedText;
   isActive: boolean;
+}
+
+export interface TeamMemberCreatePayload {
+  nameAr: string;
+  nameEn: string;
+  avatarUrl: string;
+  jobTitleAr: string;
+  jobTitleEn: string;
 }
 
 export interface ProjectItem {
@@ -136,13 +154,14 @@ export interface ProjectDetail extends ProjectItem {
   detailedDescriptionAr: string;
   detailedDescriptionEn: string;
   additionalImageUrls: string[];
-  teamMembers: TeamMember[];
+  teamMembers: ProjectTeamMember[];
   frontendTech: string[];
   backendTech: string[];
   duration: LocalizedText;
   durationAr: string;
   durationEn: string;
   sourceCodeUrl: string | null;
+  videoUrl: string | null;
   painPointsAr: string[];
   painPointsEn: string[];
   keyFeatures: KeyFeature[];
@@ -161,7 +180,7 @@ export interface ProjectCreatePayload {
   categories: string[];
   mainImageUrl: string;
   additionalImageUrls: string[];
-  teamMemberIds?: number[];
+  teamMembers: ProjectTeamMember[];
   technologies: string[];
   typeAr: string;
   typeEn: string;
@@ -174,6 +193,7 @@ export interface ProjectCreatePayload {
   clientAr: string;
   clientEn: string;
   sourceCodeUrl: string;
+  videoUrl: string;
   painPointsAr: string[];
   painPointsEn: string[];
   keyFeatures: KeyFeature[];

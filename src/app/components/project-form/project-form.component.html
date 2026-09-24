@@ -146,6 +146,13 @@
               <input id="pf-durAr" class="kp-input" formControlName="durationAr" dir="rtl" placeholder="٣ أشهر" />
             </div>
 
+            <div class="kp-field kp-span-2">
+              <label class="kp-label" for="pf-video">{{ t('admin.f.videoUrl') }}</label>
+              <input id="pf-video" class="kp-input" [class.invalid]="invalid('videoUrl')" formControlName="videoUrl" dir="ltr" placeholder="https://youtube.com/watch?v=… or a Google Drive link" />
+              @if (invalid('videoUrl')) { <span class="kp-error">{{ errorText('videoUrl') }}</span> }
+              @else { <span class="kp-hint">{{ t('admin.f.videoUrlHint') }}</span> }
+            </div>
+
           </div>
         }
 
@@ -171,22 +178,39 @@
 
             <div class="kp-field kp-span-2">
               <span class="kp-label">{{ t('admin.f.team') }}</span>
-              @if (teamLoading()) {
-                <div class="kp-skel" style="height:40px;width:60%"></div>
-              } @else if (!team().length) {
-                <span class="kp-hint">{{ t('admin.f.teamEmpty') }}</span>
-              } @else {
-                <div class="team-grid">
-                  @for (m of team(); track m.id) {
-                    <button type="button" class="member" [class.on]="selectedTeam().includes(m.id)" [attr.aria-pressed]="selectedTeam().includes(m.id)" (click)="toggleMember(m.id)">
-                      @if (m.avatarUrl) { <img class="avatar" [src]="m.avatarUrl" alt="" /> }
-                      @else { <span class="avatar">{{ loc(m.nameAr, m.nameEn).charAt(0) }}</span> }
-                      {{ loc(m.nameAr, m.nameEn) }}
-                      @if (selectedTeam().includes(m.id)) { <span class="check">✓</span> }
-                    </button>
-                  }
+              <span class="kp-hint">{{ t('admin.f.teamHint') }}</span>
+
+              @for (g of teamMembers.controls; track g; let i = $index) {
+                <div class="rep-card team-member-card" [formGroup]="g">
+                  <button type="button" class="kp-icon-btn del rep-remove" [attr.aria-label]="t('admin.remove')" (click)="removeAt(teamMembers, i)">×</button>
+                  <span class="idx">{{ i + 1 }}</span>
+                  <div class="kp-grid-2">
+                    <div class="kp-field"><label class="kp-label">{{ t('admin.f.nameEn') }}</label><input class="kp-input" formControlName="nameEn" dir="ltr" /></div>
+                    <div class="kp-field"><label class="kp-label">{{ t('admin.f.nameAr') }}</label><input class="kp-input" formControlName="nameAr" dir="rtl" /></div>
+                    <span class="kp-hint kp-span-2" style="margin-top:-0.5rem">{{ t('admin.f.oneLanguageOk') }}</span>
+                    <div class="kp-field"><label class="kp-label">{{ t('admin.f.jobTitleEn') }}</label><input class="kp-input" formControlName="jobTitleEn" dir="ltr" /></div>
+                    <div class="kp-field"><label class="kp-label">{{ t('admin.f.jobTitleAr') }}</label><input class="kp-input" formControlName="jobTitleAr" dir="rtl" /></div>
+                    <div class="kp-field kp-span-2">
+                      <label class="kp-label">{{ t('admin.f.memberPhoto') }}</label>
+                      <div class="kp-image-row">
+                        <input #memberFile type="file" accept="image/jpeg,image/png,image/webp,image/gif" hidden (change)="onTeamMemberAvatarSelected($event, i)" />
+                        <button type="button" class="kp-btn kp-btn-ghost kp-btn-sm kp-upload-btn" [disabled]="uploadingMemberAvatar() === i" (click)="memberFile.click()">
+                          @if (uploadingMemberAvatar() === i) { <span class="kp-spinner dark"></span> {{ t('admin.f.uploading') }} }
+                          @else { {{ t('admin.f.uploadImage') }} }
+                        </button>
+                        @if (g.controls['avatarUrl'].value) {
+                          <img class="member-avatar-preview" [src]="g.controls['avatarUrl'].value" alt="" />
+                        }
+                      </div>
+                      <span class="kp-hint">{{ t('admin.f.memberPhotoHint') }}</span>
+                    </div>
+                  </div>
                 </div>
               }
+
+              <button type="button" class="kp-btn kp-btn-ghost kp-btn-sm" style="margin-top:0.5rem;align-self:flex-start;" (click)="addTeamMember()">
+                + {{ t('admin.f.addMember') }}
+              </button>
             </div>
           </div>
         }

@@ -1,4 +1,5 @@
 import { Component, HostListener, computed, effect, inject, signal, untracked } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 import { AuthService } from '../../services/auth.service';
 import { ProjectsService } from '../../services/projects.service';
@@ -7,6 +8,7 @@ import { TranslationService } from '../../services/translation.service';
 import { ProjectDetail, ProjectItem } from '../../models/content.models';
 import { extractApiError } from '../../core/api-error';
 import { thumbUrl } from '../../core/image-url';
+import { resolveVideoEmbed } from '../../core/video-embed';
 import { ProjectFormComponent } from '../project-form/project-form.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
@@ -21,6 +23,7 @@ const PAGE_SIZE = 3;
 })
 export class ProjectsComponent {
   ts = inject(TranslationService);
+  private sanitizer = inject(DomSanitizer);
   auth = inject(AuthService);
   private api = inject(ProjectsService);
   private toast = inject(ToastService);
@@ -46,6 +49,17 @@ export class ProjectsComponent {
   viewing = signal<ProjectItem | null>(null);
   viewDetail = signal<ProjectDetail | null>(null);
   activeImage = signal('');
+  /** True when the image currently shown at the top of the modal is portrait / near-square. */
+  activePortrait = signal(false);
+
+  /** Cards whose image is portrait / near-square (e.g. a phone screenshot), keyed by project id.
+   *  The value is the URL that actually loaded, so the blurred backdrop reuses the same
+   *  (already cached) file even if the thumbnail 404'd and we fell back to the full image. */
+  private portraitSrc = signal<Record<number, string>>({});
+
+  /** Anything narrower than this width/height ratio can't fill the wide card without
+   *  chopping a big part off, so it is shown whole (contain) over a color-matched backdrop. */
+  private static readonly PORTRAIT_MAX_RATIO = 1.2;
 
   private requestSeq = 0;
 
@@ -63,9 +77,22 @@ export class ProjectsComponent {
     return (this.ts.currentLang() === 'ar' ? ar || en : en || ar) || '';
   }
 
-  /** Card grid + gallery strip use the small generated thumbnail; the active/detail
-   *  image stays full-size. */
+  /** Gallery strip thumbnails (small, fixed size, unrelated to the card grid). Card grid
+   *  now always uses this same thumbnail too — 1 and 2-card layouts are width-capped by
+   *  CSS instead of stretching edge-to-edge, so the thumbnail's resolution is enough. */
   thumb = thumbUrl;
+
+  /** Resolves the project's optional video link (YouTube/Vimeo/Google Drive/direct file)
+   *  into something the template can render — an iframe with a sanitized URL, or a plain
+   *  <video> tag. Returns null if there's no video or the link isn't a recognized source. */
+  videoEmbed(videoUrl: string | null): { kind: 'iframe'; safeUrl: SafeResourceUrl } | { kind: 'file'; url: string } | null {
+    const resolved = resolveVideoEmbed(videoUrl);
+    if (!resolved) return null;
+    if (resolved.kind === 'iframe') {
+      return { kind: 'iframe', safeUrl: this.sanitizer.bypassSecurityTrustResourceUrl(resolved.url) };
+    }
+    return resolved;
+  }
 
   /** Language-aware list with fallback to the other language. */
   locList(ar: string[] | undefined, en: string[] | undefined): string[] {
@@ -178,6 +205,7 @@ export class ProjectsComponent {
     this.viewing.set(item);
     this.viewDetail.set(null);
     this.activeImage.set(item.mainImageUrl || '');
+    this.activePortrait.set(false);
     document.body.classList.add('kp-modal-open');
 
     this.api.get(item.slug).subscribe({
@@ -203,6 +231,33 @@ export class ProjectsComponent {
   @HostListener('document:keydown.escape')
   onEsc(): void {
     if (this.viewing() && !this.formOpen() && !this.deleting()) this.closeDetail();
+  }
+
+  /** URL to use for the blurred backdrop of this card, or '' when its image is landscape. */
+  backdropSrc(id: number): string {
+    return this.portraitSrc()[id] ?? '';
+  }
+
+  /** Runs when a card image finishes loading (including after the thumbnail→full fallback):
+   *  decides whether it needs the "show whole image on a matching background" treatment. */
+  onCardImgLoad(event: Event, id: number): void {
+    const img = event.target as HTMLImageElement;
+    if (!img.naturalWidth || !img.naturalHeight) return;
+    const isPortrait = img.naturalWidth / img.naturalHeight < ProjectsComponent.PORTRAIT_MAX_RATIO;
+    const src = img.currentSrc || img.src;
+    this.portraitSrc.update(map => {
+      if (isPortrait) return map[id] === src ? map : { ...map, [id]: src };
+      if (!(id in map)) return map;
+      const { [id]: _removed, ...rest } = map;
+      return rest;
+    });
+  }
+
+  /** Modal top image finished loading (fires again each time a gallery thumbnail is picked). */
+  onDetailImgLoad(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (!img.naturalWidth || !img.naturalHeight) return;
+    this.activePortrait.set(img.naturalWidth / img.naturalHeight < ProjectsComponent.PORTRAIT_MAX_RATIO);
   }
 
   onImgError(event: Event): void {

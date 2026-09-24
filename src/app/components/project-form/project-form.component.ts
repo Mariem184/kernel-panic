@@ -5,7 +5,7 @@ import { ProjectsService } from '../../services/projects.service';
 import { ToastService } from '../../services/toast.service';
 import { TranslationService } from '../../services/translation.service';
 import { MediaService, validateImageFile } from '../../services/media.service';
-import { ProjectCreatePayload, ProjectDetail, TeamMember } from '../../models/content.models';
+import { ProjectCreatePayload, ProjectDetail } from '../../models/content.models';
 import { extractApiError } from '../../core/api-error';
 import { SLUG_PATTERN, atLeastOneOf, httpUrlValidator, linesToList, slugify, truncateForBackend } from '../../core/form-utils';
 import { translatePairs } from '../../core/auto-translate';
@@ -47,11 +47,11 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
   frontendTech = signal<string[]>([]);
   backendTech = signal<string[]>([]);
 
-  // Team members
-  team = signal<TeamMember[]>([]);
-  teamLoading = signal(true);
-  selectedTeam = signal<number[]>([]);
-  private originalTeam: number[] = [];
+  // Team members — embedded per-project (NOT a shared/global directory): each project
+  // keeps its own list, so adding or removing someone here never touches any other
+  // project. A per-row avatar upload tracks which row (if any) is currently uploading.
+  teamMembers = new FormArray<FormGroup>([]);
+  uploadingMemberAvatar = signal<number | null>(null);
 
   private slugTouchedByUser = false;
 
@@ -75,6 +75,7 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
     clientEn: [''],
     durationAr: [''],
     durationEn: [''],
+    videoUrl: ['', [Validators.maxLength(1000), httpUrlValidator]],
 
     painPointsArText: [''],
     painPointsEnText: ['']
@@ -86,7 +87,7 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
 
   private readonly tabFields: Record<Tab, ProjectField[]> = {
     basic: ['nameAr', 'nameEn', 'slug', 'shortDescriptionAr', 'shortDescriptionEn', 'mainImageUrl'],
-    details: [],
+    details: ['videoUrl'],
     tech: [],
     extras: []
   };
@@ -128,6 +129,7 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
         roleAr: p.roleAr ?? '', roleEn: p.roleEn ?? '',
         clientAr: p.clientAr ?? '', clientEn: p.clientEn ?? '',
         durationAr: p.durationAr ?? '', durationEn: p.durationEn ?? '',
+        videoUrl: p.videoUrl ?? '',
         painPointsArText: (p.painPointsAr ?? []).join('\n'),
         painPointsEnText: (p.painPointsEn ?? []).join('\n')
       });
@@ -138,9 +140,7 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
       (p.keyFeatures ?? []).forEach(f => this.keyFeatures.push(this.featureGroup(f)));
       [...(p.executionSteps ?? [])].sort((a, b) => a.order - b.order).forEach(s => this.executionSteps.push(this.stepGroup(s)));
       (p.results ?? []).forEach(r => this.results.push(this.resultGroup(r)));
-
-      this.originalTeam = (p.teamMembers ?? []).map(m => m.id);
-      this.selectedTeam.set([...this.originalTeam]);
+      (p.teamMembers ?? []).forEach(m => this.teamMembers.push(this.teamMemberGroup(m)));
     }
 
     this.form.controls.nameEn.valueChanges
@@ -155,11 +155,6 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
           this.form.controls.slug.setValue(slugify(v), { emitEvent: false });
         }
       });
-
-    this.api.teamMembers().subscribe({
-      next: list => { this.team.set(list); this.teamLoading.set(false); },
-      error: () => this.teamLoading.set(false)
-    });
   }
 
   ngOnDestroy(): void { document.body.classList.remove('kp-modal-open'); }
@@ -186,16 +181,44 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
   private resultGroup(r?: Partial<{ titleAr: string; titleEn: string; descriptionAr: string; descriptionEn: string }>): FormGroup {
     return this.stepGroup(r);
   }
+  private teamMemberGroup(m?: Partial<{ nameAr: string; nameEn: string; jobTitleAr: string; jobTitleEn: string; avatarUrl: string }>): FormGroup {
+    return this.fb.nonNullable.group({
+      nameAr: [m?.nameAr ?? ''], nameEn: [m?.nameEn ?? ''],
+      jobTitleAr: [m?.jobTitleAr ?? ''], jobTitleEn: [m?.jobTitleEn ?? ''],
+      avatarUrl: [m?.avatarUrl ?? '']
+    });
+  }
 
   addFeature(): void { this.keyFeatures.push(this.featureGroup()); }
   addStep(): void { this.executionSteps.push(this.stepGroup()); }
   addResult(): void { this.results.push(this.resultGroup()); }
+  addTeamMember(): void { this.teamMembers.push(this.teamMemberGroup()); }
   removeAt(arr: FormArray<FormGroup>, i: number): void { arr.removeAt(i); }
 
-  /* ───────── team ───────── */
+  /** "Add a photo" for one team-member row — uploads the file and fills that row's avatarUrl. */
+  onTeamMemberAvatarSelected(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
 
-  toggleMember(id: number): void {
-    this.selectedTeam.update(ids => ids.includes(id) ? ids.filter(x => x !== id) : [...ids, id]);
+    const problem = validateImageFile(file);
+    if (problem) {
+      this.toast.error(this.t(problem === 'tooLarge' ? 'admin.f.imageTooLarge' : 'admin.f.imageInvalidType'));
+      return;
+    }
+
+    this.uploadingMemberAvatar.set(index);
+    this.media.upload(file).subscribe({
+      next: res => {
+        this.uploadingMemberAvatar.set(null);
+        (this.teamMembers.at(index) as FormGroup).controls['avatarUrl'].setValue(res.url);
+      },
+      error: err => {
+        this.uploadingMemberAvatar.set(null);
+        this.toast.error(extractApiError(err, this.t));
+      }
+    });
   }
 
   loc(ar: string, en: string): string {
@@ -357,20 +380,17 @@ export class ProjectFormComponent implements OnInit, OnDestroy {
       durationAr: t['duration'].ar, durationEn: t['duration'].en,
       clientAr: t['client'].ar, clientEn: t['client'].en,
       sourceCodeUrl: '', // field removed from the admin form — "Source code" is no longer shown
+      videoUrl: v.videoUrl.trim(),
       painPointsAr: linesToList(v.painPointsArText),
       painPointsEn: linesToList(v.painPointsEnText),
       keyFeatures: this.keyFeatures.getRawValue().map(clean).filter(filled) as ProjectCreatePayload['keyFeatures'],
       executionSteps: this.executionSteps.getRawValue().map(clean).filter(filled)
         .map((s, i) => ({ ...s, order: i + 1 })) as ProjectCreatePayload['executionSteps'],
       results: this.results.getRawValue().map(clean).filter(filled) as ProjectCreatePayload['results'],
+      teamMembers: this.teamMembers.getRawValue().map(clean)
+        .filter(m => (m as { nameAr: string; nameEn: string }).nameAr || (m as { nameAr: string; nameEn: string }).nameEn) as ProjectCreatePayload['teamMembers'],
       status: v.status
     };
-
-    // The API rebuilds the team join-rows on every update that includes teamMemberIds,
-    // so only send it when the selection really changed (or on create).
-    const team = this.selectedTeam();
-    const teamChanged = team.length !== this.originalTeam.length || team.some(id => !this.originalTeam.includes(id));
-    if (this.isEdit ? teamChanged : team.length > 0) payload.teamMemberIds = team;
 
     const current = this.project();
     const request$ = current ? this.api.update(current.id, payload) : this.api.create(payload);
