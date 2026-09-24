@@ -61,7 +61,10 @@
                 <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
               </svg>
               @if (p.mainImageUrl) {
-                <img [src]="thumb(p.mainImageUrl)" [alt]="loc(p.nameAr, p.nameEn)" loading="lazy" decoding="async" (error)="onThumbError($event, p.mainImageUrl)" />
+                @if (backdropSrc(p.id); as bd) {
+                  <img class="backdrop" [src]="bd" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+                }
+                <img [class.contain]="!!backdropSrc(p.id)" [src]="thumb(p.mainImageUrl)" [alt]="loc(p.nameAr, p.nameEn)" loading="lazy" decoding="async" (load)="onCardImgLoad($event, p.id)" (error)="onThumbError($event, p.mainImageUrl)" />
               }
 
               @if (auth.isLoggedIn() && p.status === 'draft') {
@@ -125,7 +128,12 @@
       </button>
 
       <div class="kp-modal-body detail-body">
-        @if (activeImage()) { <img class="detail-img" [src]="activeImage()" alt="" (error)="onImgError($event)" /> }
+        @if (activeImage()) {
+          <div class="detail-media" [class.is-portrait]="activePortrait()">
+            @if (activePortrait()) { <img class="detail-backdrop" [src]="activeImage()" alt="" aria-hidden="true" /> }
+            <img class="detail-img" [src]="activeImage()" alt="" (load)="onDetailImgLoad($event)" (error)="onImgError($event)" />
+          </div>
+        }
 
         <div class="pad">
           @if (loc(v.typeAr, v.typeEn)) { <span class="type">{{ loc(v.typeAr, v.typeEn) }}</span> }

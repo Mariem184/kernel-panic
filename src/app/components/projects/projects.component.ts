@@ -49,6 +49,17 @@ export class ProjectsComponent {
   viewing = signal<ProjectItem | null>(null);
   viewDetail = signal<ProjectDetail | null>(null);
   activeImage = signal('');
+  /** True when the image currently shown at the top of the modal is portrait / near-square. */
+  activePortrait = signal(false);
+
+  /** Cards whose image is portrait / near-square (e.g. a phone screenshot), keyed by project id.
+   *  The value is the URL that actually loaded, so the blurred backdrop reuses the same
+   *  (already cached) file even if the thumbnail 404'd and we fell back to the full image. */
+  private portraitSrc = signal<Record<number, string>>({});
+
+  /** Anything narrower than this width/height ratio can't fill the wide card without
+   *  chopping a big part off, so it is shown whole (contain) over a color-matched backdrop. */
+  private static readonly PORTRAIT_MAX_RATIO = 1.2;
 
   private requestSeq = 0;
 
@@ -194,6 +205,7 @@ export class ProjectsComponent {
     this.viewing.set(item);
     this.viewDetail.set(null);
     this.activeImage.set(item.mainImageUrl || '');
+    this.activePortrait.set(false);
     document.body.classList.add('kp-modal-open');
 
     this.api.get(item.slug).subscribe({
@@ -219,6 +231,33 @@ export class ProjectsComponent {
   @HostListener('document:keydown.escape')
   onEsc(): void {
     if (this.viewing() && !this.formOpen() && !this.deleting()) this.closeDetail();
+  }
+
+  /** URL to use for the blurred backdrop of this card, or '' when its image is landscape. */
+  backdropSrc(id: number): string {
+    return this.portraitSrc()[id] ?? '';
+  }
+
+  /** Runs when a card image finishes loading (including after the thumbnail→full fallback):
+   *  decides whether it needs the "show whole image on a matching background" treatment. */
+  onCardImgLoad(event: Event, id: number): void {
+    const img = event.target as HTMLImageElement;
+    if (!img.naturalWidth || !img.naturalHeight) return;
+    const isPortrait = img.naturalWidth / img.naturalHeight < ProjectsComponent.PORTRAIT_MAX_RATIO;
+    const src = img.currentSrc || img.src;
+    this.portraitSrc.update(map => {
+      if (isPortrait) return map[id] === src ? map : { ...map, [id]: src };
+      if (!(id in map)) return map;
+      const { [id]: _removed, ...rest } = map;
+      return rest;
+    });
+  }
+
+  /** Modal top image finished loading (fires again each time a gallery thumbnail is picked). */
+  onDetailImgLoad(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    if (!img.naturalWidth || !img.naturalHeight) return;
+    this.activePortrait.set(img.naturalWidth / img.naturalHeight < ProjectsComponent.PORTRAIT_MAX_RATIO);
   }
 
   onImgError(event: Event): void {
