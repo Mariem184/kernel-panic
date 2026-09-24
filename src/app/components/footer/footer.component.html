@@ -52,34 +52,26 @@
           <li><a href="#about">{{ ts.t('footer.linkAbout') }}</a></li>
           <li><a href="#services">{{ ts.t('footer.linkServices') }}</a></li>
           <li><a href="#why-us">{{ ts.t('footer.linkWhyUs') }}</a></li>
-          <li><a href="#contact">{{ ts.t('footer.linkContact') }}</a></li>
         </ul>
       </div>
 
-      <!-- Column 3: Services -->
-      <div class="footer-col">
+      <!-- Column 3: Services — split into two real side-by-side lists (not CSS
+           multi-column, which didn't render as two visually distinct columns for
+           short list items like these) so the 5 links read as 3 + 2 instead of one
+           long single column. -->
+      <div class="footer-col services-col">
         <h4 class="col-title">{{ ts.t('footer.colServices') }}</h4>
-        <ul class="footer-links">
-          <li><a href="#services">{{ ts.t('services.item1.title') }}</a></li>
-          <li><a href="#services">{{ ts.t('services.item2.title') }}</a></li>
-          <li><a href="#services">{{ ts.t('services.item3.title') }}</a></li>
-          <li><a href="#services">{{ ts.t('services.item4.title') }}</a></li>
-          <li><a href="#services">{{ ts.t('services.item5.title') }}</a></li>
-        </ul>
-      </div>
-
-      <!-- Column 4: Connect -->
-      <div class="footer-col">
-        <h4 class="col-title">{{ ts.t('footer.colConnect') }}</h4>
-        <ul class="footer-links">
-          <li><a href="https://wa.me/201091610085" target="_blank" rel="noopener noreferrer">WhatsApp (01091610085)</a></li>
-          <li><a href="https://whatsapp.com/channel/0029VbD9n5YLikg6FPSg3f2Q" target="_blank" rel="noopener noreferrer">WhatsApp Channel</a></li>
-          <li><a href="mailto:kernelpanic177@gmail.com">kernelpanic177@gmail.com</a></li>
-          <li><a href="https://www.linkedin.com/company/kernel-panik/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-          <li><a href="https://www.facebook.com/share/19YzjS7c7m/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
-          <li><a href="https://www.instagram.com/kern.elpanic?igsh=eWdwMjV2bWlwNDVu" target="_blank" rel="noopener noreferrer">Instagram</a></li>
-          <li><a href="https://www.tiktok.com/@kernel.panic28?_r=1&_t=ZS-992uC2F2I0i" target="_blank" rel="noopener noreferrer">TikTok</a></li>
-        </ul>
+        <div class="services-links-row">
+          <ul class="footer-links">
+            <li><a href="#services">{{ ts.t('services.item1.title') }}</a></li>
+            <li><a href="#services">{{ ts.t('services.item2.title') }}</a></li>
+            <li><a href="#services">{{ ts.t('services.item3.title') }}</a></li>
+          </ul>
+          <ul class="footer-links">
+            <li><a href="#services">{{ ts.t('services.item4.title') }}</a></li>
+            <li><a href="#services">{{ ts.t('services.item5.title') }}</a></li>
+          </ul>
+        </div>
       </div>
     </div>
 

@@ -46,22 +46,22 @@ export class TranslationService {
       soundFamiliar: {
         tag: 'COMMON CHALLENGES',
         title: 'Sound Familiar?',
-        desc: 'Modern businesses face constant technological challenges. We solve the issues that hold your business back.',
+        desc: 'Modern businesses face a wide range of technology challenges that can affect productivity, security, and growth. We help organizations address the technical issues that impact their operations and digital performance.',
         card1: {
           title: 'Frequent Network Outages',
-          desc: 'Slow internet, unreliable connections, and sudden server downtime disrupting daily business operations.'
+          desc: 'Slow connections, unstable networks, and unexpected service interruptions that can disrupt day-to-day business operations.'
         },
         card2: {
           title: 'Cybersecurity Risks',
-          desc: 'Unprotected data, ransomware vulnerabilities, and rising digital threats putting company assets at risk.'
+          desc: 'Unprotected systems, ransomware exposure, and other cyber threats that can put sensitive data and critical business assets at risk.'
         },
         card3: {
-          title: 'Legacy Inflexible Systems',
-          desc: 'Outdated software and tools that cannot scale with business growth or integrate with modern platforms.'
+          title: 'Legacy & Inflexible Systems',
+          desc: 'Outdated software and technologies that limit scalability, integration, and the ability to adapt to evolving business needs.'
         },
         card4: {
           title: 'Lack of IT Expertise',
-          desc: 'Difficulty finding trained specialists to secure, maintain, and upgrade technical infrastructure.'
+          desc: 'Difficulty accessing qualified technical professionals to secure, maintain, troubleshoot, and modernize IT infrastructure.'
         }
       },
       whoWeAre: {
@@ -83,7 +83,7 @@ export class TranslationService {
         desc: 'End-to-end technology services tailored to protect, streamline, and accelerate your business operations.',
         item1: {
           title: 'Cybersecurity & Ethical Hacking',
-          desc: 'Vulnerability assessment, penetration testing, threat detection, and comprehensive data protection to shield your systems against cyber attacks.',
+          desc: 'Vulnerability assessment, penetration testing, threat detection, and data protection solutions designed to identify security risks, strengthen your systems, and protect critical assets against cyber threats.',
           feature1: 'Penetration Testing & Audits',
           feature2: 'Firewall & Server Hardening',
           feature3: 'Incident Response & Recovery'
@@ -111,7 +111,7 @@ export class TranslationService {
         },
         item5: {
           title: 'Courses & Professional Training',
-          desc: 'Hands-on practical training programs in ethical hacking, networking, and software engineering to upskill corporate teams and individuals.',
+          desc: 'Hands-on training programs in ethical hacking, networking, and software engineering, designed to enhance the technical skills and capabilities of corporate teams and individual professionals.',
           feature1: 'Hands-on Labs & Projects',
           feature2: 'Cybersecurity Certifications',
           feature3: 'Custom Corporate Training'
@@ -119,25 +119,25 @@ export class TranslationService {
       },
       process: {
         tag: 'OUR METHODOLOGY',
-        title: 'How We Ensure Flawless Delivery',
-        desc: 'A structured 4-step engineering process designed to eliminate downtime and guarantee success.',
+        title: 'How We Deliver with Confidence',
+        desc: 'A structured four-step engineering process designed to minimize risks, ensure quality, and deliver reliable technology solutions aligned with your business requirements.',
         step1Num: '01',
-        step1Title: 'Discovery & Audit',
-        step1Desc: 'We deeply analyze your current infrastructure, workflows, and vulnerabilities to pinpoint exact requirements.',
+        step1Title: 'Discovery & Assessment',
+        step1Desc: 'We analyze your existing infrastructure, workflows, and security posture to understand your requirements, identify potential risks, and define clear objectives.',
         step2Num: '02',
         step2Title: 'Strategic Architecture',
-        step2Desc: 'We design custom, scalable blueprints optimized for robust security, high performance, and cost efficiency.',
+        step2Desc: 'We design tailored, scalable solutions optimized for security, performance, reliability, and cost efficiency.',
         step3Num: '03',
         step3Title: 'Seamless Implementation',
-        step3Desc: 'Our engineers deploy systems with zero operational downtime, following industry-standard best practices.',
+        step3Desc: 'Our engineers deploy and integrate solutions with minimal operational disruption, following industry standards and established engineering best practices.',
         step4Num: '04',
         step4Title: 'Continuous Monitoring & Support',
-        step4Desc: 'We maintain, monitor, and optimize your systems 24/7 to ensure long-term stability and zero surprises.'
+        step4Desc: 'We provide ongoing monitoring, maintenance, and technical support to help maintain system reliability, security, and performance over time.'
       },
       whyUs: {
         tag: 'WHY KERNEL PANIC',
         title: 'Built for Reliability. Engineered for Growth.',
-        desc: 'Why leading companies trust Kernel Panic as their dedicated technology partner.',
+        desc: 'We combine technical expertise, practical experience, and tailored technology solutions to help organizations build reliable systems, strengthen their digital infrastructure, and support sustainable growth.',
         feat1Title: 'Expert Specialized Engineers',
         feat1Desc: 'Certified specialists across cybersecurity, networks, software, and systems architecture.',
         feat2Title: 'Proactive Zero-Panic Security',
@@ -391,22 +391,22 @@ export class TranslationService {
       soundFamiliar: {
         tag: 'التحديات الشائعة',
         title: 'هل تبدو هذه المشاكل مألوفة؟',
-        desc: 'تواجه الشركات الحديثة تحديات تقنية مستمرة. نحن نقدم الحلول الجذرية لإزالة العقبات التي تعيق نموك.',
+        desc: 'تواجه الشركات الحديثة مجموعة واسعة من التحديات التقنية التي قد تؤثر على الإنتاجية والأمان والنمو. نساعد المؤسسات على معالجة المشكلات التقنية التي تؤثر على عملياتها وأدائها الرقمي.',
         card1: {
           title: 'انقطاع وبطء الشبكات',
-          desc: 'بطء الإنترنت، وعدم استقرار الاتصال، وسقوط الخوادم المفاجئ الذي يعطل سير العمل اليومي.'
+          desc: 'اتصالات بطيئة، شبكات غير مستقرة، وانقطاعات غير متوقعة في الخدمة قد تعطّل سير العمل اليومي.'
         },
         card2: {
           title: 'مخاطر الأمن السيبراني',
-          desc: 'بيانات غير محمية، ثغرات الفدية والاختراق، والتهديدات الرقمية المتزايدة التي تعرض أصول شركتك للخطر.'
+          desc: 'أنظمة غير محمية، والتعرّض لهجمات الفدية، وتهديدات إلكترونية أخرى قد تعرّض البيانات الحساسة وأصول الشركة الحيوية للخطر.'
         },
         card3: {
-          title: 'برمجيات قديمة وغير مرنة',
-          desc: 'أنظمة وأدوات قديمة عاجزة عن مواكبة توسع أعمالك أو التكامل مع المنصات والتقنيات الحديثة.'
+          title: 'أنظمة قديمة وغير مرنة',
+          desc: 'برمجيات وتقنيات قديمة تحدّ من القدرة على التوسع والتكامل والتكيّف مع احتياجات العمل المتطوّرة.'
         },
         card4: {
           title: 'نقص الكوادر التقنية المؤهلة',
-          desc: 'صعوبة العثور على متخصصين مدربين لإدارة وتأمين وصيانة البنية التحتية الرقمية لشركتك.'
+          desc: 'صعوبة الوصول لمتخصصين تقنيين مؤهلين لتأمين البنية التحتية وصيانتها واستكشاف أعطالها وتحديثها.'
         }
       },
       whoWeAre: {
@@ -428,7 +428,7 @@ export class TranslationService {
         desc: 'خدمات تكنولوجية متكاملة مصممة لحماية وتطوير وتسريع أعمالك بأحدث المعايير العالمية.',
         item1: {
           title: 'الأمن السيبراني واختبار الاختراق',
-          desc: 'تقييم الثغرات، اختبارات الاختراق الشاملة، واكتشاف التهديدات، وحماية البيانات لتأمين أنظمتك ضد أي هجمات إلكترونية.',
+          desc: 'تقييم الثغرات، واختبارات الاختراق، واكتشاف التهديدات، وحلول حماية البيانات المصممة لتحديد المخاطر الأمنية وتعزيز أنظمتك وحماية أصولك الحيوية من التهديدات الإلكترونية.',
           feature1: 'اختبار الاختراق والتدقيق الأمني',
           feature2: 'تأمين السيرفرات والجدران النارية',
           feature3: 'الاستجابة للحوادث واستعادة البيانات'
@@ -456,7 +456,7 @@ export class TranslationService {
         },
         item5: {
           title: 'الدورات والتدريب الاحترافي',
-          desc: 'برامج تدريب عملية ومكثفة على أيدي خبراء لتأهيل الكوادر وفرق العمل في مجالات الهاكينج الأخلاقي، الشبكات، والبرمجة.',
+          desc: 'برامج تدريب عملية في الهاكينج الأخلاقي والشبكات وهندسة البرمجيات، مصممة لتطوير المهارات التقنية لفرق العمل والمتخصصين الأفراد.',
           feature1: 'مشاريع ومعامل تطبيقية عملية',
           feature2: 'تأهيل لشهادات الأمن والشبكات',
           feature3: 'تدريب مخصص للشركات والأفراد'
@@ -464,25 +464,25 @@ export class TranslationService {
       },
       process: {
         tag: 'منهجية عملنا',
-        title: 'كيف نضمن لك أعلى مستويات الجودة',
-        desc: 'منهجية هندسية واضحة من 4 خطوات مصممة لمنع الأعطال وضمان استقرار مشروعك.',
+        title: 'كيف نُنجز مشروعك بثقة تامة',
+        desc: 'منهجية هندسية واضحة من أربع خطوات مصممة لتقليل المخاطر وضمان الجودة وتقديم حلول تقنية موثوقة تتماشى مع احتياجات عملك.',
         step1Num: '01',
         step1Title: 'الاستكشاف والتقييم',
-        step1Desc: 'ندرس بنيتك التقنية الحالية ونحلل الثغرات ومتطلبات العمل لتحديد الحل الدقيق.',
+        step1Desc: 'نحلل بنيتك التحتية الحالية وسير عملك ووضعك الأمني لفهم احتياجاتك، وتحديد المخاطر المحتملة، ووضع أهداف واضحة.',
         step2Num: '02',
         step2Title: 'التخطيط والهندسة',
-        step2Desc: 'نصمم مخططات مخصصة وقابلة للتوسع بأعلى معايير الأمان والأداء والكفاءة المالية.',
+        step2Desc: 'نصمم حلولاً مخصصة وقابلة للتوسع، محسّنة من حيث الأمان والأداء والموثوقية والكفاءة المالية.',
         step3Num: '03',
         step3Title: 'التنفيذ والتشغيل',
-        step3Desc: 'يقوم مهندسونا بتنفيذ وتركيب الأنظمة دون أي توقف لسير عملك اليومي.',
+        step3Desc: 'يقوم مهندسونا بتنفيذ الحلول ودمجها بأقل قدر ممكن من تعطيل سير عملك، وفق أفضل المعايير الهندسية المعتمدة.',
         step4Num: '04',
         step4Title: 'المراقبة والدعم المستمر',
-        step4Desc: 'نراقب أنظمتك ونقدم دعماً فنياً مستمراً لضمان الاستقرار التام وتفادي أي مفاجآت.'
+        step4Desc: 'نقدم مراقبة وصيانة ودعمًا فنيًا مستمرًا للمساعدة في الحفاظ على موثوقية أنظمتك وأمانها وأدائها مع مرور الوقت.'
       },
       whyUs: {
         tag: 'لماذا كيرنل بانيك',
         title: 'صُممت للأمان المطلق. وهُندست لنمو أعمالك.',
-        desc: 'لماذا تختار كبرى الشركات Kernel Panic كشريكها التقني المعتمد.',
+        desc: 'نجمع بين الخبرة التقنية والتجربة العملية وحلول تقنية مخصصة لمساعدة المؤسسات على بناء أنظمة موثوقة، وتعزيز بنيتها التحتية الرقمية، ودعم نموها المستدام.',
         feat1Title: 'مهندسون خبراء ومعتمدون',
         feat1Desc: 'فريق متخصص وحاصل على أعلى الشهادات في الأمن السيبراني والشبكات وهندسة البرمجيات.',
         feat2Title: 'أمان استباقي بدون قلق',
