@@ -199,7 +199,10 @@
                           @else { {{ t('admin.f.uploadImage') }} }
                         </button>
                         @if (g.controls['avatarUrl'].value) {
-                          <img class="member-avatar-preview" [src]="g.controls['avatarUrl'].value" alt="" />
+                          <span class="member-avatar-wrap">
+                            <img class="member-avatar-preview" [src]="g.controls['avatarUrl'].value" alt="" />
+                            <button type="button" class="member-avatar-remove" [attr.aria-label]="t('admin.remove')" [attr.title]="t('admin.remove')" (click)="g.controls['avatarUrl'].setValue('')">×</button>
+                          </span>
                         }
                       </div>
                       <span class="kp-hint">{{ t('admin.f.memberPhotoHint') }}</span>
