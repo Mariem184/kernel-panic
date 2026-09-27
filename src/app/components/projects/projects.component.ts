@@ -263,6 +263,21 @@ export class ProjectsComponent {
     return this.portraitSrc()[id] ?? '';
   }
 
+  /** Projects forced into "contain" mode by name, even though their image isn't detected as portrait. */
+private forcedContainNames = new Set<string>(['Ticketing & Task Management System']);
+
+isContain(p: ProjectItem): boolean {
+  return !!this.backdropSrc(p.id) || this.forcedContainNames.has(p.nameEn);
+}
+
+/** Backdrop image source for a card: the auto-detected portrait backdrop if there is one,
+ *  otherwise the same image for any project forced into contain mode by name. */
+backdropFor(p: ProjectItem): string {
+  const auto = this.backdropSrc(p.id);
+  if (auto) return auto;
+  return this.forcedContainNames.has(p.nameEn) ? this.thumb(p.mainImageUrl) : '';
+}
+
   /** Runs when a card image finishes loading (including after the thumbnail→full fallback):
    *  decides whether it needs the "show whole image on a matching background" treatment. */
   onCardImgLoad(event: Event, id: number): void {
