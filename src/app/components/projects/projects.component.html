@@ -16,6 +16,29 @@
       </div>
     }
 
+    @if (!loading() && !failed() && items().length && categories().length > 1) {
+      <div class="category-tabs" role="tablist">
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="selectedCategory() === null"
+          (click)="setCategory(null)"
+        >
+          {{ t('projects.all') }}
+        </button>
+        @for (cat of categories(); track cat) {
+          <button
+            type="button"
+            class="tab-btn"
+            [class.active]="selectedCategory() === cat"
+            (click)="setCategory(cat)"
+          >
+            {{ cat }}
+          </button>
+        }
+      </div>
+    }
+
     @if (loading()) {
       <div class="projects-grid">
         @for (s of skeletons; track s) {
@@ -42,6 +65,10 @@
           <button type="button" class="kp-btn kp-btn-primary" (click)="startCreate()">{{ t('admin.addProject') }}</button>
         }
       </div>
+    } @else if (!filtered().length) {
+      <div class="kp-state">
+        <p>{{ t('projects.empty') }}</p>
+      </div>
     } @else {
       <div class="projects-grid">
         @for (p of visible(); track p.id; let i = $index) {
@@ -65,7 +92,7 @@
                   <img class="backdrop" [src]="bg" alt="" aria-hidden="true" decoding="async" />
                 }
                 <img
-                  [class.contain]="!!backdropSrc(p.id)"
+                  [class.contain]="!!backdropSrc(p.id) || p.nameEn === 'Ticketing & Task Management System'"
                   [src]="thumb(p.mainImageUrl)"
                   [alt]="loc(p.nameAr, p.nameEn)"
                   loading="lazy"
@@ -118,9 +145,9 @@
         }
       </div>
 
-      @if (items().length > visibleCount()) {
+      @if (filtered().length > visibleCount()) {
         <div class="kp-more"><button type="button" class="kp-btn kp-btn-ghost" (click)="showMore()">{{ t('projects.showMore') }}</button></div>
-      } @else if (items().length > pageSize) {
+      } @else if (filtered().length > pageSize) {
         <div class="kp-more"><button type="button" class="kp-btn kp-btn-ghost" (click)="showLess()">{{ t('projects.showLess') }}</button></div>
       }
     }

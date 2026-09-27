@@ -33,7 +33,25 @@ export class ProjectsComponent {
   failed = signal(false);
   visibleCount = signal(PAGE_SIZE);
   pageSize = PAGE_SIZE;
-  visible = computed(() => this.items().slice(0, this.visibleCount()));
+
+  // ───────── category filter ─────────
+  selectedCategory = signal<string | null>(null);
+
+  categories = computed(() => {
+    const set = new Set(
+      this.items()
+        .map(p => this.loc(p.typeAr, p.typeEn))
+        .filter((c): c is string => !!c)
+    );
+    return [...set];
+  });
+
+  filtered = computed(() => {
+    const cat = this.selectedCategory();
+    return cat ? this.items().filter(p => this.loc(p.typeAr, p.typeEn) === cat) : this.items();
+  });
+
+  visible = computed(() => this.filtered().slice(0, this.visibleCount()));
   skeletons = [1, 2, 3];
 
   // form modal
@@ -138,6 +156,13 @@ export class ProjectsComponent {
 
   showMore(): void { this.visibleCount.update(c => c + PAGE_SIZE); }
   showLess(): void { this.visibleCount.set(PAGE_SIZE); }
+
+  /* ───────── category filter ───────── */
+
+  setCategory(cat: string | null): void {
+    this.selectedCategory.set(cat);
+    this.visibleCount.set(this.pageSize);
+  }
 
   /* ───────── admin: add / edit ───────── */
 
