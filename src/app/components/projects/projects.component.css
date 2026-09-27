@@ -43,6 +43,18 @@
   border-color: var(--primary-blue);
   color: #FFFFFF;
 }
+@media (max-width: 640px) {
+  .category-tabs {
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+  }
+
+  .tab-btn {
+    padding: 0.45rem 1rem;
+    font-size: 0.8125rem;
+  }
+}
 
 /* Exactly one card: a full-bleed stretch (up to ~1100px) looked oversized and, at
    that width, visibly softer than the generated thumbnail's native resolution.
