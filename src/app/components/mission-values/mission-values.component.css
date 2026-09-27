@@ -22,6 +22,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.5rem;
+  flex-direction: row-reverse;
 }
 
 .pillar-icon {
@@ -46,12 +47,14 @@
   font-weight: 800;
   color: var(--dark-navy);
   margin-bottom: 0.75rem;
+  text-align: center;
 }
 
 .pillar-desc {
   font-size: 0.9375rem;
   color: var(--text-secondary);
   line-height: 1.6;
+   text-align: center;
 }
 
 @media (max-width: 860px) {

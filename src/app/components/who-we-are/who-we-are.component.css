@@ -80,6 +80,8 @@
 .content-col {
   display: flex;
   flex-direction: column;
+   align-items: center;   
+  text-align: center; 
 }
 
 .who-title {
@@ -92,6 +94,9 @@
   color: var(--text-secondary);
   line-height: 1.65;
   margin-bottom: 1rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .who-paragraph.secondary {

@@ -20,13 +20,15 @@
 .card-header-line {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 1rem;
+  flex-direction: row-reverse;
 }
 
 .why-icon {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
+  border-radius: var(--radius-md);
   background-color: var(--primary-blue-light);
   display: flex;
   align-items: center;
@@ -34,10 +36,10 @@
 }
 
 .why-subnumber {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  color: var(--primary-blue);
-  letter-spacing: 0.05em;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #BFDBFE;
+  letter-spacing: -0.02em;
   margin-bottom: 0.25rem;
 }
 
@@ -46,12 +48,14 @@
   font-weight: 800;
   color: var(--dark-navy);
   margin-bottom: 0.75rem;
+  text-align: center;
 }
 
 .why-card-desc {
   font-size: 0.875rem;
   color: var(--text-secondary);
   line-height: 1.6;
+  text-align: center;
 }
 
 @media (max-width: 960px) {

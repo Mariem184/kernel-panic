@@ -32,6 +32,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.25rem;
+  flex-direction: row-reverse;
 }
 
 .service-icon-box {
@@ -56,6 +57,7 @@
   font-weight: 800;
   color: var(--dark-navy);
   margin-bottom: 0.875rem;
+  text-align: center;
 }
 
 .service-desc {
@@ -64,6 +66,7 @@
   line-height: 1.6;
   margin-bottom: 1.5rem;
   flex-grow: 1;
+  text-align: center;
 }
 
 .service-link {
@@ -76,6 +79,7 @@
   text-decoration: none;
   transition: all var(--transition-fast);
   margin-top: auto;
+   align-self: center;
 }
 
 .service-link:hover {
