@@ -87,6 +87,12 @@ export class ProjectsComponent {
       this.auth.isLoggedIn();
       untracked(() => this.load());
     });
+
+    effect(() => {
+    this.ts.currentLang();
+    untracked(() => this.setCategory(null));
+  });
+
   }
 
   t = (k: string) => this.ts.t(k);
