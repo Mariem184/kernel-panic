@@ -53,8 +53,8 @@ chatRouter.post('/', async (req, res) => {
     const userIsArabic = isArabic(userMessage);
 
     const fallbackErrorMessage = userIsArabic
-      ? 'عذرًا، نواجه صعوبة في معالجة طلبك حاليًا. يرجى المحاولة مرة أخرى أو التواصل معنا مباشرة عبر واتساب: 01091610085'
-      : "Sorry, I'm having trouble processing your request right now. Please try again or reach out to our team directly on WhatsApp: 01091610085";
+      ? 'عذرًا، نواجه صعوبة في معالجة طلبك حاليًا. يرجى المحاولة مرة أخرى أو التواصل معنا مباشرة عبر واتساب: 01507316744'
+      : "Sorry, I'm having trouble processing your request right now. Please try again or reach out to our team directly on WhatsApp: 01507316744";
 
     return res.status(500).json({
       error: 'Internal server error',

@@ -23,8 +23,8 @@ export class StayConnectedComponent {
   socialLinks: SocialLink[] = [
     { 
       name: 'WhatsApp', 
-      subtitle: '01091610085', 
-      link: 'https://wa.me/201091610085', 
+      subtitle: '01507316744', 
+      link: 'https://wa.me/201507316744', 
       iconType: 'whatsapp' 
     },
     { 

@@ -6,8 +6,8 @@
 
 - **Company**: Kernel Panic IT Team (Egypt)
 - **Official Motto**: ZERO PANIC. FULL CONTROL.
-- **Phone / Mobile**: `01091610085` (Local Egypt) / `+201091610085` (International)
-- **Direct WhatsApp**: [https://wa.me/201091610085](https://wa.me/201091610085)
+- **Phone / Mobile**: `01507316744` (Local Egypt) / `+201507316744` (International)
+- **Direct WhatsApp**: [https://wa.me/201507316744](https://wa.me/201507316744)
 - **Official Email**: `kernelpanic177@gmail.com`
 - **WhatsApp Channel**: [https://whatsapp.com/channel/0029VbD9n5YLikg6FPSg3f2Q](https://whatsapp.com/channel/0029VbD9n5YLikg6FPSg3f2Q)
 - **LinkedIn**: [https://www.linkedin.com/company/kernel-panik/](https://www.linkedin.com/company/kernel-panik/)
@@ -23,21 +23,21 @@
 - **Free Initial Consultation (استشارة أولية مجانية)**:
   Kernel Panic offers a complimentary initial technical consultation to understand client needs, assess system challenges, review existing infrastructure, and discuss project feasibility.
 - **Tailored Pricing (عروض أسعار مخصصة)**:
-  Kernel Panic does not impose rigid or arbitrary one-size-fits-all fixed prices. Pricing is custom-tailored based on project scope, enterprise size, infrastructure scale, required security levels, and timeline. Clients can request an instant customized quote by contacting the team directly via WhatsApp (`01091610085`) or Email (`kernelpanic177@gmail.com`).
+  Kernel Panic does not impose rigid or arbitrary one-size-fits-all fixed prices. Pricing is custom-tailored based on project scope, enterprise size, infrastructure scale, required security levels, and timeline. Clients can request an instant customized quote by contacting the team directly via WhatsApp (`01507316744`) or Email (`kernelpanic177@gmail.com`).
 
 ### التفاصيل بالعربية
 - **استشارة أولية مجانية**:
   يقدم فريق كيرنل بانيك استشارة تقنية وفنية أولية مجانية لدراسة احتياجات شركتك، تقييم الوضع الحالي، ومناقشة الحلول المناسبة لمشروعك.
 - **عروض أسعار مفصلة حسب متطلباتك**:
-  لا نعتمد أسعاراً عشوائية ثابتة، بل يتم تحديد التكلفة بدقة بناءً على حجم المشروع، نطاق العمل، ومستوى الأمان والبنية المطلوبة. للحصول على عرض سعر فوري ومفصل يمكن التواصل مباشرة عبر الواتساب (`01091610085`) أو البريد الإلكتروني (`kernelpanic177@gmail.com`).
+  لا نعتمد أسعاراً عشوائية ثابتة، بل يتم تحديد التكلفة بدقة بناءً على حجم المشروع، نطاق العمل، ومستوى الأمان والبنية المطلوبة. للحصول على عرض سعر فوري ومفصل يمكن التواصل مباشرة عبر الواتساب (`01507316744`) أو البريد الإلكتروني (`kernelpanic177@gmail.com`).
 
 ---
 
 ## Frequently Asked Questions (FAQs) / الأسئلة الشائعة
 
 ### Q1: How do I book a free consultation? / كيف أحجز استشارة مجانية؟
-- **Answer (EN)**: You can connect directly with our engineering team on WhatsApp at `01091610085` (+201091610085) or email us at `kernelpanic177@gmail.com`.
-- **الإجابة (AR)**: يمكنك التواصل مباشرة مع مهندسينا عبر الواتساب على الرقم `01091610085` أو إرسال بريد إلكتروني إلى `kernelpanic177@gmail.com` لحجز موعد استشارتك المجانية فوراً.
+- **Answer (EN)**: You can connect directly with our engineering team on WhatsApp at `01507316744` (+201507316744) or email us at `kernelpanic177@gmail.com`.
+- **الإجابة (AR)**: يمكنك التواصل مباشرة مع مهندسينا عبر الواتساب على الرقم `01507316744` أو إرسال بريد إلكتروني إلى `kernelpanic177@gmail.com` لحجز موعد استشارتك المجانية فوراً.
 
 ### Q2: Do you offer Penetration Testing and Security Audits? / هل تقدمون فحص الثغرات واختبار الاختراق؟
 - **Answer (EN)**: Yes! We provide comprehensive offensive and defensive cybersecurity solutions including web/mobile app penetration testing, API vulnerability assessments, server and firewall hardening, and 24/7 proactive monitoring.
@@ -56,5 +56,5 @@
 - **الإجابة (AR)**: نعم، نقدم دورات تدريبية عملية ومكثفة مع مهندسين معتمدين في مجالات الأمن السيبراني، هندسة الشبكات، وتطوير البرمجيات للشركات والأفراد.
 
 ### Q6: What if I have a question about something not mentioned on the website?
-- **Answer (EN)**: If you need specific information that is not available here, our engineering team is ready to assist you directly via WhatsApp (`01091610085`) or email (`kernelpanic177@gmail.com`).
-- **الإجابة (AR)**: إذا كان لديك أي استفسار عن تفاصيل أو خدمات خاصة غير مذكورة هنا، يسعدنا تواصلك المباشر مع مهندسينا عبر الواتساب (`01091610085`) أو البريد الإلكتروني (`kernelpanic177@gmail.com`).
+- **Answer (EN)**: If you need specific information that is not available here, our engineering team is ready to assist you directly via WhatsApp (`01507316744`) or email (`kernelpanic177@gmail.com`).
+- **الإجابة (AR)**: إذا كان لديك أي استفسار عن تفاصيل أو خدمات خاصة غير مذكورة هنا، يسعدنا تواصلك المباشر مع مهندسينا عبر الواتساب (`01507316744`) أو البريد الإلكتروني (`kernelpanic177@gmail.com`).

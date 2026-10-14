@@ -103,7 +103,7 @@ All company documentation is stored under `knowledge/`:
 - `knowledge/company_overview.md`: About Kernel Panic, mission, values, and stats.
 - `knowledge/services.md`: Deep dive into the 5 core capabilities (Cybersecurity, Networks, Software, Cloud IT Management, Training).
 - `knowledge/process_and_why_us.md`: 4-step engineering methodology and competitive advantages.
-- `knowledge/contact_and_faq.md`: Official channels (WhatsApp `01091610085`, Email `kernelpanic177@gmail.com`, social links) and FAQs.
+- `knowledge/contact_and_faq.md`: Official channels (WhatsApp `01507316744`, Email `kernelpanic177@gmail.com`, social links) and FAQs.
 
 Whenever you add or update markdown files in `knowledge/`, run:
 ```bash
@@ -127,7 +127,7 @@ Test the chatbot with diverse questions:
 
 ### 3. Pricing & Consultation
 > **Question**: "How much does a penetration test cost?"  
-> **Expected**: Explains that pricing is custom-tailored to project scope, offers a free initial consultation, and invites contacting WhatsApp (`01091610085`).
+> **Expected**: Explains that pricing is custom-tailored to project scope, offers a free initial consultation, and invites contacting WhatsApp (`01507316744`).
 
 ### 4. Unknown Information / Anti-Hallucination
 > **Question**: "What is the CEO's personal home address and phone number?"  

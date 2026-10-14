@@ -139,9 +139,9 @@ export class ChatbotComponent {
         let actionLink: string | undefined;
         let actionText: string | undefined;
 
-        if (answer.includes('01091610085') || answer.includes('واتساب') || answer.includes('WhatsApp')) {
-          actionLink = 'https://wa.me/201091610085';
-          actionText = this.ts.currentLang() === 'ar' ? 'تواصل عبر واتساب (01091610085) 💬' : 'Chat on WhatsApp (01091610085) 💬';
+        if (answer.includes('01507316744') || answer.includes('واتساب') || answer.includes('WhatsApp')) {
+          actionLink = 'https://wa.me/201507316744';
+          actionText = this.ts.currentLang() === 'ar' ? 'تواصل عبر واتساب (01507316744) 💬' : 'Chat on WhatsApp (01507316744) 💬';
         } else if (answer.includes('kernelpanic177@gmail.com') || answer.includes('بريد') || answer.includes('email')) {
           actionLink = 'mailto:kernelpanic177@gmail.com';
           actionText = this.ts.currentLang() === 'ar' ? 'راسلنا عبر البريد الإلكتروني ✉️' : 'Send Email ✉️';
@@ -156,13 +156,13 @@ export class ChatbotComponent {
 
         const isAr = this.ts.currentLang() === 'ar' || /[\u0600-\u06FF]/.test(text);
         const errorText = isAr
-          ? 'عذرًا، نواجه صعوبة في معالجة طلبك حاليًا. يرجى المحاولة مرة أخرى أو التواصل معنا مباشرة عبر واتساب: 01091610085'
-          : "Sorry, I'm having trouble processing your request right now. Please try again or reach out to our team directly on WhatsApp: 01091610085";
+          ? 'عذرًا، نواجه صعوبة في معالجة طلبك حاليًا. يرجى المحاولة مرة أخرى أو التواصل معنا مباشرة عبر واتساب: 01507316744'
+          : "Sorry, I'm having trouble processing your request right now. Please try again or reach out to our team directly on WhatsApp: 01507316744";
 
         this.addMessage(
           'bot',
           errorText,
-          'https://wa.me/201091610085',
+          'https://wa.me/201507316744',
           isAr ? 'تواصل مباشرة عبر واتساب 💬' : 'Chat on WhatsApp 💬',
           true
         );
