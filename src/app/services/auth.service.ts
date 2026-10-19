@@ -50,6 +50,11 @@ export class AuthService {
   readonly token = signal<string | null>(null);
   readonly user = signal<AuthUser | null>(null);
   readonly isLoggedIn = computed(() => !!this.token());
+  /** Admins can also manage team accounts; editors can only add/edit news & projects. */
+  readonly isAdmin = computed(() => {
+    const role = this.user()?.role as unknown;
+    return this.isLoggedIn() && (role === 0 || String(role).toLowerCase() === 'admin');
+  });
 
   constructor() {
     this.restoreSession();

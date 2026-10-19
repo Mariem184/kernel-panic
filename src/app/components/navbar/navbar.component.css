@@ -523,3 +523,8 @@
 .mobile-actions .admin-logout-btn { color: #166534; border-color: #BBF7D0; background-color: #F0FDF4; }
 .mobile-actions .admin-logout-btn:hover { color: #14532D; border-color: #16A34A; background-color: #DCFCE7; }
 .mobile-actions .admin-dot { width: 8px; height: 8px; border-radius: 50%; background: #16A34A; box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.2); }
+
+/* Admin-only "Team accounts" button (next to the admin/logout pill) */
+.team-btn.icon-pill { color: var(--primary-blue); }
+.team-btn.icon-pill:hover { border-color: var(--primary-blue); }
+.mobile-actions .team-btn { color: var(--primary-blue); }

@@ -2,11 +2,12 @@ import { Component, HostListener, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslationService } from '../../services/translation.service';
 import { AuthService } from '../../services/auth.service';
+import { TeamAccountsComponent } from '../team-accounts/team-accounts.component';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TeamAccountsComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -33,7 +34,15 @@ export class NavbarComponent implements OnInit {
     this.activeSection = sectionId;
   }
 
+  /** Admin-only "Team accounts" pop-up (add editors who can post news & projects). */
+  teamOpen = false;
+  openTeam() {
+    this.teamOpen = true;
+    this.closeMobileMenu();
+  }
+
   logout() {
+    this.teamOpen = false;
     this.auth.logout();
     this.closeMobileMenu();
   }

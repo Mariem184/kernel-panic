@@ -1,3 +1,4 @@
+import { SectionHeadingComponent } from '../section-heading/section-heading.component';
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
@@ -13,7 +14,7 @@ interface WhyChooseItem {
 @Component({
   selector: 'app-why-choose-us',
   standalone: true,
-  imports: [CommonModule, ScrollRevealDirective],
+  imports: [SectionHeadingComponent, CommonModule, ScrollRevealDirective],
   templateUrl: './why-choose-us.component.html',
   styleUrl: './why-choose-us.component.css'
 })

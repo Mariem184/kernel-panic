@@ -19,6 +19,29 @@
   z-index: 1;
 }
 
+/* Progress line that draws itself in as the timeline scrolls into view. Extra
+   class-qualified selector so it reliably beats the generic global .reveal-init
+   rule (which would otherwise also apply its own translateY/opacity transform). */
+.process-timeline .timeline-line-fill {
+  position: absolute;
+  top: 26px;
+  left: 60px;
+  right: 60px;
+  height: 2px;
+  z-index: 1;
+  background: linear-gradient(90deg, var(--primary-blue), #7FB1FF);
+  opacity: 1;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.process-timeline .timeline-line-fill.revealed { transform: scaleX(1); }
+:host-context([dir='rtl']) .process-timeline .timeline-line-fill { transform-origin: right center; }
+
+@media (prefers-reduced-motion: reduce) {
+  .process-timeline .timeline-line-fill { transform: scaleX(1); transition: none; }
+}
+
 .steps-grid {
   position: relative;
   z-index: 2;
@@ -85,7 +108,7 @@
 }
 
 @media (max-width: 860px) {
-  .timeline-line {
+  .timeline-line, .timeline-line-fill {
     display: none;
   }
 

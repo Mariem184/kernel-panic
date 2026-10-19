@@ -1,15 +1,15 @@
-.projects-section {
-  padding: 70px 0 90px 0;
-  background-color: var(--bg-section-tint);
-}
+/* ═══════════════════════════════════════════════════════════════════════
+   Projects — Featured Editorial Portfolio
+   Same light system as the rest of the site. Distinctiveness comes from
+   the asymmetric layout and a real, cleanly framed project screenshot —
+   not a color change.
+   ═══════════════════════════════════════════════════════════════════════ */
 
-.projects-grid {
-  display: grid;
-  /* auto-fit (not auto-fill) collapses empty tracks, so 2+ cards stretch to fill the
-     row instead of sitting in narrow columns with a blank gap beside them — while
-     still wrapping to fewer columns on narrower screens on its own. */
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
+.projects-section {
+  /* Smaller top padding: the Services showcase above it no longer leaves
+     trailing empty space, so 96px here read as a large gap. */
+  padding: 56px 0 104px;
+  background-color: var(--bg-page);
 }
 
 /* ── Category filter tabs ── */
@@ -18,7 +18,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.625rem;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2.75rem;
 }
 
 .tab-btn {
@@ -32,161 +32,302 @@
   cursor: pointer;
   transition: all var(--transition-fast);
 }
+.tab-btn:hover { border-color: var(--primary-blue); color: var(--primary-blue); }
+.tab-btn.active { background-color: var(--primary-blue); border-color: var(--primary-blue); color: #FFFFFF; }
 
-.tab-btn:hover {
-  border-color: var(--primary-blue);
-  color: var(--primary-blue);
-}
-
-.tab-btn.active {
-  background-color: var(--primary-blue);
-  border-color: var(--primary-blue);
-  color: #FFFFFF;
-}
 @media (max-width: 640px) {
-  .category-tabs {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    padding: 0 1rem;
-  }
-
-  .tab-btn {
-    width: 100%;
-    text-align: center;
-  }
+  .category-tabs { flex-direction: column; align-items: stretch; gap: 0.5rem; margin-bottom: 2rem; padding: 0 1rem; }
+  .tab-btn { width: 100%; text-align: center; }
 }
 
-/* Exactly one card: a full-bleed stretch (up to ~1100px) looked oversized and, at
-   that width, visibly softer than the generated thumbnail's native resolution.
-   Capping it to a normal card width and centering it reads as an intentional single
-   card instead of an accident of there only being one item yet. */
-.projects-grid:has(> .project-card:only-child) {
-  grid-template-columns: minmax(0, 420px);
-  justify-content: center;
+/* ── Loading skeleton, same silhouette as the real layout ── */
+.feature-skel {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 2.75rem;
+  align-items: center;
+}
+.feature-skel-media { aspect-ratio: 4 / 3; border-radius: 16px; }
+.feature-skel-info { display: flex; flex-direction: column; gap: 1rem; }
+@media (max-width: 860px) {
+  .feature-skel { grid-template-columns: 1fr; }
 }
 
-/* Same idea for exactly two cards — each was stretching to ~half the (often very
-   wide) container, which read as oversized next to the rest of the page. Cap each
-   to a normal-ish card width and center the pair as a group instead. */
-.projects-grid:has(> .project-card:nth-child(2):last-child) {
-  grid-template-columns: repeat(2, minmax(0, 420px));
-  justify-content: center;
+/* ═══════════════ Featured editorial portfolio ═══════════════ */
+
+.feature-wrap { display: flex; flex-direction: column; gap: 2.25rem; }
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: center;
 }
 
-.project-card {
+/* Clean image frame: neutral surface, subtle border + shadow, the actual
+   screenshot shown in full (contain) rather than cropped to fill a box. */
+.feature-media-frame { position: relative; }
+
+.feature-media {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  border-radius: 16px;
   overflow: hidden;
-  background: #fff;
-  cursor: pointer;
-  outline: none;
-}
-.project-card:focus-visible { box-shadow: 0 0 0 3px var(--primary-blue-glow); border-color: var(--primary-blue); }
-.project-card.is-draft { border-style: dashed; }
-.project-card.skeleton { cursor: default; pointer-events: none; }
-.project-card.skeleton:hover { transform: none; }
-
-.media {
-  position: relative;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 4 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #93B4E8;
-  background: linear-gradient(135deg, #E8F0FE 0%, #D6E4FB 100%);
-  overflow: hidden;
+  color: #B9CCEA;
+  background: var(--bg-section-tint);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-lg);
 }
-.media img {
+/* Blurred, scaled-up copy of the same screenshot fills the frame behind the
+   crisp "contain"-fit foreground image, so narrow/portrait screenshots (a
+   phone mockup, say) never sit on bare empty space. */
+.feature-backdrop {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  filter: blur(30px) saturate(1.15) brightness(0.9);
+  transform: scale(1.2);
+  z-index: 0;
+}
+.feature-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(255, 255, 255, 0.3);
+}
+.feature-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
   transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.project-card:hover .media img:not(.backdrop) { transform: scale(1.04); }
-.media-skel { aspect-ratio: 16 / 10; border-radius: 0; }
+.feature-media:hover .feature-img { transform: scale(1.025); }
 
-/* Portrait / near-square images (e.g. a phone screenshot): show the WHOLE image instead of
-   cropping it to the wide card, and fill the leftover space with a blurred, enlarged copy of
-   the same image so the side areas take on its own colors instead of a flat blue gradient.
-   The copy is the same URL as the main image, so it comes from cache (no extra download). */
-.media img.contain { object-fit: contain; z-index: 1; }
-.media img.backdrop {
-  z-index: 0;
-  object-fit: cover;
-  filter: blur(24px) saturate(1.15);
-  transform: scale(1.3);          /* bleeds past the edges so the blur never fades to the box's own background */
-  pointer-events: none;
-}
+.badges { position: absolute; top: 14px; inset-inline-start: 14px; z-index: 3; }
+.admin-actions { position: absolute; top: 14px; inset-inline-end: 14px; display: flex; gap: 6px; z-index: 3; }
 
-.badges { position: absolute; top: 10px; inset-inline-start: 10px; z-index: 2; }
-.admin-actions { position: absolute; top: 10px; inset-inline-end: 10px; display: flex; gap: 6px; z-index: 2; }
-
-.body { display: flex; flex-direction: column; gap: 0.625rem; padding: 1.25rem 1.375rem 1.375rem; flex: 1; }
-
-.type { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--primary-blue); }
-
-.title {
-  font-size: 1.1875rem;
-  font-weight: 800;
-  line-height: 1.35;
+.feature-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  background: #fff;
   color: var(--dark-navy);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-fast);
+}
+.feature-nav:hover, .feature-nav:focus-visible { color: #fff; background: var(--primary-blue); border-color: var(--primary-blue); }
+.feature-nav.prev { inset-inline-start: -8px; }
+.feature-nav.next { inset-inline-end: -8px; }
+:host-context([dir='rtl']) .feature-nav svg { transform: scaleX(-1); }
+@media (max-width: 640px) {
+  .feature-nav.prev { inset-inline-start: 8px; }
+  .feature-nav.next { inset-inline-end: 8px; }
 }
 
-.desc {
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: var(--text-secondary);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.feature-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.more-chip { background: var(--bg-page-alt); color: var(--text-secondary); }
-
-.foot {
-  margin-top: auto;
-  padding-top: 0.75rem;
+.feature-info-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  font-size: 0.8125rem;
 }
-.client { color: var(--text-muted); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-.more { display: inline-flex; align-items: center; gap: 6px; color: var(--primary-blue); font-weight: 700; white-space: nowrap; transition: transform var(--transition-fast); }
-.project-card:hover .more { transform: translateX(4px); }
-:host-context([dir='rtl']) .project-card:hover .more { transform: translateX(-4px); }
-:host-context([dir='rtl']) .more svg { transform: scaleX(-1); }
+
+.eyebrow { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--primary-blue); }
+.feature-counter { font-size: 0.8125rem; font-weight: 700; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+.feature-type { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.125rem; }
+
+.feature-title {
+  font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+  font-weight: 800;
+  line-height: 1.22;
+  color: var(--dark-navy);
+}
+
+.feature-desc {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  max-width: 50ch;
+}
+
+.feature-info .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.25rem; }
+.feature-info .more-chip { background: var(--bg-page-alt); color: var(--text-secondary); }
+
+.feature-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 0.375rem;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--card-border);
+}
+.meta-label { font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+.meta-value { font-size: 0.9375rem; font-weight: 700; color: var(--dark-navy); }
+
+.feature-cta {
+  margin-top: 1rem;
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.feature-cta:hover svg { transform: translateX(4px); }
+.feature-cta svg { transition: transform var(--transition-fast); }
+:host-context([dir='rtl']) .feature-cta:hover svg { transform: translateX(-4px); }
+:host-context([dir='rtl']) .feature-cta svg { transform: scaleX(-1); }
+
+/* ── Slim thumbnail navigation strip: auto-scrolls in a seamless infinite loop.
+   The track renders the thumbnail list twice back-to-back and drifts left by exactly
+   one list-width (50% of the doubled track), so the loop point is invisible. ── */
+.feature-strip {
+  overflow: hidden;
+  padding: 0.25rem 0 0.5rem;
+  border-top: 1px solid var(--card-border);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+}
+
+.feature-strip-track {
+  display: flex;
+  width: max-content;
+  gap: 1.75rem;
+  animation-name: kp-strip-scroll;
+  animation-duration: 18s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.feature-strip:hover .feature-strip-track,
+.feature-strip:focus-within .feature-strip-track,
+:host-context(body.kp-modal-open) .feature-strip-track {   /* still while a pop-up is open */
+  animation-play-state: paused;
+}
+@keyframes kp-strip-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+:host-context([dir='rtl']) .feature-strip-track { animation-name: kp-strip-scroll-rtl; }
+@keyframes kp-strip-scroll-rtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .feature-strip-track { animation: none; }
+}
+
+.strip-item {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  background: none;
+  border: none;
+  padding: 1rem 0 0;
+  cursor: pointer;
+  outline: none;
+  position: relative;
+  opacity: 0.6;
+  transition: opacity var(--transition-fast);
+}
+.strip-item:hover, .strip-item:focus-visible, .strip-item.active { opacity: 1; }
+.strip-item::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--primary-blue);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--transition-normal);
+}
+.strip-item.active::before { transform: scaleX(1); }
+
+.strip-thumb {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 36px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  background: var(--bg-section-tint);
+}
+.strip-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.strip-thumb .kp-badge.mini { position: absolute; top: 2px; inset-inline-start: 2px; font-size: 0.5rem; padding: 1px 4px; z-index: 1; }
+
+.strip-name {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color var(--transition-fast);
+}
+.strip-item.active .strip-name, .strip-item:hover .strip-name { color: var(--dark-navy); }
+
+@media (max-width: 860px) {
+  .feature-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+  .feature-media { aspect-ratio: 16 / 11; }
+}
+
 
 /* ── Details modal ── */
 .detail { position: relative; }
 .detail-close { position: absolute; top: 12px; inset-inline-end: 12px; z-index: 3; }
 .detail-body { padding: 0; }
-.detail-img { display: block; width: 100%; max-height: 380px; object-fit: cover; }
-
-/* Portrait / near-square image (e.g. a phone screenshot) at the top of the modal: show the whole
-   picture, centered, and fill the sides with a blurred copy of itself so they match its colors.
-   Landscape images keep the original wide, cropped look. */
-.detail-media { position: relative; overflow: hidden; }
-.detail-media.is-portrait { height: clamp(320px, 60vh, 520px); }
-.detail-media.is-portrait .detail-img {
+/* Main picture of the pop-up: a fixed-height frame where every picture is
+   shown WHOLE (object-fit: contain — nothing cropped, wide or tall), with a
+   blurred copy of the same picture filling the empty sides so they match
+   its colours. The frame never changes height between pictures. */
+.detail-media {
+  position: relative;
+  overflow: hidden;
+  contain: paint;                 /* the blur + fades repaint only inside this box */
+  height: clamp(260px, 54vh, 500px);
+  background: #0B1528;
+}
+.detail-slide {
   position: absolute;
   inset: 0;
+  animation: kp-slide-in 0.45s ease;
+}
+@keyframes kp-slide-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .detail-slide { animation: none; } }
+
+.detail-img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
   height: 100%;
-  max-height: none;
   object-fit: contain;
   z-index: 1;
 }
@@ -196,17 +337,85 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(28px) saturate(1.15);
-  transform: scale(1.3);          /* bleeds past the edges so the blur never fades out at the border */
+  filter: blur(28px) saturate(1.15) brightness(0.9);
+  transform: scale(1.3) translateZ(0);   /* own GPU layer: blurred once, not on every scroll frame */          /* bleeds past the edges so the blur never fades out at the border */
   pointer-events: none;
   z-index: 0;
+}
+
+/* Prev / next arrows and "3 / 12" counter on the main picture */
+.slide-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--dark-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px -6px rgba(11, 21, 40, 0.4);
+  opacity: 0;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+.detail-media:hover .slide-arrow, .slide-arrow:focus-visible { opacity: 1; }
+.slide-arrow:hover { transform: scale(1.06); }
+.slide-prev { left: 14px; }
+.slide-next { right: 14px; }
+@media (hover: none) { .slide-arrow { opacity: 1; } }
+
+.slide-count {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(11, 21, 40, 0.6);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
 }
 
 .pad { padding: 1.5rem 1.75rem 1.75rem; }
 .detail-title { font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 800; line-height: 1.3; color: var(--dark-navy); margin: 0.375rem 0 0.5rem; }
 .lead { font-size: 1.0625rem; line-height: 1.7; color: var(--text-secondary); }
 
-.gallery { display: flex; gap: 0.5rem; margin-top: 1.25rem; overflow-x: auto; padding-bottom: 4px; }
+/* Endless thumbnail marquee */
+.gallery {
+  margin-top: 1.25rem;
+  overflow: hidden;
+  contain: paint;
+  padding-block: 2px 4px;
+  /* soft fade at both edges so thumbnails slide in and out smoothly */
+  mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+}
+.gallery-track {
+  display: flex;
+  gap: 0.5rem;
+  width: max-content;
+  animation: kp-thumbs-loop linear infinite;
+  will-change: transform;
+}
+/* Track = two identical halves + one gap between them, so moving by
+   half the track plus half a gap (0.25rem) lands exactly on the 2nd copy. */
+@keyframes kp-thumbs-loop { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 0.25rem)); } }
+@keyframes kp-thumbs-loop-rtl { from { transform: translateX(0); } to { transform: translateX(calc(50% + 0.25rem)); } }
+:host-context([dir='rtl']) .gallery-track { animation-name: kp-thumbs-loop-rtl; }
+.gallery:hover .gallery-track, .gallery:focus-within .gallery-track { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .gallery { overflow-x: auto; mask-image: none; -webkit-mask-image: none; }
+  .gallery-track { animation: none; }
+}
 .thumb { flex: 0 0 84px; height: 58px; padding: 0; border: 2px solid transparent; border-radius: 10px; overflow: hidden; cursor: pointer; background: var(--bg-page-alt); opacity: 0.7; transition: all var(--transition-fast); }
 .thumb.on, .thumb:hover { opacity: 1; border-color: var(--primary-blue); }
 .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }

@@ -5,6 +5,58 @@
   overflow: hidden;
 }
 
+/* Subtle technical grid + ambient lighting behind the hero content. Barely-there —
+   this is a light section, so it stays faint rather than becoming a texture. */
+.hero-bg-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(0, 98, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 98, 255, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(75% 65% at 70% 30%, #000 35%, transparent 100%);
+}
+.hero-bg-glow {
+  position: absolute;
+  z-index: 0;
+  top: -12%;
+  inset-inline-end: -8%;
+  width: 50vw;
+  height: 50vw;
+  max-width: 620px;
+  max-height: 620px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 98, 255, 0.1) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+.hero-container { position: relative; z-index: 1; }
+
+/* ── Coordinated entrance sequence ── */
+.hero-enter {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: heroEnter 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-enter-1 { animation-delay: 0.05s; }
+.hero-enter-2 { animation-delay: 0.18s; }
+.hero-enter-3 { animation-delay: 0.30s; }
+.hero-enter-4 { animation-delay: 0.40s; }
+.hero-enter-5 { opacity: 0; transform: translateY(14px) scale(0.97); animation: heroEnterVisual 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; animation-delay: 0.22s; }
+
+@keyframes heroEnter {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroEnterVisual {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-enter, .hero-enter-5 { animation: none; opacity: 1; transform: none; }
+}
+
 .hero-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -116,6 +168,7 @@
   position: relative;
   z-index: 2;
   animation: float-network 6s ease-in-out infinite alternate;
+  translate: calc(var(--px, 0) * 6px) calc(var(--py, 0) * 6px);
 }
 
 .orbit-ring {
@@ -159,6 +212,7 @@
   width: 56px;
   height: 56px;
   animation: float-badge-1 5s ease-in-out infinite;
+  translate: calc(var(--px, 0) * -14px) calc(var(--py, 0) * -14px);
 }
 
 .code-symbol {
@@ -174,6 +228,7 @@
   width: 54px;
   height: 54px;
   animation: float-badge-2 6s ease-in-out infinite;
+  translate: calc(var(--px, 0) * 18px) calc(var(--py, 0) * 18px);
 }
 
 .badge-network {
@@ -182,6 +237,7 @@
   width: 50px;
   height: 50px;
   animation: float-badge-1 5.5s ease-in-out infinite 0.4s;
+  translate: calc(var(--px, 0) * -10px) calc(var(--py, 0) * 10px);
 }
 
 
@@ -191,6 +247,7 @@
   width: 50px;
   height: 50px;
   animation: float-badge-1 5s ease-in-out infinite 1.2s;
+  translate: calc(var(--px, 0) * 12px) calc(var(--py, 0) * -12px);
 }
 
 /* Keyframes */

@@ -1,0 +1,16 @@
+<div class="sh">
+  @if (eyebrow()) {
+    <span class="sh-eyebrow" [class.sh-eyebrow--code]="marker() === 'code'" [class.sh-eyebrow--plain]="marker() === 'none'">
+      @if (marker() === 'code') { <span class="sh-code" aria-hidden="true">//</span> }
+      {{ eyebrow() }}
+    </span>
+  }
+
+  <h2 class="sh-title" [attr.id]="headingId()">{{ parts().before }}@if (parts().hl) {<span [class]="'sh-hl sh-hl--' + accent() + (parts().hl.length <= 16 ? ' sh-hl--keep' : '')">{{ parts().hl }}</span>}{{ parts().after }}</h2>
+
+  @if (subtitle()) {
+    <p class="sh-sub">{{ subtitle() }}</p>
+  }
+
+  <ng-content />
+</div>

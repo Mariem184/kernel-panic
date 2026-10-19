@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { SectionHeadingComponent } from '../section-heading/section-heading.component';
+import { Component, computed, inject } from '@angular/core';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 import { TranslationService } from '../../services/translation.service';
 
@@ -13,12 +14,17 @@ interface SocialLink {
 @Component({
   selector: 'app-stay-connected',
   standalone: true,
-  imports: [CommonModule, ScrollRevealDirective],
+  imports: [SectionHeadingComponent, CommonModule, NgTemplateOutlet, ScrollRevealDirective],
   templateUrl: './stay-connected.component.html',
   styleUrl: './stay-connected.component.css'
 })
 export class StayConnectedComponent {
   public ts = inject(TranslationService);
+
+  // Continuous infinite-loop auto-scroll (CSS-only marquee; the duplicated-list
+  // technique below is the same one used for the Projects thumbnail strip).
+  // Pausing on hover/focus is handled purely in CSS (:hover / :focus-within).
+  stripAnimDuration = computed(() => `${Math.max(this.socialLinks.length * 2.5, 14)}s`);
 
   socialLinks: SocialLink[] = [
     { 

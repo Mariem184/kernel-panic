@@ -1,74 +1,345 @@
 <section id="services" class="services-section">
   <div class="container">
-    <!-- Section Header -->
     <div class="section-header" appScrollReveal>
-      <span class="section-tag">{{ ts.t('services.tag') }}</span>
-      <h2 class="section-title">
-        {{ ts.t('services.title') }}
-      </h2>
-      <p class="section-desc">
-        {{ ts.t('services.desc') }}
-      </p>
+      <app-section-heading
+        [eyebrow]="ts.t('services.tag')"
+        [title]="ts.t('services.title')"
+        [highlight]="ts.t('services.titleHighlight')"
+        [subtitle]="ts.t('services.desc')"
+        accent="line"
+        marker="code"></app-section-heading>
     </div>
+  </div>
 
-    <!-- 5 Services Grid (3 top, 2 bottom centered) -->
-    <div class="services-grid">
-      <div 
-        *ngFor="let item of services(); let i = index" 
-        class="service-card card-base"
-        [class.row-2-item]="i >= 3"
-        appScrollReveal
-        [revealDelay]="i * 100"
-      >
-        <div class="card-top-row">
-          <div class="service-icon-box">
-            <!-- Shield Icon -->
-            <svg *ngIf="item.iconType === 'shield'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
+  <!-- Scroll-driven showcase: this wrapper is tall enough for 5 scroll
+       "stages"; the inner panel is CSS position:sticky so it pins in place
+       (and releases naturally once the wrapper's bottom edge arrives) while
+       a scroll-position listener in the component derives which service is
+       active — no wheel-hijacking, no scroll-snap, native scrolling only. -->
+  <div class="showcase-scroller" #scroller [style.height.px]="scrollerHeightPx()">
+    <div class="showcase-sticky" #sticky [style.top.px]="stickyTop()">
+      <div class="container showcase-inner">
 
-            <!-- Network Icon -->
-            <svg *ngIf="item.iconType === 'network'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="5" r="3"/>
-              <circle cx="5" cy="19" r="3"/>
-              <circle cx="19" cy="19" r="3"/>
-              <line x1="7.5" y1="17" x2="10.5" y2="7.5"/>
-              <line x1="16.5" y1="17" x2="13.5" y2="7.5"/>
-            </svg>
+        <!-- LEFT: compact vertical service timeline -->
+        <nav class="showcase-nav" aria-label="Services">
+          <span class="nav-eyebrow">{{ ts.t('services.tag') }}</span>
 
-            <!-- Software Icon -->
-            <svg *ngIf="item.iconType === 'software'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="16 18 22 12 16 6"/>
-              <polyline points="8 6 2 12 8 18"/>
-            </svg>
-
-            <!-- Infrastructure Icon -->
-            <svg *ngIf="item.iconType === 'infra'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"/>
-              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"/>
-              <line x1="6" y1="6" x2="6.01" y2="6"/>
-              <line x1="6" y1="18" x2="6.01" y2="18"/>
-            </svg>
-
-            <!-- Training Icon -->
-            <svg *ngIf="item.iconType === 'training'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-            </svg>
+          <div class="nav-list">
+            @for (item of services(); track item.number; let i = $index; let last = $last) {
+              <button
+                type="button"
+                class="nav-entry"
+                [class.active]="i === activeIndex()"
+                [class.passed]="i < activeIndex()"
+                [attr.aria-current]="i === activeIndex() ? 'true' : null"
+                (click)="jumpToService(i)"
+              >
+                <span class="nav-rail">
+                  <span class="nav-dot"></span>
+                  @if (!last) {
+                    <span class="nav-connector"></span>
+                  }
+                </span>
+                <span class="nav-text">
+                  <span class="nav-num">{{ item.number }}</span>
+                  <span class="nav-title">{{ item.title }}</span>
+                </span>
+              </button>
+            }
           </div>
-          <span class="service-number">{{ item.number }}</span>
+        </nav>
+
+        <!-- MIDDLE: the active service's copy -->
+        <div class="showcase-stage">
+          <div class="stage-text">
+            @for (item of activeArr(); track item.number) {
+              <div class="stage-text-inner">
+                <div class="stage-num">{{ pad(activeIndex() + 1) }}<span class="stage-num-total"> / {{ pad(services().length) }}</span></div>
+                <h3 class="stage-title">{{ item.title }}</h3>
+                <p class="stage-desc">{{ item.description }}</p>
+                <a [href]="item.linkUrl" class="stage-cta">
+                  <span class="stage-cta-label">{{ item.linkText }}</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+              </div>
+            }
+          </div>
+
+          <!-- RIGHT: large code-generated technical visualization. Same
+               container dimensions for every service — only the hero
+               graphic and floating panel copy change — so the showcase
+               never shifts height or width depending on which is active. -->
+          <div class="stage-visual">
+            @for (item of activeArr(); track item.number) {
+              <div class="stage-visual-inner">
+                <div class="visual-bg-grid" aria-hidden="true"></div>
+
+                <!-- Shared technical foundation behind every service's hero
+                     graphic — the same node network, just quietly present,
+                     so all five illustrations read as one connected system
+                     rather than five disconnected cards. -->
+                <svg class="visual-network-bg" viewBox="0 0 400 320" aria-hidden="true">
+                  <g class="net-bg-lines">
+                    <path d="M28 54 L118 96 L118 214 L272 252"/>
+                    <path d="M372 46 L256 88 L256 176"/>
+                    <path d="M38 254 L136 224"/>
+                    <path d="M332 224 L256 176"/>
+                    <path d="M118 96 L256 88"/>
+                  </g>
+                  <circle class="net-bg-node" cx="28" cy="54" r="3"/>
+                  <circle class="net-bg-node" cx="118" cy="96" r="3"/>
+                  <circle class="net-bg-node" cx="118" cy="214" r="3"/>
+                  <circle class="net-bg-node" cx="272" cy="252" r="3"/>
+                  <circle class="net-bg-node" cx="372" cy="46" r="3"/>
+                  <circle class="net-bg-node" cx="256" cy="88" r="3"/>
+                  <circle class="net-bg-node" cx="256" cy="176" r="3"/>
+                  <circle class="net-bg-node" cx="38" cy="254" r="3"/>
+                  <circle class="net-bg-node" cx="136" cy="224" r="3"/>
+                  <circle class="net-bg-node" cx="332" cy="224" r="3"/>
+                  <circle class="net-bg-pulse" r="3">
+                    <animateMotion dur="3.4s" repeatCount="indefinite" path="M28 54 L118 96 L118 214 L272 252"/>
+                  </circle>
+                </svg>
+
+                <div class="hero-stage" aria-hidden="true">
+                  @switch (item.iconType) {
+
+                    @case ('shield') {
+                      <svg class="hero-orbits" viewBox="0 0 320 320">
+                        <g class="orbit-ring orbit-ring-a"><ellipse cx="160" cy="160" rx="148" ry="58"/><circle class="orbit-node" cx="308" cy="160" r="4"/></g>
+                        <g class="orbit-ring orbit-ring-b"><ellipse cx="160" cy="160" rx="58" ry="148"/><circle class="orbit-node" cx="160" cy="12" r="4"/></g>
+                      </svg>
+                      <svg class="hero-shield" viewBox="0 0 200 220">
+                        <defs>
+                          <linearGradient id="svcShieldGrad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#5B9CFF"/>
+                            <stop offset="55%" stop-color="#0062FF"/>
+                            <stop offset="100%" stop-color="#0040B8"/>
+                          </linearGradient>
+                          <linearGradient id="svcShieldSheen" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4"/>
+                            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+                          </linearGradient>
+                        </defs>
+                        <path d="M100 8 L180 38 V110 C180 160 145 196 100 212 C55 196 20 160 20 110 V38 Z" fill="url(#svcShieldGrad)"/>
+                        <path d="M100 18 L166 44 V108 C166 148 138 178 100 194 V18Z" fill="url(#svcShieldSheen)"/>
+                        <rect x="77" y="107" width="46" height="36" rx="7" fill="#fff"/>
+                        <path d="M85 107 V93 a15 15 0 0 1 30 0 v14" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+                        <circle cx="100" cy="122" r="5.5" fill="#0046D1"/>
+                        <rect x="97" y="125" width="6" height="11" rx="3" fill="#0046D1"/>
+                      </svg>
+                    }
+
+                    @case ('network') {
+                      <svg class="hero-network" viewBox="0 0 220 220">
+                        <g class="net-lines">
+                          <line x1="110" y1="110" x2="40" y2="48"/>
+                          <line x1="110" y1="110" x2="182" y2="48"/>
+                          <line x1="110" y1="110" x2="38" y2="172"/>
+                          <line x1="110" y1="110" x2="184" y2="172"/>
+                          <line x1="110" y1="110" x2="110" y2="18"/>
+                        </g>
+                        <circle class="net-pulse" cx="110" cy="110" r="24"/>
+                        <circle class="net-hub" cx="110" cy="110" r="22"/>
+                        <circle class="net-node" cx="40" cy="48" r="10"/>
+                        <circle class="net-node" cx="182" cy="48" r="10"/>
+                        <circle class="net-node" cx="38" cy="172" r="10"/>
+                        <circle class="net-node" cx="184" cy="172" r="10"/>
+                        <circle class="net-node" cx="110" cy="18" r="10"/>
+                      </svg>
+                    }
+
+                    @case ('software') {
+                      <!-- Code → product: a dark IDE window with syntax-colored
+                           lines sits behind a lighter app-preview window, tied
+                           together with a build pill and a tech-stack card —
+                           tells the "code becomes a working product" story. -->
+                      <div class="hero-devstack">
+                        <div class="dev-window dev-window-code">
+                          <div class="window-bar dark">
+                            <span class="window-dot wd-r"></span>
+                            <span class="window-dot wd-y"></span>
+                            <span class="window-dot wd-g"></span>
+                          </div>
+                          <div class="dev-code-body">
+                            <div class="dev-rail">
+                              <span class="dev-rail-dot active"></span>
+                              <span class="dev-rail-dot"></span>
+                              <span class="dev-rail-dot"></span>
+                              <span class="dev-rail-dot"></span>
+                            </div>
+                            <div class="dev-code-lines">
+                              <div class="dev-line"><span class="ln">01</span><span class="code c-purple" style="width:36%"></span></div>
+                              <div class="dev-line"><span class="ln">02</span><span class="code c-blue" style="width:64%"></span></div>
+                              <div class="dev-line indent"><span class="ln">03</span><span class="code c-green" style="width:46%"></span></div>
+                              <div class="dev-line indent"><span class="ln">04</span><span class="code c-pink" style="width:54%"></span></div>
+                              <div class="dev-line"><span class="ln">05</span><span class="code c-blue" style="width:28%"></span></div>
+                              <div class="dev-line"><span class="ln">06</span><span class="code c-purple" style="width:62%"></span></div>
+                              <div class="dev-line indent"><span class="ln">07</span><span class="code c-green" style="width:40%"></span></div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="dev-window dev-window-app">
+                          <div class="window-bar light">
+                            <span class="app-url-dot"></span>
+                            <span class="app-url-bar"></span>
+                          </div>
+                          <div class="dev-app-body">
+                            <div class="app-hero"></div>
+                            <div class="app-row"></div>
+                            <div class="app-row short"></div>
+                          </div>
+                        </div>
+
+                        <div class="dev-chip">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                          Build · Deploy · Scale
+                        </div>
+
+                        <div class="dev-stack-card">
+                          <span class="dev-stack-title">Tech Stack</span>
+                          <div class="dev-stack-row"><span class="dev-stack-badge badge-ng">A</span>Angular</div>
+                          <div class="dev-stack-row"><span class="dev-stack-badge badge-net">.NET</span>.NET</div>
+                          <div class="dev-stack-row"><span class="dev-stack-badge badge-ts">TS</span>TypeScript</div>
+                        </div>
+                      </div>
+                    }
+
+                    @case ('infra') {
+                      <!-- A tilted, three-unit server stack (not a flat
+                           browser window) with its own monitoring panel and
+                           a signal line between them — physical hardware
+                           being actively watched, not generic analytics. -->
+                      <div class="hero-infra">
+                        <div class="infra-rack-3d">
+                          <div class="infra-unit">
+                            <span class="infra-led on"></span>
+                            <span class="infra-vents"><span></span><span></span><span></span><span></span><span></span></span>
+                            <span class="infra-bay"></span>
+                            <span class="infra-port"></span>
+                          </div>
+                          <div class="infra-unit">
+                            <span class="infra-led on led-delay-1"></span>
+                            <span class="infra-vents"><span></span><span></span><span></span><span></span><span></span></span>
+                            <span class="infra-bay"></span>
+                            <span class="infra-port"></span>
+                          </div>
+                          <div class="infra-unit">
+                            <span class="infra-led on led-delay-2"></span>
+                            <span class="infra-vents"><span></span><span></span><span></span><span></span><span></span></span>
+                            <span class="infra-bay"></span>
+                            <span class="infra-port"></span>
+                          </div>
+                        </div>
+
+                        <svg class="infra-link" viewBox="0 0 220 220" aria-hidden="true">
+                          <path class="infra-link-path" d="M104 76 C146 64, 168 92, 180 112"/>
+                          <circle class="infra-link-pulse" r="3">
+                            <animateMotion dur="2.2s" repeatCount="indefinite" path="M104 76 C146 64, 168 92, 180 112"/>
+                          </circle>
+                        </svg>
+
+                        <div class="infra-monitor">
+                          <span class="infra-monitor-title">System Health</span>
+                          <div class="infra-metric"><span>CPU</span><span class="infra-bar"><span class="infra-bar-fill" style="width:46%"></span></span></div>
+                          <div class="infra-metric"><span>Storage</span><span class="infra-bar"><span class="infra-bar-fill" style="width:68%"></span></span></div>
+                          <div class="infra-metric"><span>Memory</span><span class="infra-bar"><span class="infra-bar-fill" style="width:32%"></span></span></div>
+                        </div>
+                      </div>
+                    }
+
+                    @case ('training') {
+                      <!-- Graduation cap + a sealed, ribboned certificate as
+                           the focal objects, with a completion ring and a
+                           compact module list — learning, proof, progress. -->
+                      <div class="hero-academy">
+                        <div class="academy-cert">
+                          <div class="academy-cert-seal">
+                            <svg viewBox="0 0 64 64" aria-hidden="true">
+                              <circle cx="32" cy="32" r="29" class="seal-ring-outer"/>
+                              <circle cx="32" cy="32" r="21" class="seal-ring-inner"/>
+                              <path d="M22 33 L29 40 L43 24" class="seal-check"/>
+                            </svg>
+                          </div>
+                          <div class="academy-cert-lines">
+                            <span class="cert-kicker">Certificate of Completion</span>
+                            <span class="cert-line w1"></span>
+                            <span class="cert-line w2"></span>
+                            <span class="cert-line w3"></span>
+                          </div>
+                          <svg class="academy-cert-ribbon" viewBox="0 0 40 60" aria-hidden="true">
+                            <path d="M6 0 H34 V46 L20 36 L6 46 Z"/>
+                          </svg>
+                        </div>
+
+                        <div class="academy-cap">
+                          <svg viewBox="0 0 48 40" aria-hidden="true">
+                            <path d="M24 2 L46 13 L24 24 L2 13 Z" class="cap-top"/>
+                            <path d="M12 17 V27 C12 31 36 31 36 27 V17" class="cap-base"/>
+                            <line x1="44" y1="13" x2="44" y2="25" class="cap-tassel-string"/>
+                            <circle cx="44" cy="27" r="2.2" class="cap-tassel-bead"/>
+                          </svg>
+                        </div>
+
+                        <div class="academy-progress">
+                          <svg viewBox="0 0 80 80" aria-hidden="true">
+                            <circle cx="40" cy="40" r="34" class="ring-track"/>
+                            <circle cx="40" cy="40" r="34" class="ring-fill" pathLength="100" stroke-dasharray="100" style="stroke-dashoffset: 18"/>
+                          </svg>
+                          <span class="academy-progress-value">82%</span>
+                        </div>
+
+                        <div class="academy-modules">
+                          <span class="modules-title">Modules</span>
+                          <div class="modules-row"><span class="module-dot done"></span><span class="module-bar"></span></div>
+                          <div class="modules-row"><span class="module-dot done"></span><span class="module-bar"></span></div>
+                          <div class="modules-row"><span class="module-dot"></span><span class="module-bar short"></span></div>
+                        </div>
+                      </div>
+                    }
+                  }
+                </div>
+
+                @if (item.iconType === 'shield' || item.iconType === 'network') {
+                  <div class="visual-panel panel-top">
+                    <span class="panel-icon">
+                      @switch (item.iconType) {
+                        @case ('shield') {
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        }
+                        @case ('network') {
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="19" r="2.5"/><circle cx="19" cy="19" r="2.5"/><line x1="7.2" y1="17" x2="10.3" y2="7.3"/><line x1="16.8" y1="17" x2="13.7" y2="7.3"/></svg>
+                        }
+                      }
+                    </span>
+                    <span class="panel-copy">
+                      <span class="panel-label">{{ item.panelTopLabel }}</span>
+                      <span class="panel-value"><span class="panel-dot"></span>{{ item.panelTopValue }}</span>
+                    </span>
+                  </div>
+
+                  <div class="visual-panel panel-stat">
+                    <span class="panel-stat-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="20" x2="5" y2="13"/><line x1="12" y1="20" x2="12" y2="8"/><line x1="19" y1="20" x2="19" y2="4"/></svg>
+                    </span>
+                    <span class="panel-copy">
+                      <span class="panel-label">{{ item.panelStatLabel }}</span>
+                      <span class="panel-stat-value">{{ item.panelStatValue }}<span class="panel-trend">↑ {{ item.panelStatTrend }}</span></span>
+                    </span>
+                  </div>
+
+                  <div class="visual-panel panel-chart">
+                    <svg class="panel-chart-svg" viewBox="0 0 110 40" preserveAspectRatio="none">
+                      <path class="chart-line" pathLength="100" d="M2 30 C18 10, 28 34, 44 18 S68 6, 84 15 S100 4, 108 9"/>
+                      <circle class="chart-end-dot" cx="108" cy="9" r="3"/>
+                    </svg>
+                  </div>
+                }
+              </div>
+            }
+          </div>
         </div>
-
-        <h3 class="service-title">{{ item.title }}</h3>
-        <p class="service-desc">{{ item.description }}</p>
-
-        <a [href]="item.linkUrl" class="service-link">
-          <span>{{ item.linkText }}</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </a>
       </div>
     </div>
   </div>

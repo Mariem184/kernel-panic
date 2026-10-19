@@ -2,46 +2,55 @@
   <div class="container">
     <!-- Section Header -->
     <div class="section-header" appScrollReveal>
-      <span class="section-tag">{{ ts.t('soundFamiliar.tag') }}</span>
-      <h2 class="section-title">
-        {{ ts.t('soundFamiliar.title') }}
-      </h2>
-      <p class="section-desc">
-        {{ ts.t('soundFamiliar.desc') }}
-      </p>
+      <app-section-heading
+        [eyebrow]="ts.t('soundFamiliar.tag')"
+        [title]="ts.t('soundFamiliar.title')"
+        [highlight]="ts.t('soundFamiliar.titleHighlight')"
+        [subtitle]="ts.t('soundFamiliar.desc')"
+        accent="curve"
+        size="large"></app-section-heading>
     </div>
 
-    <!-- 2x2 Problem / Solution Grid -->
-    <div class="problem-solution-grid">
-      <div 
-        *ngFor="let item of items(); let i = index" 
-        class="ps-card card-base"
-        appScrollReveal
-        [revealDelay]="i * 100"
-      >
-        <!-- Problem Row -->
-        <div class="ps-row problem-row">
-          <div class="ps-icon-circle problem-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="8" x2="12" y2="12"/>
-              <line x1="12" y1="16" x2="12.01" y2="16"/>
+    <!-- Challenge → Solution accordion: each row asks the question; opening it
+         answers it directly underneath, so the pairing stays unambiguous. -->
+    <div class="challenge-accordion" appScrollReveal>
+      @for (item of items(); track $index; let i = $index) {
+        <div class="acc-item" [class.open]="openIndex() === i">
+          <button
+            type="button"
+            class="acc-header"
+            [attr.aria-expanded]="openIndex() === i"
+            [attr.aria-controls]="'challenge-panel-' + i"
+            (click)="toggle(i)"
+          >
+            <span class="ps-icon-circle problem-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+            </span>
+            <span class="problem-text">{{ item.problem }}</span>
+            <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"/>
             </svg>
-          </div>
-          <span class="problem-text">{{ item.problem }}</span>
-        </div>
+          </button>
 
-        <!-- Solution Row -->
-        <div class="ps-row solution-row">
-          <div class="ps-icon-circle solution-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
+          <div class="acc-panel" [id]="'challenge-panel-' + i">
+            <div class="acc-panel-inner">
+              <div class="ps-row solution-row">
+                <span class="ps-icon-circle solution-icon">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0062FF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                  </svg>
+                </span>
+                <span class="solution-text">{{ item.solution }}</span>
+              </div>
+            </div>
           </div>
-          <span class="solution-text">{{ item.solution }}</span>
         </div>
-      </div>
+      }
     </div>
   </div>
 </section>

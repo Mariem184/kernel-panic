@@ -1,0 +1,152 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Section heading system — one look for every section.
+   Tokens come from styles.css (:root): --primary-blue, --dark-navy,
+   --text-secondary. Change them there and every heading follows.
+   ═══════════════════════════════════════════════════════════════════════ */
+:host {
+  display: block;
+  --sh-accent: var(--primary-blue);
+  --sh-accent-soft: rgba(0, 98, 255, 0.14);
+}
+
+.sh { text-align: center; }
+:host(.sh-left) .sh { text-align: start; }
+
+/* ── 1. Eyebrow: small, blue, uppercase, quiet pill ── */
+.sh-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 999px;
+  background: rgba(0, 98, 255, 0.07);
+  border: 1px solid rgba(0, 98, 255, 0.16);
+  color: var(--sh-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+/* dot marker (default) */
+.sh-eyebrow:not(.sh-eyebrow--code):not(.sh-eyebrow--plain)::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: 0 0 auto;
+}
+/* "//" technical marker */
+.sh-code {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  font-weight: 700;
+  letter-spacing: 0;
+  opacity: 0.7;
+}
+
+/* ── 2. Main heading ── */
+.sh-title {
+  margin: 0;
+  font-size: clamp(1.875rem, 3.6vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  color: var(--dark-navy);
+  text-wrap: balance;            /* no single orphan word on the last line */
+  overflow-wrap: break-word;
+}
+:host(.sh-large) .sh-title { font-size: clamp(2rem, 4.3vw, 3.125rem); }
+
+/* ── Highlighted phrase ──
+   All accents are drawn with backgrounds + box-decoration-break: clone,
+   so they stay correct even if the phrase wraps onto two lines. */
+.sh-hl {
+  color: var(--sh-accent);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background-repeat: no-repeat;
+}
+
+/* curve — the reference treatment */
+.sh-hl--curve {
+  padding-bottom: 0.14em;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M3 10 C 45 3, 110 2, 197 8' fill='none' stroke='%230062FF' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-size: 100% 0.3em;
+  background-position: 0 100%;
+}
+
+/* line — a soft, thick marker stroke along the bottom of the phrase.
+   Deliberately NOT a thin full-strength underline: blue text with a thin
+   blue underline reads as a clickable link. */
+.sh-hl--line {
+  padding-inline: 0.04em;
+  background-image: linear-gradient(rgba(0, 98, 255, 0.2), rgba(0, 98, 255, 0.2));
+  background-size: 100% 0.22em;
+  background-position: 0 88%;
+}
+
+/* bracket — technical corner brackets [ ], drawn as thin lines so they
+   look the same in English and Arabic (no mirrored glyphs). */
+.sh-hl--bracket {
+  --b: rgba(0, 98, 255, 0.45);
+  --t: 0.32em;   /* tick length */
+  padding-inline: 0.3em;
+  background-image:
+    linear-gradient(var(--b), var(--b)), linear-gradient(var(--b), var(--b)), linear-gradient(var(--b), var(--b)),
+    linear-gradient(var(--b), var(--b)), linear-gradient(var(--b), var(--b)), linear-gradient(var(--b), var(--b));
+  background-size:
+    2px 100%, var(--t) 2px, var(--t) 2px,
+    2px 100%, var(--t) 2px, var(--t) 2px;
+  background-position:
+    0 0, 0 0, 0 100%,
+    100% 0, 100% 0, 100% 100%;
+}
+
+/* mark — editorial: serif italic on a soft highlighter band */
+.sh-hl--mark {
+  padding-inline: 0.12em;
+  background-image: linear-gradient(transparent 60%, var(--sh-accent-soft) 60%, var(--sh-accent-soft) 92%, transparent 92%);
+  background-size: 100% 100%;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Short phrases ("Full Control", "Kernel Panic") stay on one line instead
+   of being split in two; long ones may still wrap normally. */
+.sh-hl--keep { white-space: nowrap; }
+
+/* ── 3. Subtitle ── */
+.sh-sub {
+  margin: 1rem auto 0;
+  max-width: 640px;
+  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+:host(.sh-left) .sh-sub { margin-inline: 0; }
+
+/* ── Arabic ──
+   No letter-spacing on Arabic letters, a little more line height, and the
+   editorial accent keeps the Arabic font (no Latin serif italic). */
+:host-context([dir='rtl']) .sh-eyebrow { letter-spacing: 0; font-size: 0.8125rem; }
+:host-context([dir='rtl']) .sh-title { letter-spacing: 0; line-height: 1.35; }
+:host-context([dir='rtl']) .sh-hl--mark { font-family: inherit; font-style: normal; font-weight: 800; }
+:host-context([dir='rtl']) .sh-hl--curve {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M197 10 C 155 3, 90 2, 3 8' fill='none' stroke='%230062FF' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+/* ── Small screens ── */
+@media (max-width: 540px) {
+  .sh-eyebrow { margin-bottom: 0.75rem; }
+  .sh-sub { margin-top: 0.75rem; }
+}
+
+/* High-contrast / forced colours: keep the highlight readable as plain text */
+@media (forced-colors: active) {
+  .sh-hl { background: none; text-decoration: underline; }
+  .sh-eyebrow { border-color: CanvasText; }
+}

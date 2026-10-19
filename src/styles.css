@@ -93,6 +93,12 @@ body {
   font-family: var(--font-arabic);
 }
 
+/* Arabic text (Cairo) renders visibly smaller than the Latin font at the
+   same size, so the whole site is scaled up a little in Arabic. Everything
+   is sized in rem, so text grows together with its spacing and the layout
+   keeps its proportions. */
+html[dir="rtl"] { font-size: 17px; }
+
 /* Brand Logos ALWAYS maintain exact LTR order (Icon + KERNEL + PANIC) */
 .brand-logo,
 .footer-logo,
@@ -131,35 +137,9 @@ body {
   margin: 0 auto 3rem auto;
 }
 
-.section-tag {
-  display: inline-block;
-  font-size: 0.8125rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--primary-blue);
-  margin-bottom: 0.625rem;
-}
+/* Section eyebrow + title + subtitle styles live in the shared
+   SectionHeading component (app/components/section-heading). */
 
-.section-title {
-  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
-  font-weight: 800;
-  color: var(--dark-navy);
-  line-height: 1.25;
-  margin-bottom: 0.875rem;
-  letter-spacing: -0.02em;
-}
-
-.section-title .highlight-blue {
-  color: var(--primary-blue);
-}
-
-.section-desc {
-  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
-  color: var(--text-secondary);
-  line-height: 1.65;
-  margin: 0 auto;
-}
 
 /* Common Card Base */
 .card-base {
@@ -283,7 +263,20 @@ body {
    work in both LTR (English) and RTL (Arabic).
    ══════════════════════════════════════════════════════════════════ */
 
+/* Page behind an open pop-up stays still: lock both the page and the root
+   scroller, and stop wheel/touch scrolling from "leaking" out of the pop-up
+   to the page when the pop-up reaches its top or bottom. */
 body.kp-modal-open { overflow: hidden; }
+html:has(body.kp-modal-open) { overflow: hidden; }
+.kp-modal-backdrop, .kp-modal, .kp-modal-body { overscroll-behavior: contain; }
+
+/* While a pop-up is open, freeze every looping animation on the page behind
+   it (project strip, service illustrations, pulses…). Nobody can see them
+   clearly, and repainting them under the pop-up made its scrolling stutter.
+   Animations inside the pop-up keep running. */
+body.kp-modal-open *:not(.kp-modal-backdrop, .kp-modal-backdrop *) {
+  animation-play-state: paused !important;
+}
 
 /* ── Buttons ── */
 .kp-btn {
@@ -418,8 +411,10 @@ body.kp-modal-open { overflow: hidden; }
   justify-content: center;
   padding: 20px;
   overflow-y: auto;
-  background: rgba(11, 21, 40, 0.55);
-  backdrop-filter: blur(3px);
+  /* No backdrop blur: blurring the whole page behind the pop-up on every
+     frame was the main cause of laggy scrolling inside the pop-up. A
+     slightly darker overlay gives the same focus. */
+  background: rgba(11, 21, 40, 0.68);
   animation: kp-fade 0.2s ease;
 }
 .kp-modal {

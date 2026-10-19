@@ -84,10 +84,7 @@
   text-align: center; 
 }
 
-.who-title {
-  font-size: clamp(1.875rem, 3vw, 2.375rem);
-  margin-bottom: 1.25rem;
-}
+.who-heading { margin-bottom: 1.25rem; }
 
 .who-paragraph {
   font-size: 0.95rem;

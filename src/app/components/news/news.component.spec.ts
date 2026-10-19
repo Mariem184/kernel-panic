@@ -39,7 +39,8 @@ describe('NewsComponent', () => {
     req.flush({ totalCount: 1, items: [mkNews(1, 'Alpha')] });
     await settle(fixture);
 
-    expect(el.querySelectorAll('.news-card').length).toBe(1);
+    expect(el.querySelectorAll('.timeline-item').length).toBe(1);
+    expect(el.querySelectorAll('.journey-feature').length).toBe(1);
     expect(el.textContent).toContain('Alpha');
     expect(el.querySelector('.admin-actions')).toBeNull();
     expect(el.querySelector('.kp-admin-toolbar')).toBeNull();
@@ -56,7 +57,12 @@ describe('NewsComponent', () => {
     await settle(fixture);
 
     expect(el.querySelector('.kp-admin-toolbar button')).not.toBeNull();
-    expect(el.querySelectorAll('.admin-actions').length).toBe(2);
+    // Edit/Delete now live on the single featured-story panel, not on every
+    // timeline entry — only one is ever in the DOM at a time.
+    expect(el.querySelectorAll('.admin-actions').length).toBe(1);
+    // The draft entry (Beta) isn't necessarily the one loaded into the feature
+    // panel, so the draft indicator shown directly on its timeline entry is
+    // what a logged-in admin actually relies on to spot it.
     expect(el.querySelectorAll('.kp-badge.draft').length).toBe(1);
   });
 
@@ -78,8 +84,8 @@ describe('NewsComponent', () => {
     reload.flush({ totalCount: 2, items: [mkNews(1, 'Alpha'), mkNews(2, 'Beta', 'draft')] });
     await settle(fixture);
 
-    expect(el.querySelectorAll('.news-card').length).toBe(2);
-    expect(el.querySelectorAll('.admin-actions').length).toBe(2);
+    expect(el.querySelectorAll('.timeline-item').length).toBe(2);
+    expect(el.querySelectorAll('.admin-actions').length).toBe(1);
   });
 
   it('hides drafts + controls again on logout', async () => {
@@ -87,7 +93,7 @@ describe('NewsComponent', () => {
     fixture.detectChanges();
     ctrl.expectOne(LIST).flush({ totalCount: 2, items: [mkNews(1, 'Alpha'), mkNews(2, 'Beta', 'draft')] });
     await settle(fixture);
-    expect(el.querySelectorAll('.news-card').length).toBe(2);
+    expect(el.querySelectorAll('.timeline-item').length).toBe(2);
 
     auth.logout();
     await settle(fixture);
@@ -96,7 +102,7 @@ describe('NewsComponent', () => {
     reload.flush({ totalCount: 1, items: [mkNews(1, 'Alpha')] });
     await settle(fixture);
 
-    expect(el.querySelectorAll('.news-card').length).toBe(1);
+    expect(el.querySelectorAll('.timeline-item').length).toBe(1);
     expect(el.querySelector('.admin-actions')).toBeNull();
   });
 
@@ -117,7 +123,7 @@ describe('NewsComponent', () => {
     del.flush({ message: 'News article deleted successfully' });
     await settle(fixture);
 
-    expect(el.querySelectorAll('.news-card').length).toBe(1);
+    expect(el.querySelectorAll('.timeline-item').length).toBe(1);
     expect(el.textContent).not.toContain('Alpha');
     expect(el.querySelector('app-confirm-dialog')).toBeNull();
   });
@@ -134,7 +140,7 @@ describe('NewsComponent', () => {
     await settle(fixture);
 
     ctrl.expectNone(`${LIST}/1`);
-    expect(el.querySelectorAll('.news-card').length).toBe(1);
+    expect(el.querySelectorAll('.timeline-item').length).toBe(1);
   });
 
   it('shows a friendly empty state and an error state with retry', async () => {
@@ -155,6 +161,6 @@ describe('NewsComponent', () => {
     (el.querySelector('.kp-state button') as HTMLButtonElement).click();
     ctrl.expectOne(LIST).flush({ totalCount: 1, items: [mkNews(1, 'Alpha')] });
     await settle(fixture);
-    expect(el.querySelectorAll('.news-card').length).toBe(1);
+    expect(el.querySelectorAll('.timeline-item').length).toBe(1);
   });
 });

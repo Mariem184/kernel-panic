@@ -3,13 +3,46 @@
   background-color: var(--bg-page);
 }
 
-.social-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
+/* Infinite-loop auto-scrolling marquee: the track renders the card list twice
+   back-to-back and animates translateX(0) → translateX(-50%), so the loop is
+   seamless. Same technique as the Projects thumbnail strip. */
+.social-strip {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 32px, #000 calc(100% - 32px), transparent 100%);
+}
+
+.social-strip-track {
+  display: flex;
+  width: max-content;
   gap: 1rem;
+  animation-name: kp-social-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.social-strip:hover .social-strip-track,
+.social-strip:focus-within .social-strip-track {
+  animation-play-state: paused;
+}
+
+@keyframes kp-social-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+:host-context([dir='rtl']) .social-strip-track { animation-name: kp-social-scroll-rtl; }
+@keyframes kp-social-scroll-rtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .social-strip-track { animation: none; }
+  .social-strip { overflow-x: auto; }
 }
 
 .social-card {
+  flex: 0 0 auto;
+  width: 150px;
   padding: 1.25rem 0.875rem;
   display: flex;
   flex-direction: column;
@@ -74,14 +107,6 @@
   max-width: 110px;
 }
 
-@media (max-width: 1024px) {
-  .social-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
 @media (max-width: 640px) {
-  .social-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .social-card { width: 128px; }
 }

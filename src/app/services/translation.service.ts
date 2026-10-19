@@ -46,6 +46,7 @@ export class TranslationService {
       soundFamiliar: {
         tag: 'COMMON CHALLENGES',
         title: 'Sound Familiar?',
+        titleHighlight: 'Familiar?',
         desc: 'Modern businesses face a wide range of technology challenges that can affect productivity, security, and growth. We help organizations address the technical issues that impact their operations and digital performance.',
         card1: {
           title: 'Frequent Network Outages',
@@ -67,6 +68,7 @@ export class TranslationService {
       whoWeAre: {
         tag: 'WHO WE ARE',
         title: 'Your Dedicated Technology & Security Team',
+        titleHighlight: 'Technology & Security',
         desc1: 'Kernel Panic is a specialized IT and Cybersecurity powerhouse established in Egypt. We help organizations build ironclad digital defense, high-speed network infrastructure, and scalable custom software.',
         desc2: 'Our philosophy is simple: Eliminate technical chaos so you can focus entirely on growing your business with complete peace of mind.',
         stat1Number: '100%',
@@ -80,6 +82,7 @@ export class TranslationService {
       services: {
         tag: 'OUR CAPABILITIES',
         title: 'Comprehensive IT & Cybersecurity Solutions',
+        titleHighlight: 'IT & Cybersecurity',
         desc: 'End-to-end technology services tailored to protect, streamline, and accelerate your business operations.',
         item1: {
           title: 'Cybersecurity & Ethical Hacking',
@@ -115,11 +118,20 @@ export class TranslationService {
           feature1: 'Hands-on Labs & Projects',
           feature2: 'Cybersecurity Certifications',
           feature3: 'Custom Corporate Training'
-        }
+        },
+        sidebarHeading: 'Interactive Timeline (Vertical / Horizontal)',
+        sidebarDesc: 'A clean timeline-style layout with animated indicators. Each service is revealed one by one as you scroll or click.',
+        sidebarFeature1: 'Visual and minimal',
+        sidebarFeature2: 'Smooth transitions',
+        sidebarFeature3: 'Great for storytelling',
+        prev: 'Previous service',
+        next: 'Next service',
+        learnMore: 'Learn More'
       },
       process: {
         tag: 'OUR METHODOLOGY',
         title: 'How We Deliver with Confidence',
+        titleHighlight: 'Confidence',
         desc: 'A structured four-step engineering process designed to minimize risks, ensure quality, and deliver reliable technology solutions aligned with your business requirements.',
         step1Num: '01',
         step1Title: 'Discovery & Assessment',
@@ -137,6 +149,7 @@ export class TranslationService {
       whyUs: {
         tag: 'WHY KERNEL PANIC',
         title: 'Built for Reliability. Engineered for Growth.',
+        titleHighlight: 'Reliability',
         desc: 'We combine technical expertise, practical experience, and tailored technology solutions to help organizations build reliable systems, strengthen their digital infrastructure, and support sustainable growth.',
         feat1Title: 'Expert Specialized Engineers',
         feat1Desc: 'Certified specialists across cybersecurity, networks, software, and systems architecture.',
@@ -150,6 +163,7 @@ export class TranslationService {
       missionValues: {
         tag: 'CORE PRINCIPLES',
         title: 'Mission & Values',
+        titleHighlight: 'Values',
         missionTitle: 'Our Mission',
         missionDesc: 'To empower organizations across Egypt and the region with resilient, cutting-edge technology and impenetrable cybersecurity—turning IT from a source of stress into a competitive advantage.',
         val1Title: 'Precision & Excellence',
@@ -160,7 +174,9 @@ export class TranslationService {
         val3Desc: 'We don’t just build systems; we educate and equip your team for sustainable independence.'
       },
       finalCta: {
+        tag: 'Get Started',
         title: 'Ready to Take Full Control of Your IT?',
+        titleHighlight: 'Full Control',
         desc: 'Stop worrying about crashes, security breaches, or slow networks. Partner with Kernel Panic today.',
         btnWa: 'Chat with an Engineer on WhatsApp',
         btnEmail: 'Email Us: kernelpanic177@gmail.com'
@@ -168,6 +184,7 @@ export class TranslationService {
       stayConnected: {
         tag: 'STAY CONNECTED',
         title: 'Connect with Kernel Panic IT Team',
+        titleHighlight: 'Kernel Panic',
         desc: 'Reach out through any of our official channels for immediate assistance, consultations, or project inquiries.'
       },
       footer: {
@@ -197,11 +214,25 @@ export class TranslationService {
         readOriginal: 'Read the original',
         by: 'By',
         showMore: 'See More',
-        showLess: 'See Less'
+        showLess: 'See Less',
+        journeyTag: 'News & Updates',
+        journeyTitle: 'Our Journey in the News',
+        journeyTitleHighlight: 'Journey',
+        journeyDesc: 'Explore the latest updates, partnerships, and milestones from Kernel Panic IT.',
+        balanceNote: 'Discover the latest updates, partnerships, and milestones shaping our technology journey.',
+        readStory: 'Read Story',
+        viewAllNews: 'View All News',
+        nextStories: 'Next Stories',
+        prevStory: 'Previous story',
+        nextStory: 'Next story',
+        timelineLabel: 'News timeline',
+        allNewsTitle: 'All News & Updates',
+        loadMore: 'Load More'
       },
       projects: {
         tag: 'Our Work',
         title: 'Projects We Are Proud Of',
+        titleHighlight: 'Projects',
         desc: 'A selection of the solutions we have designed, built, and delivered for our clients.',
         all: 'All',
         empty: 'No projects to show yet. Please check back soon.',
@@ -209,6 +240,11 @@ export class TranslationService {
         loadError: 'We could not load the projects right now.',
         retry: 'Try again',
         viewDetails: 'View details',
+        selectedWork: 'Selected Work',
+        viewCaseStudy: 'View case study',
+        prevProject: 'Previous project',
+        nextProject: 'Next project',
+        selector: 'Choose a project',
         showMore: 'See More',
         showLess: 'See Less',
         gallery: 'Project gallery',
@@ -227,6 +263,46 @@ export class TranslationService {
         sourceCode: 'View source code'
       },
       admin: {
+        team: {
+          title: 'Team accounts',
+          subtitle: 'Give your team their own login to add and edit news & projects.',
+          add: 'Add team member',
+          newMember: 'New team member',
+          fullName: 'Full name',
+          email: 'Email (used to log in)',
+          emailInvalid: 'Enter a valid email address.',
+          password: 'Password',
+          passwordHint: 'At least 6 characters. Share it privately — they can change it after logging in.',
+          generate: 'Generate',
+          role: 'Role',
+          roleEditor: 'Editor',
+          roleAdmin: 'Admin',
+          roleEditorHint: 'Can add, edit and delete news and projects only.',
+          roleAdminHint: 'Full access, including managing team accounts.',
+          copyLogin: 'Copy login details',
+          copied: 'Login details copied.',
+          create: 'Create account',
+          created: 'Account created for {email}.',
+          members: 'Team members',
+          you: 'You',
+          inactive: 'Disabled',
+          lastLogin: 'Last login:',
+          neverLoggedIn: 'Never logged in yet',
+          disable: 'Disable',
+          enable: 'Enable',
+          disabled: 'Account disabled — it can no longer log in or post.',
+          enabled: 'Account enabled.',
+          roleChanged: 'Role updated. It applies from their next login.',
+          resetPassword: 'Reset password',
+          newPassword: 'New password (min 6)',
+          save: 'Save',
+          passwordReset: 'Password updated.',
+          delete: 'Delete account',
+          deleteTitle: 'Delete this account?',
+          deleteMsg: 'They will no longer be able to log in. News and projects they added stay on the site.',
+          deleted: 'Account deleted.',
+          retry: 'Try again'
+        },
         addNews: 'Add news',
         addProject: 'Add project',
         edit: 'Edit',
@@ -392,6 +468,7 @@ export class TranslationService {
       soundFamiliar: {
         tag: 'التحديات الشائعة',
         title: 'هل تبدو هذه المشاكل مألوفة؟',
+        titleHighlight: 'مألوفة؟',
         desc: 'تواجه الشركات الحديثة مجموعة واسعة من التحديات التقنية التي قد تؤثر على الإنتاجية والأمان والنمو. نساعد المؤسسات على معالجة المشكلات التقنية التي تؤثر على عملياتها وأدائها الرقمي.',
         card1: {
           title: 'انقطاع وبطء الشبكات',
@@ -413,6 +490,7 @@ export class TranslationService {
       whoWeAre: {
         tag: 'من نحن',
         title: 'فريقك المتخصص في التكنولوجيا والأمن السيبراني',
+        titleHighlight: 'التكنولوجيا والأمن السيبراني',
         desc1: 'Kernel Panic هو فريق رائد في مجال تكنولوجيا المعلومات والأمن السيبراني تأسس في مصر. نساعد المؤسسات والشركات على بناء دفاعات رقمية حصينة، وشبكات فائقة السرعة، وبرمجيات مخصصة قابلة للتوسع.',
         desc2: 'فلسفتنا واضحة وبسيطة: القضاء التام على الفوضى التقنية حتى تتفرغ لتنمية وتطوير أعمالك براحة بال وثقة تامة.',
         stat1Number: '100%',
@@ -426,6 +504,7 @@ export class TranslationService {
       services: {
         tag: 'مجالات خبرتنا',
         title: 'حلول تقنية وأمنية شاملة ومتكاملة',
+        titleHighlight: 'تقنية وأمنية',
         desc: 'خدمات تكنولوجية متكاملة مصممة لحماية وتطوير وتسريع أعمالك بأحدث المعايير العالمية.',
         item1: {
           title: 'الأمن السيبراني واختبار الاختراق',
@@ -461,11 +540,20 @@ export class TranslationService {
           feature1: 'مشاريع ومعامل تطبيقية عملية',
           feature2: 'تأهيل لشهادات الأمن والشبكات',
           feature3: 'تدريب مخصص للشركات والأفراد'
-        }
+        },
+        sidebarHeading: 'جدول زمني تفاعلي (عمودي / أفقي)',
+        sidebarDesc: 'تصميم بسيط على شكل خط زمني مع مؤشرات متحركة. تظهر كل خدمة بالتتابع أثناء التمرير أو الضغط عليها.',
+        sidebarFeature1: 'تصميم بصري وبسيط',
+        sidebarFeature2: 'انتقالات سلسة',
+        sidebarFeature3: 'مثالي لسرد قصة الخدمات',
+        prev: 'الخدمة السابقة',
+        next: 'الخدمة التالية',
+        learnMore: 'اعرف المزيد'
       },
       process: {
         tag: 'منهجية عملنا',
         title: 'كيف نُنجز مشروعك بثقة تامة',
+        titleHighlight: 'بثقة تامة',
         desc: 'منهجية هندسية واضحة من أربع خطوات مصممة لتقليل المخاطر وضمان الجودة وتقديم حلول تقنية موثوقة تتماشى مع احتياجات عملك.',
         step1Num: '01',
         step1Title: 'الاستكشاف والتقييم',
@@ -483,6 +571,7 @@ export class TranslationService {
       whyUs: {
         tag: 'لماذا كيرنل بانيك',
         title: 'صُممت للأمان المطلق. وهُندست لنمو أعمالك.',
+        titleHighlight: 'للأمان المطلق',
         desc: 'نجمع بين الخبرة التقنية والتجربة العملية وحلول تقنية مخصصة لمساعدة المؤسسات على بناء أنظمة موثوقة، وتعزيز بنيتها التحتية الرقمية، ودعم نموها المستدام.',
         feat1Title: 'مهندسون خبراء ومعتمدون',
         feat1Desc: 'فريق متخصص وحاصل على أعلى الشهادات في الأمن السيبراني والشبكات وهندسة البرمجيات.',
@@ -496,6 +585,7 @@ export class TranslationService {
       missionValues: {
         tag: 'مبادئنا الأساسية',
         title: 'رسالتنا وقيمنا',
+        titleHighlight: 'وقيمنا',
         missionTitle: 'رسالتنا',
         missionDesc: 'تمكين المؤسسات والشركات في مصر والمنطقة بحلول تكنولوجية متقدمة وأمن سيبراني منيع—لتحويل تكنولوجيا المعلومات من مصدر قلق إلى نقطة قوة وميزة تنافسية كبرى.',
         val1Title: 'الدقة والتميز الهندسي',
@@ -506,7 +596,9 @@ export class TranslationService {
         val3Desc: 'لا نكتفي ببناء الأنظمة؛ بل ندرب ونمكن فريقك للتعامل معها باحترافية وسلاسة.'
       },
       finalCta: {
+        tag: 'ابدأ الآن',
         title: 'جاهز للتحكم الكامل في بنيتك التقنية؟',
+        titleHighlight: 'للتحكم الكامل',
         desc: 'توقف عن القلق بشأن الأعطال، الاختراقات، أو بطء الشبكات. تواصل مع Kernel Panic اليوم.',
         btnWa: 'تحدث مع مهندس متخصص عبر واتساب',
         btnEmail: 'راسلنا عبر البريد: kernelpanic177@gmail.com'
@@ -514,6 +606,7 @@ export class TranslationService {
       stayConnected: {
         tag: 'ابقَ على تواصل',
         title: 'تواصل مع فريق Kernel Panic IT Team',
+        titleHighlight: 'Kernel Panic',
         desc: 'تواصل معنا عبر أي من قنواتنا الرسمية للحصول على استشارة فورية أو طلب خدماتنا.'
       },
       footer: {
@@ -543,11 +636,25 @@ export class TranslationService {
         readOriginal: 'قراءة المصدر الأصلي',
         by: 'بواسطة',
         showMore: 'عرض المزيد',
-        showLess: 'عرض أقل'
+        showLess: 'عرض أقل',
+        journeyTag: 'الأخبار والمستجدات',
+        journeyTitle: 'رحلتنا في الأخبار',
+        journeyTitleHighlight: 'رحلتنا',
+        journeyDesc: 'تابع أحدث التحديثات والشراكات والإنجازات من Kernel Panic IT.',
+        balanceNote: 'اكتشف أحدث التحديثات والشراكات والإنجازات التي تشكّل رحلتنا التقنية.',
+        readStory: 'اقرأ القصة',
+        viewAllNews: 'عرض جميع الأخبار',
+        nextStories: 'قصص أخرى',
+        prevStory: 'الخبر السابق',
+        nextStory: 'الخبر التالي',
+        timelineLabel: 'الخط الزمني للأخبار',
+        allNewsTitle: 'جميع الأخبار والمستجدات',
+        loadMore: 'تحميل المزيد'
       },
       projects: {
         tag: 'أعمالنا',
         title: 'مشاريع نفخر بها',
+        titleHighlight: 'مشاريع',
         desc: 'مجموعة مختارة من الحلول التي صمّمناها وبنيناها وسلّمناها لعملائنا.',
         all: 'الكل',
         empty: 'لا توجد مشاريع لعرضها حتى الآن. تفضّل بزيارتنا قريبًا.',
@@ -555,6 +662,11 @@ export class TranslationService {
         loadError: 'تعذّر تحميل المشاريع حاليًا.',
         retry: 'إعادة المحاولة',
         viewDetails: 'عرض التفاصيل',
+        selectedWork: 'أعمال مختارة',
+        viewCaseStudy: 'عرض دراسة الحالة',
+        prevProject: 'المشروع السابق',
+        nextProject: 'المشروع التالي',
+        selector: 'اختر مشروعًا',
         showMore: 'عرض المزيد',
         showLess: 'عرض أقل',
         gallery: 'معرض صور المشروع',
@@ -573,6 +685,46 @@ export class TranslationService {
         sourceCode: 'عرض الكود المصدري'
       },
       admin: {
+        team: {
+          title: 'حسابات الفريق',
+          subtitle: 'أنشئ لكل عضو في فريقك حساباً خاصاً لإضافة الأخبار والمشاريع وتعديلها.',
+          add: 'إضافة عضو للفريق',
+          newMember: 'عضو جديد',
+          fullName: 'الاسم الكامل',
+          email: 'البريد الإلكتروني (لتسجيل الدخول)',
+          emailInvalid: 'أدخل بريداً إلكترونياً صحيحاً.',
+          password: 'كلمة المرور',
+          passwordHint: '6 أحرف على الأقل. أرسلها له بشكل خاص — ويمكنه تغييرها بعد تسجيل الدخول.',
+          generate: 'توليد',
+          role: 'الصلاحية',
+          roleEditor: 'محرر',
+          roleAdmin: 'مدير',
+          roleEditorHint: 'يمكنه إضافة الأخبار والمشاريع وتعديلها وحذفها فقط.',
+          roleAdminHint: 'صلاحيات كاملة، بما فيها إدارة حسابات الفريق.',
+          copyLogin: 'نسخ بيانات الدخول',
+          copied: 'تم نسخ بيانات الدخول.',
+          create: 'إنشاء الحساب',
+          created: 'تم إنشاء حساب {email}.',
+          members: 'أعضاء الفريق',
+          you: 'أنت',
+          inactive: 'معطّل',
+          lastLogin: 'آخر دخول:',
+          neverLoggedIn: 'لم يسجّل الدخول بعد',
+          disable: 'تعطيل',
+          enable: 'تفعيل',
+          disabled: 'تم تعطيل الحساب — لم يعد بإمكانه الدخول أو النشر.',
+          enabled: 'تم تفعيل الحساب.',
+          roleChanged: 'تم تحديث الصلاحية، وتُطبَّق من تسجيل دخوله القادم.',
+          resetPassword: 'تغيير كلمة المرور',
+          newPassword: 'كلمة مرور جديدة (6 أحرف على الأقل)',
+          save: 'حفظ',
+          passwordReset: 'تم تحديث كلمة المرور.',
+          delete: 'حذف الحساب',
+          deleteTitle: 'حذف هذا الحساب؟',
+          deleteMsg: 'لن يتمكن من تسجيل الدخول بعد الآن. الأخبار والمشاريع التي أضافها تبقى على الموقع.',
+          deleted: 'تم حذف الحساب.',
+          retry: 'إعادة المحاولة'
+        },
         addNews: 'إضافة خبر',
         addProject: 'إضافة مشروع',
         edit: 'تعديل',

@@ -1,3 +1,4 @@
+import { SectionHeadingComponent } from '../section-heading/section-heading.component';
 import { Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
@@ -12,7 +13,7 @@ interface ProcessStep {
 @Component({
   selector: 'app-process',
   standalone: true,
-  imports: [CommonModule, ScrollRevealDirective],
+  imports: [SectionHeadingComponent, CommonModule, ScrollRevealDirective],
   templateUrl: './process.component.html',
   styleUrl: './process.component.css'
 })

@@ -1,20 +1,23 @@
 <section id="hero" class="hero-section">
+  <div class="hero-bg-grid" aria-hidden="true"></div>
+  <div class="hero-bg-glow" aria-hidden="true"></div>
+
   <div class="container hero-container">
     <!-- Left Content -->
     <div class="hero-content">
       <!-- Main Bold Headline with translations -->
-      <h1 class="hero-title">
+      <h1 class="hero-title hero-enter hero-enter-1">
         <span class="title-dark">{{ ts.t('hero.titleDark') }}</span>
         <span class="title-blue">{{ ts.t('hero.titleBlue') }}</span>
       </h1>
 
       <!-- Description -->
-      <p class="hero-desc">
+      <p class="hero-desc hero-enter hero-enter-2">
         {{ ts.t('hero.desc') }}
       </p>
 
       <!-- Action Buttons -->
-      <div class="hero-actions">
+      <div class="hero-actions hero-enter hero-enter-3">
         <a href="#contact" class="btn btn-primary hero-btn-primary">
           <span>{{ ts.t('hero.btnConsultation') }}</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -32,7 +35,7 @@
       </div>
 
       <!-- Tech Breadcrumb -->
-      <div class="hero-breadcrumbs">
+      <div class="hero-breadcrumbs hero-enter hero-enter-4">
         <span>{{ ts.t('hero.crumbs.security') }}</span>
         <span class="dot">•</span>
         <span>{{ ts.t('hero.crumbs.networking') }}</span>
@@ -44,7 +47,7 @@
     </div>
 
     <!-- Right Side Futuristic Technology Visualization -->
-    <div class="hero-visual-wrapper">
+    <div class="hero-visual-wrapper hero-enter hero-enter-5">
       <div class="tech-globe-container">
         <!-- Center Radial Glow -->
         <div class="core-glow"></div>

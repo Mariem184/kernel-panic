@@ -34,7 +34,7 @@
   display: flex !important;
   flex-direction: row !important;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   margin-bottom: 1.125rem;
   direction: ltr !important;
   unicode-bidi: isolate !important;
@@ -46,13 +46,14 @@
   justify-content: center;
 }
 
+/* No drop-shadow: the blurred glow made a pale box around the mark, so the
+   logo looked pasted on top of the footer instead of part of it. */
 .footer-logo-img {
-  height: 60px;
+  height: 56px;
   width: auto;
   object-fit: contain;
   display: block;
   mix-blend-mode: multiply;
-  filter: drop-shadow(0 4px 12px rgba(0, 98, 255, 0.16));
 }
 
 .logo-text {
@@ -228,4 +229,24 @@
     gap: 1rem;
     text-align: center;
   }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   Arabic (RTL) footer — columns run right-to-left as before.
+   The logo block itself stays LTR (icon + KERNEL PANIC), but it now
+   hugs the RIGHT edge of its column, flush with the motto, the text
+   and the social icons under it, instead of floating offset from them.
+   ───────────────────────────────────────────────────────────── */
+:host-context([dir='rtl']) .footer-logo {
+  align-self: flex-start;   /* flex-start = right side in an RTL column */
+  width: fit-content;
+}
+
+/* The motto is English: isolate it so it reads "ZERO PANIC. FULL CONTROL."
+   (not ".ZERO PANIC…") while staying aligned to the right. */
+:host-context([dir='rtl']) .footer-motto {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: right;
 }

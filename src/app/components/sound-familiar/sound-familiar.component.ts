@@ -1,4 +1,5 @@
-import { Component, computed, inject } from '@angular/core';
+import { SectionHeadingComponent } from '../section-heading/section-heading.component';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ScrollRevealDirective } from '../../directives/scroll-reveal.directive';
 import { TranslationService } from '../../services/translation.service';
@@ -11,7 +12,7 @@ interface ProblemSolutionItem {
 @Component({
   selector: 'app-sound-familiar',
   standalone: true,
-  imports: [CommonModule, ScrollRevealDirective],
+  imports: [SectionHeadingComponent, CommonModule, ScrollRevealDirective],
   templateUrl: './sound-familiar.component.html',
   styleUrl: './sound-familiar.component.css'
 })
@@ -36,4 +37,12 @@ export class SoundFamiliarComponent {
       solution: this.ts.t('soundFamiliar.card4.desc')
     }
   ]);
+
+  /** Accordion: the first challenge starts open so the pattern reads immediately;
+   *  clicking a row toggles it, and only one is open at a time. */
+  openIndex = signal<number | null>(0);
+
+  toggle(i: number): void {
+    this.openIndex.update(cur => (cur === i ? null : i));
+  }
 }

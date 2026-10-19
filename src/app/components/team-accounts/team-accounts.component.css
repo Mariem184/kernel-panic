@@ -1,0 +1,77 @@
+.team-modal { max-width: 760px; }
+.team-sub { margin-top: 0.25rem; font-size: 0.8125rem; color: var(--text-secondary); }
+
+.add-btn { margin-bottom: 1.5rem; }
+
+.add-card {
+  margin-bottom: 1.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  background: var(--bg-page);
+}
+.add-title { font-size: 1rem; font-weight: 800; color: var(--dark-navy); margin-bottom: 1rem; }
+.pw-row { display: flex; gap: 0.5rem; }
+.pw-row .kp-input { flex: 1; min-width: 0; font-family: ui-monospace, Menlo, Consolas, monospace; }
+.pw-gen { flex: 0 0 auto; padding-inline: 0.875rem; }
+.add-actions { display: flex; align-items: center; gap: 0.625rem; flex-wrap: wrap; margin-top: 1.25rem; }
+.add-actions .spacer { flex: 1; }
+
+.list-title {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.9375rem; font-weight: 800; color: var(--dark-navy);
+  margin-bottom: 0.75rem;
+}
+.count {
+  font-size: 0.75rem; font-weight: 700; color: var(--primary-blue);
+  background: rgba(0, 98, 255, 0.08); border-radius: 999px; padding: 0.125rem 0.5rem;
+}
+.state { padding: 2rem 0; display: flex; justify-content: center; }
+
+.user-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.625rem; }
+.user-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.875rem;
+  align-items: start;
+  padding: 0.875rem 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  background: #fff;
+}
+.user-row.off { background: var(--bg-page); }
+.user-row.off .name, .user-row.off .email { opacity: 0.6; }
+
+.avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.8125rem; font-weight: 800;
+  color: var(--text-secondary); background: var(--bg-page);
+  border: 1px solid var(--card-border);
+}
+.avatar.admin { color: #fff; background: var(--primary-blue); border-color: var(--primary-blue); }
+
+.who { min-width: 0; }
+.name { display: flex; align-items: center; flex-wrap: wrap; gap: 0.375rem; font-weight: 800; color: var(--dark-navy); }
+.email { font-size: 0.8125rem; color: var(--text-secondary); overflow-wrap: anywhere; text-align: start; }
+.meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.125rem; }
+.you, .badge-off {
+  font-size: 0.6875rem; font-weight: 700; border-radius: 999px; padding: 0.125rem 0.5rem;
+}
+.you { color: var(--primary-blue); background: rgba(0, 98, 255, 0.08); }
+.badge-off { color: var(--danger-red); background: var(--danger-bg); }
+
+.reset-row { display: flex; gap: 0.5rem; margin-top: 0.625rem; flex-wrap: wrap; }
+.reset-row .kp-input { flex: 1 1 160px; min-height: 38px; }
+.reset-row .kp-btn { min-height: 38px; padding-block: 0.375rem; }
+
+.controls { display: flex; align-items: center; gap: 0.375rem; flex-wrap: wrap; justify-content: flex-end; }
+.role-select { min-height: 36px; padding-block: 0.25rem; width: auto; font-size: 0.8125rem; }
+.kp-btn.small { min-height: 36px; padding: 0.375rem 0.75rem; font-size: 0.8125rem; }
+.kp-icon-btn.danger:hover:not(:disabled) { color: var(--danger-red); border-color: var(--danger-red); }
+
+@media (max-width: 640px) {
+  .kp-grid-2 { grid-template-columns: 1fr; }
+  .user-row { grid-template-columns: auto 1fr; }
+  .controls { grid-column: 1 / -1; justify-content: flex-start; }
+}

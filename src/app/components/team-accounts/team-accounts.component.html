@@ -1,0 +1,149 @@
+<div class="kp-modal-backdrop team-backdrop" (click)="closed.emit()">
+  <div class="kp-modal team-modal" role="dialog" aria-modal="true" [attr.aria-label]="t('admin.team.title')" (click)="$event.stopPropagation()">
+
+    <div class="kp-modal-header">
+      <div>
+        <h2 class="kp-modal-title">{{ t('admin.team.title') }}</h2>
+        <p class="team-sub">{{ t('admin.team.subtitle') }}</p>
+      </div>
+      <button type="button" class="kp-icon-btn" (click)="closed.emit()" [attr.aria-label]="t('admin.cancel')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="kp-modal-body">
+
+      <!-- ───── Add a team member ───── -->
+      @if (!formOpen()) {
+        <button type="button" class="kp-btn kp-btn-primary add-btn" (click)="openForm()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          {{ t('admin.team.add') }}
+        </button>
+      } @else {
+        <form class="add-card" (ngSubmit)="save()" novalidate>
+          <h3 class="add-title">{{ t('admin.team.newMember') }}</h3>
+
+          @if (formError()) { <div class="kp-form-error" role="alert">{{ formError() }}</div> }
+
+          <div class="kp-grid-2">
+            <label class="kp-field">
+              <span class="kp-label">{{ t('admin.team.fullName') }}<span class="req">*</span></span>
+              <input class="kp-input" name="fullName" [(ngModel)]="form.fullName" autocomplete="off"
+                     [class.invalid]="submitted() && form.fullName.trim().length < 2" />
+            </label>
+
+            <label class="kp-field">
+              <span class="kp-label">{{ t('admin.team.email') }}<span class="req">*</span></span>
+              <input class="kp-input" type="email" name="email" dir="ltr" [(ngModel)]="form.email" autocomplete="off"
+                     [class.invalid]="submitted() && !emailValid" />
+              @if (submitted() && !emailValid) { <span class="kp-error">{{ t('admin.team.emailInvalid') }}</span> }
+            </label>
+
+            <label class="kp-field">
+              <span class="kp-label">{{ t('admin.team.password') }}<span class="req">*</span></span>
+              <div class="pw-row">
+                <input class="kp-input" name="password" dir="ltr" [type]="showPassword() ? 'text' : 'password'"
+                       [(ngModel)]="form.password" autocomplete="new-password"
+                       [class.invalid]="submitted() && form.password.length < 6" />
+                <button type="button" class="kp-btn kp-btn-ghost pw-gen" (click)="generatePassword()">{{ t('admin.team.generate') }}</button>
+              </div>
+              <span class="kp-hint">{{ t('admin.team.passwordHint') }}</span>
+            </label>
+
+            <label class="kp-field">
+              <span class="kp-label">{{ t('admin.team.role') }}</span>
+              <select class="kp-select" name="role" [(ngModel)]="form.role">
+                <option value="editor">{{ t('admin.team.roleEditor') }}</option>
+                <option value="admin">{{ t('admin.team.roleAdmin') }}</option>
+              </select>
+              <span class="kp-hint">{{ t(form.role === 'admin' ? 'admin.team.roleAdminHint' : 'admin.team.roleEditorHint') }}</span>
+            </label>
+          </div>
+
+          <div class="add-actions">
+            @if (form.email && form.password.length >= 6) {
+              <button type="button" class="kp-btn kp-btn-ghost copy-btn" (click)="copyLogin()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                {{ t('admin.team.copyLogin') }}
+              </button>
+            }
+            <span class="spacer"></span>
+            <button type="button" class="kp-btn kp-btn-ghost" [disabled]="saving()" (click)="cancelForm()">{{ t('admin.cancel') }}</button>
+            <button type="submit" class="kp-btn kp-btn-primary" [disabled]="saving()">
+              @if (saving()) { <span class="kp-spinner"></span> }
+              {{ t('admin.team.create') }}
+            </button>
+          </div>
+        </form>
+      }
+
+      <!-- ───── Accounts list ───── -->
+      <h3 class="list-title">{{ t('admin.team.members') }} @if (!loading()) { <span class="count">{{ list().length }}</span> }</h3>
+
+      @if (loading()) {
+        <div class="state"><span class="kp-spinner"></span></div>
+      } @else if (loadError()) {
+        <div class="kp-form-error">{{ loadError() }}</div>
+        <button type="button" class="kp-btn kp-btn-ghost" (click)="load()">{{ t('admin.team.retry') }}</button>
+      } @else {
+        <ul class="user-list">
+          @for (u of list(); track u.id) {
+            <li class="user-row" [class.off]="!u.isActive">
+              <span class="avatar" [class.admin]="u.role === 'admin'" aria-hidden="true">{{ initials(u.fullName) }}</span>
+
+              <div class="who">
+                <div class="name">
+                  {{ u.fullName }}
+                  @if (u.id === myId()) { <span class="you">{{ t('admin.team.you') }}</span> }
+                  @if (!u.isActive) { <span class="badge-off">{{ t('admin.team.inactive') }}</span> }
+                </div>
+                <div class="email" dir="ltr">{{ u.email }}</div>
+                <div class="meta">{{ lastLogin(u) }}</div>
+
+                @if (resetId() === u.id) {
+                  <div class="reset-row">
+                    <input class="kp-input" dir="ltr" type="text" [(ngModel)]="resetValue" [placeholder]="t('admin.team.newPassword')" autocomplete="new-password" />
+                    <button type="button" class="kp-btn kp-btn-primary" [disabled]="resetValue.length < 6 || busyId() === u.id" (click)="saveReset(u)">{{ t('admin.team.save') }}</button>
+                    <button type="button" class="kp-btn kp-btn-ghost" (click)="resetId.set(null)">{{ t('admin.cancel') }}</button>
+                  </div>
+                }
+              </div>
+
+              <div class="controls">
+                <select class="kp-select role-select" [ngModel]="u.role" (ngModelChange)="setRole(u, $event)"
+                        [disabled]="u.id === myId() || busyId() === u.id" [attr.aria-label]="t('admin.team.role')">
+                  <option value="editor">{{ t('admin.team.roleEditor') }}</option>
+                  <option value="admin">{{ t('admin.team.roleAdmin') }}</option>
+                </select>
+
+                @if (u.id !== myId()) {
+                  <button type="button" class="kp-btn kp-btn-ghost small" [disabled]="busyId() === u.id" (click)="toggleActive(u)">
+                    {{ t(u.isActive ? 'admin.team.disable' : 'admin.team.enable') }}
+                  </button>
+                }
+                <button type="button" class="kp-btn kp-btn-ghost small" [disabled]="busyId() === u.id" (click)="startReset(u)">{{ t('admin.team.resetPassword') }}</button>
+                @if (u.id !== myId()) {
+                  <button type="button" class="kp-icon-btn danger" [disabled]="busyId() === u.id" (click)="askDelete(u)" [attr.aria-label]="t('admin.team.delete')" [attr.title]="t('admin.team.delete')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/></svg>
+                  </button>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  </div>
+</div>
+
+@if (toDelete(); as u) {
+  <app-confirm-dialog
+    [title]="t('admin.team.deleteTitle')"
+    [message]="t('admin.team.deleteMsg')"
+    [itemName]="u.fullName + ' · ' + u.email"
+    [confirmLabel]="t('admin.team.delete')"
+    [cancelLabel]="t('admin.cancel')"
+    [busy]="busyId() === u.id"
+    (confirmed)="confirmDelete()"
+    (cancelled)="closeConfirm()" />
+}

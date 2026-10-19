@@ -1,13 +1,15 @@
 <section id="contact" class="final-cta-section">
   <div class="container">
     <div class="cta-box card-base" appScrollReveal>
-      <span class="section-tag cta-tag">{{ ts.t('soundFamiliar.tag') }}</span>
-      <h2 class="cta-title">
-        {{ ts.t('finalCta.title') }}
-      </h2>
-      <p class="cta-desc">
-        {{ ts.t('finalCta.desc') }}
-      </p>
+      <div class="cta-box-grid" aria-hidden="true"></div>
+      <div class="cta-box-glow" aria-hidden="true"></div>
+      <app-section-heading class="cta-heading"
+        [eyebrow]="ts.t('finalCta.tag')"
+        [title]="ts.t('finalCta.title')"
+        [highlight]="ts.t('finalCta.titleHighlight')"
+        [subtitle]="ts.t('finalCta.desc')"
+        accent="curve"
+        size="large"></app-section-heading>
 
       <div class="cta-actions">
         <a href="https://wa.me/201507316744?text=مرحبا%20أريد%20طلب%20استشارة%20مجانية" target="_blank" rel="noopener noreferrer" class="btn btn-primary cta-btn-primary">
