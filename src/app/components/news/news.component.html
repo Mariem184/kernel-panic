@@ -78,6 +78,8 @@
             <button
               type="button"
               class="timeline-item"
+              animate.enter="tl-enter"
+              animate.leave="tl-leave"
               [class.is-last]="last"
               role="tab"
               [class.active]="n.id === activeStory()?.id"
@@ -112,7 +114,7 @@
                 </span>
                 }
                 <span class="timeline-foot">
-                  <span class="read-time">{{ n.readingTimeMinutes }} {{ t('news.minRead') }}</span>
+                  <span class="read-time reads"><svg class="reads-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>{{ fmtReads(n.viewCount) }}</span>
                   <svg class="timeline-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </span>
               </span>
@@ -122,7 +124,7 @@
           @if (hasMultipleGroups()) {
             <button type="button" class="kp-btn kp-btn-ghost next-group-btn" (click)="nextGroup()">
               {{ t('news.nextStories') }}
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
             </button>
           }
         </div>
@@ -177,7 +179,7 @@
               <div class="journey-body">
                 @if (loc(n.excerptAr, n.excerptEn)) { <p class="journey-excerpt">{{ loc(n.excerptAr, n.excerptEn) }}</p> }
                 <div class="foot">
-                  <span class="read-time">{{ n.readingTimeMinutes }} {{ t('news.minRead') }}</span>
+                  <span class="read-time reads"><svg class="reads-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>{{ fmtReads(n.viewCount) }}</span>
                   <span class="more" tabindex="0" role="button" (click)="openDetail(n)" (keydown.enter)="onCardKey($event, n)">
                     {{ t('news.readStory') }}
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -258,7 +260,7 @@
                 <h4 class="card-title">{{ loc(n.titleAr, n.titleEn) }}</h4>
                 @if (loc(n.excerptAr, n.excerptEn)) { <p class="card-excerpt">{{ loc(n.excerptAr, n.excerptEn) }}</p> }
                 <div class="foot">
-                  <span class="read-time">{{ n.readingTimeMinutes }} {{ t('news.minRead') }}</span>
+                  <span class="read-time reads"><svg class="reads-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>{{ fmtReads(n.viewCount) }}</span>
                   <span class="more">
                     {{ t('news.readMore') }}
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -289,7 +291,7 @@
         <div class="meta">
           @if (loc(v.categoryAr, v.categoryEn)) { <span class="cat">{{ loc(v.categoryAr, v.categoryEn) }}</span> }
           <span class="date">{{ fmtDate(v.publishedAt) }}</span>
-          <span class="date">· {{ v.readingTimeMinutes }} {{ t('news.minRead') }}</span>
+          <span class="date">· {{ fmtReads(v.viewCount) }}</span>
         </div>
         <h2 class="detail-title">{{ loc(v.titleAr, v.titleEn) }}</h2>
         @if (loc(v.authorNameAr, v.authorNameEn)) { <p class="author">{{ t('news.by') }} {{ loc(v.authorNameAr, v.authorNameEn) }}</p> }

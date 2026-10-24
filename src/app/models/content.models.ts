@@ -31,6 +31,8 @@ export interface NewsItem {
   authorNameAr: string;
   authorNameEn: string;
   readingTimeMinutes: number;
+  /** How many visitors opened the full story (from the API; 0 if unknown). */
+  viewCount?: number;
   publishedAt: string;
   status: ContentStatus;
   isFeatured: boolean;

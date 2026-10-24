@@ -50,35 +50,35 @@ export class NewsComponent {
     return [...this.items()].sort((a, b) => (Date.parse(b.publishedAt) || 0) - (Date.parse(a.publishedAt) || 0));
   });
 
-  /** sortedItems() split into fixed, non-overlapping groups of 3 — what the "Next
-   *  Stories" control pages through. Deterministic (no randomization), so paging
-   *  forward never repeats a story until every group has been shown once. */
-  groups = computed(() => {
-    const list = this.sortedItems();
-    const out: NewsItem[][] = [];
-    for (let i = 0; i < list.length; i += GROUP_SIZE) out.push(list.slice(i, i + GROUP_SIZE));
-    return out;
-  });
+  /* The timeline shows a SLIDING WINDOW of up to GROUP_SIZE consecutive
+   * stories (never a page with a lone story at the end). Moving past the
+   * last visible story slides the window by one: the top story leaves, the
+   * next one comes in at the bottom. */
 
-  hasMultipleGroups = computed(() => this.groups().length > 1);
+  /** Index (in publish order) of the story shown in the big panel. */
+  private activeIndex = signal(0);
+  /** Index of the first story visible in the timeline window. */
+  private windowStart = signal(0);
+  private windowSize = computed(() => Math.min(GROUP_SIZE, this.sortedItems().length));
 
-  /** Which fixed group of up to GROUP_SIZE items the left timeline column
-   *  currently shows. "Next Stories" pages to the next group; nothing here
-   *  auto-advances on its own. */
-  groupIndex = signal(0);
+  /** More stories exist than fit in the window → show "Next story". */
+  hasMultipleGroups = computed(() => this.sortedItems().length > GROUP_SIZE);
+
+  /** The stories currently visible in the timeline column. */
   activeGroup = computed(() => {
-    const g = this.groups();
-    if (!g.length) return [] as NewsItem[];
-    return g[Math.min(this.groupIndex(), g.length - 1)];
+    const list = this.sortedItems();
+    const size = this.windowSize();
+    const start = Math.min(this.windowStart(), Math.max(0, list.length - size));
+    return list.slice(start, start + size);
   });
 
-  /** Which entry within the current group is loaded into the big feature
-   *  panel on the right. Reset to the first entry whenever the group changes. */
-  selectedInGroup = signal(0);
+  /** Position of the active story inside the visible window. */
+  selectedInGroup = computed(() => this.activeIndex() - this.windowStart());
+
   activeStory = computed(() => {
-    const g = this.activeGroup();
-    if (!g.length) return null;
-    return g[Math.min(this.selectedInGroup(), g.length - 1)];
+    const list = this.sortedItems();
+    if (!list.length) return null;
+    return list[Math.min(this.activeIndex(), list.length - 1)];
   });
 
   /** 0-or-1 array wrapper keyed by the active story — lets the template
@@ -91,28 +91,37 @@ export class NewsComponent {
 
   /** Click a timeline entry: goes to that story (scrolls to its stage when pinned). */
   selectStory(i: number): void {
-    this.goToStory(this.groupIndex() * GROUP_SIZE + i);
+    this.goToStory(this.windowStart() + i);
   }
 
-  /** "Next Stories": goes to the first story of the next group, wrapping around. */
+  /** "Next story": the top story slides out, the next one slides in at the
+   *  bottom and becomes the selected one. After the last story it starts
+   *  again from the newest. */
   nextGroup(): void {
-    const total = this.groups().length;
-    if (total < 2) return;
-    const g = (this.groupIndex() + 1) % total;
-    this.goToStory(g * GROUP_SIZE);
+    const len = this.sortedItems().length;
+    if (len <= GROUP_SIZE) return;
+    const lastVisible = this.windowStart() + this.windowSize() - 1;
+    this.goToStory(lastVisible + 1 < len ? lastVisible + 1 : 0);
   }
 
-  /** Shows the story at this position in publish order (also pages the
-   *  timeline to the group that contains it). */
+  /** Shows the story at this position in publish order and slides the
+   *  window just enough to keep it visible (one step at a time when moving
+   *  forward/backward through neighbours). */
   private jumpToFlatIndex(flatIdx: number): void {
-    const g = Math.floor(flatIdx / GROUP_SIZE);
-    if (g !== this.groupIndex()) this.groupIndex.set(g);
-    const sel = flatIdx - g * GROUP_SIZE;
-    if (sel !== this.selectedInGroup()) this.selectedInGroup.set(sel);
+    const len = this.sortedItems().length;
+    if (!len) return;
+    const idx = Math.min(Math.max(flatIdx, 0), len - 1);
+    const size = this.windowSize();
+    let start = this.windowStart();
+    if (idx < start) start = idx;
+    else if (idx >= start + size) start = idx - size + 1;
+    start = Math.min(Math.max(start, 0), Math.max(0, len - size));
+    if (start !== this.windowStart()) this.windowStart.set(start);
+    if (idx !== this.activeIndex()) this.activeIndex.set(idx);
   }
 
   private currentFlatIndex(): number {
-    return this.groupIndex() * GROUP_SIZE + this.selectedInGroup();
+    return this.activeIndex();
   }
 
   nextStory(): void {
@@ -518,7 +527,40 @@ export class NewsComponent {
 
   /* ───────── read-only details ───────── */
 
+  /** Counts one read per browser per story (team members logged in don't
+   *  count), then shows the new total everywhere the story appears. */
+  private registerView(item: NewsItem): void {
+    if (this.auth.isLoggedIn() || item.status === 'draft') return;
+    const KEY = 'kp_read_news';
+    let seen: number[] = [];
+    try { seen = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { seen = []; }
+    if (seen.includes(item.id)) return;
+
+    this.api.registerView(item.id).subscribe({
+      next: ({ viewCount }) => {
+        try { localStorage.setItem(KEY, JSON.stringify([...seen, item.id].slice(-300))); } catch { /* storage full/blocked */ }
+        this.items.update(list => list.map(n => (n.id === item.id ? { ...n, viewCount } : n)));
+        const v = this.viewing();
+        if (v?.id === item.id) this.viewing.set({ ...v, viewCount });
+        const d = this.viewDetail();
+        if (d?.id === item.id) this.viewDetail.set({ ...d, viewCount });
+      },
+      error: () => { /* counting is best-effort — never bother the reader */ },
+    });
+  }
+
+  /** "1,234 reads" / "1.2K reads" — short and in the current language. */
+  fmtReads(count: number | undefined | null): string {
+    const n = count ?? 0;
+    const num = new Intl.NumberFormat(this.ts.currentLang() === 'ar' ? 'ar-EG' : 'en-US', {
+      notation: n >= 10000 ? 'compact' : 'standard',
+      maximumFractionDigits: 1,
+    }).format(n);
+    return this.t(n === 1 ? 'news.readOne' : 'news.reads').replace('{n}', num);
+  }
+
   openDetail(item: NewsItem): void {
+    this.registerView(item);
     this.viewing.set(item);
     this.viewDetail.set(null);
     document.body.classList.add('kp-modal-open');

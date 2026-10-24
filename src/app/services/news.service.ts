@@ -18,6 +18,11 @@ export class NewsService {
     return this.http.get<NewsDetail>(`${this.url}/${encodeURIComponent(String(slugOrId))}`);
   }
 
+  /** Public: +1 read for this story. Returns the new total. */
+  registerView(id: number): Observable<{ viewCount: number }> {
+    return this.http.post<{ viewCount: number }>(`${this.url}/${id}/view`, {});
+  }
+
   create(payload: NewsCreatePayload): Observable<NewsDetail> {
     return this.http.post<NewsDetail>(this.url, payload);
   }
