@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { getQdrantClient } from './qdrantClient.js';
+import { getQdrantClient, isQdrantHealthy, markQdrantUnavailable } from './qdrantClient.js';
 import { generateEmbedding, cosineSimilarity } from '../embeddings/embeddingService.js';
 import { config } from '../../config/env.js';
 
@@ -11,10 +11,16 @@ const fallbackIndexPath = path.resolve(__dirname, '../../../knowledge/local_inde
 
 let cachedLocalIndex = null;
 
+const STOP_WORDS = new Set([
+  'the', 'is', 'in', 'at', 'of', 'on', 'and', 'a', 'an', 'to', 'for', 'with', 'by',
+  'what', 'who', 'how', 'why', 'when', 'where', 'are', 'we', 'you', 'it', 'can', 'do',
+  'في', 'من', 'على', 'إلى', 'عن', 'هو', 'هي', 'هل', 'ما', 'ماذا', 'كيف', 'مع', 'أو'
+]);
+
 /**
  * Loads the local fallback index if available.
  */
-function getLocalFallbackIndex() {
+export function getLocalFallbackIndex() {
   if (cachedLocalIndex) return cachedLocalIndex;
   try {
     if (fs.existsSync(fallbackIndexPath)) {
@@ -28,17 +34,39 @@ function getLocalFallbackIndex() {
   return null;
 }
 
+export function _setCachedIndexForTesting(index) {
+  cachedLocalIndex = index;
+}
+
+export function _resetCachedIndexForTesting() {
+  cachedLocalIndex = null;
+}
+
 /**
- * Performs local similarity search using in-memory cosine similarity.
+ * Fast keyword search used only when embedding is unavailable.
  */
-function searchLocalFallback(queryEmbedding, topK = 5, minScore = 0.20) {
+export function searchLocalFallbackByKeywords(query, topK = config.rag.topK) {
   const localIndex = getLocalFallbackIndex();
   if (!localIndex || !Array.isArray(localIndex.chunks) || localIndex.chunks.length === 0) {
     return [];
   }
 
+  const words = (query || '')
+    .toLowerCase()
+    .split(/[\s,?.!؟]+/)
+    .filter((w) => w.length >= 3 && !STOP_WORDS.has(w));
+
+  if (words.length === 0) return [];
+
   const scored = localIndex.chunks.map((chunk) => {
-    const score = queryEmbedding ? cosineSimilarity(queryEmbedding, chunk.vector) : 0;
+    const combined = `${chunk.title || ''} ${chunk.section || ''} ${chunk.text || ''}`.toLowerCase();
+    let matches = 0;
+    for (const w of words) {
+      if (combined.includes(w)) {
+        matches += (chunk.title && chunk.title.toLowerCase().includes(w)) ? 3 : 1;
+      }
+    }
+    const score = matches / (words.length * 2);
     return {
       id: chunk.id,
       score,
@@ -51,94 +79,154 @@ function searchLocalFallback(queryEmbedding, topK = 5, minScore = 0.20) {
     };
   });
 
-  const filtered = scored
-    .filter((item) => item.score >= minScore)
+  return scored
+    .filter((item) => item.score >= 0.25)
     .sort((a, b) => b.score - a.score)
     .slice(0, topK);
+}
 
-  if (filtered.length > 0) {
-    return filtered;
+/**
+ * Performs local similarity search using in-memory cosine similarity.
+ */
+export function searchLocalFallback(
+  queryEmbedding,
+  topK = config.rag.topK,
+  minScore = config.rag.scoreThreshold,
+  queryText = ''
+) {
+  if (queryEmbedding && Array.isArray(queryEmbedding)) {
+    const localIndex = getLocalFallbackIndex();
+    if (!localIndex || !Array.isArray(localIndex.chunks) || localIndex.chunks.length === 0) {
+      return [];
+    }
+
+    return localIndex.chunks
+      .map((chunk) => ({
+        id: chunk.id,
+        score: cosineSimilarity(queryEmbedding, chunk.vector),
+        payload: {
+          text: chunk.text,
+          title: chunk.title,
+          section: chunk.section,
+          source: chunk.source
+        }
+      }))
+      .filter((item) => item.score >= minScore)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, topK);
   }
 
-  // Fallback: If no vector matches above minScore, return top company overview chunks
-  return localIndex.chunks.slice(0, topK).map((chunk) => ({
-    id: chunk.id,
-    score: 0.5,
-    payload: {
-      text: chunk.text,
-      title: chunk.title,
-      section: chunk.section,
-      source: chunk.source
-    }
-  }));
+  // Fallback to keyword search only if embedding was not generated
+  if (queryText) {
+    return searchLocalFallbackByKeywords(queryText, topK);
+  }
+
+  return [];
 }
 
 /**
  * Retrieves the most relevant company knowledge chunks for a query.
- * Queries Qdrant first, falling back gracefully to local vector index.
- *
- * @param {string} query
- * @param {number} limit
- * @returns {Promise<{ contextText: string, chunks: any[], hasRelevantKnowledge: boolean }>}
  */
-export async function retrieveContext(query, limit = 4) {
+export async function retrieveContext(query, limit = config.rag.topK, threshold = config.rag.scoreThreshold) {
+  const startTime = performance.now();
+  let usedFallback = false;
+
   try {
+    if (!query || typeof query !== 'string' || !query.trim()) {
+      return {
+        contextText: '',
+        chunks: [],
+        hasRelevantKnowledge: false,
+        retrievalMs: Math.round(performance.now() - startTime),
+        usedFallback: false
+      };
+    }
+
     let queryEmbedding = null;
     try {
-      queryEmbedding = await generateEmbedding(query);
+      const embPromise = generateEmbedding(query);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Embedding generation timeout')), 800)
+      );
+      queryEmbedding = await Promise.race([embPromise, timeoutPromise]);
     } catch (embErr) {
-      console.warn('[RAG] Local embedding generation failed, using local fallback:', embErr.message);
+      console.warn('[RAG] Embedding timed out or failed, falling back to keyword search:', embErr.message);
     }
 
     let matchedResults = [];
-    let usedFallback = false;
 
-    // 1. Try Qdrant retrieval
-    if (queryEmbedding) {
+    // 1. Try Qdrant retrieval if healthy and embedding available
+    if (queryEmbedding && (await isQdrantHealthy())) {
       try {
         const client = getQdrantClient();
-        const response = await client.query(config.qdrant.collection, {
+        const queryPromise = client.query(config.qdrant.collection, {
           query: queryEmbedding,
           limit,
           with_payload: true,
-          score_threshold: 0.20
+          score_threshold: threshold
         });
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Qdrant query timeout')), 800)
+        );
 
+        const response = await Promise.race([queryPromise, timeoutPromise]);
         const points = response?.points || [];
         if (Array.isArray(points) && points.length > 0) {
           matchedResults = points;
         }
       } catch (qdrantErr) {
-        console.warn('[RAG] Qdrant search unavailable, using local fallback index:', qdrantErr.message);
+        markQdrantUnavailable();
         usedFallback = true;
       }
     }
 
-    // 2. If Qdrant had no results or failed, try local fallback
+    // 2. If Qdrant had no results or failed, use local index
     if (matchedResults.length === 0) {
-      matchedResults = searchLocalFallback(queryEmbedding, limit, 0.20);
+      matchedResults = searchLocalFallback(queryEmbedding, limit, threshold, query);
       if (matchedResults.length > 0) {
         usedFallback = true;
       }
     }
+
+    const retrievalMs = Math.round(performance.now() - startTime);
 
     if (matchedResults.length === 0) {
       return {
         contextText: '',
         chunks: [],
         hasRelevantKnowledge: false,
+        retrievalMs,
         usedFallback
       };
     }
 
     // Deduplicate and format context
-    const chunks = matchedResults.map((r) => ({
-      score: r.score,
-      title: r.payload?.title || 'Knowledge',
-      section: r.payload?.section || '',
-      text: r.payload?.text || '',
-      source: r.payload?.source || ''
-    }));
+    const seenTexts = new Set();
+    const chunks = [];
+
+    for (const r of matchedResults) {
+      const text = r.payload?.text || '';
+      if (!text || seenTexts.has(text)) continue;
+      seenTexts.add(text);
+
+      chunks.push({
+        score: r.score,
+        title: r.payload?.title || 'Knowledge',
+        section: r.payload?.section || '',
+        text,
+        source: r.payload?.source || ''
+      });
+    }
+
+    if (chunks.length === 0) {
+      return {
+        contextText: '',
+        chunks: [],
+        hasRelevantKnowledge: false,
+        retrievalMs,
+        usedFallback
+      };
+    }
 
     const contextText = chunks
       .map((c, i) => `--- [Knowledge Chunk ${i + 1}: ${c.title}${c.section ? ' - ' + c.section : ''}] ---\n${c.text}`)
@@ -148,6 +236,7 @@ export async function retrieveContext(query, limit = 4) {
       contextText,
       chunks,
       hasRelevantKnowledge: true,
+      retrievalMs,
       usedFallback
     };
   } catch (err) {
@@ -156,6 +245,8 @@ export async function retrieveContext(query, limit = 4) {
       contextText: '',
       chunks: [],
       hasRelevantKnowledge: false,
+      retrievalMs: Math.round(performance.now() - startTime),
+      usedFallback,
       error: err.message
     };
   }

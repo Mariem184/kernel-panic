@@ -10,6 +10,7 @@ export interface ChatMessagePayload {
 export interface ChatResponse {
   answer: string;
   sources?: string[];
+  cannotAnswer?: boolean;
   error?: string;
 }
 

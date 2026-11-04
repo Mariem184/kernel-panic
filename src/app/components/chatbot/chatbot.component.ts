@@ -116,16 +116,16 @@ export class ChatbotComponent {
     const text = this.userInput.trim();
     if (!text || this.isTyping) return;
 
-    // 1. Add user message
+    // 1. Prepare conversation history for backend context (prior messages)
+    const history: ChatMessagePayload[] = this.messages
+      .slice(-6)
+      .map((m) => ({ sender: m.sender, text: m.text }));
+
+    // 2. Add user message to UI
     this.addMessage('user', text);
     this.userInput = '';
     this.isTyping = true;
     this.cdr.markForCheck();
-
-    // 2. Prepare conversation history for backend context
-    const history: ChatMessagePayload[] = this.messages
-      .slice(-6)
-      .map((m) => ({ sender: m.sender, text: m.text }));
 
     const currentLang = this.ts.currentLang();
 
@@ -135,16 +135,18 @@ export class ChatbotComponent {
         this.isTyping = false;
         const answer = res.answer || '';
 
-        // Check if contact info or WhatsApp is mentioned to provide a direct CTA button
+        // البوكس الخاص بالواتساب يظهر فقط إذا لم تتوفر معلومة أو عجز المساعد عن الرد
         let actionLink: string | undefined;
         let actionText: string | undefined;
 
-        if (answer.includes('01507316744') || answer.includes('واتساب') || answer.includes('WhatsApp')) {
+        const isUnanswered = res.cannotAnswer || this.isUnableToAnswer(answer);
+
+        if (isUnanswered) {
           actionLink = 'https://wa.me/201507316744';
-          actionText = this.ts.currentLang() === 'ar' ? 'تواصل عبر واتساب (01507316744) 💬' : 'Chat on WhatsApp (01507316744) 💬';
-        } else if (answer.includes('kernelpanic177@gmail.com') || answer.includes('بريد') || answer.includes('email')) {
-          actionLink = 'mailto:kernelpanic177@gmail.com';
-          actionText = this.ts.currentLang() === 'ar' ? 'راسلنا عبر البريد الإلكتروني ✉️' : 'Send Email ✉️';
+          actionText =
+            this.ts.currentLang() === 'ar'
+              ? 'تواصل مع الفريق عبر واتساب (01507316744) 💬'
+              : 'Chat on WhatsApp (01507316744) 💬';
         }
 
         this.addMessage('bot', answer, actionLink, actionText);
@@ -156,14 +158,15 @@ export class ChatbotComponent {
 
         const isAr = this.ts.currentLang() === 'ar' || /[\u0600-\u06FF]/.test(text);
         const errorText = isAr
-          ? 'عذرًا، نواجه صعوبة في معالجة طلبك حاليًا. يرجى المحاولة مرة أخرى أو التواصل معنا مباشرة عبر واتساب: 01507316744'
-          : "Sorry, I'm having trouble processing your request right now. Please try again or reach out to our team directly on WhatsApp: 01507316744";
+          ? 'عذرًا، نواجه صعوبة في معالجة طلبك حاليًا. يرجى التواصل مع فريق العمل مباشرة لمساعدتك.'
+          : "Sorry, I'm having trouble processing your request right now. Please reach out to our team directly.";
 
+        // في حالة الخطأ أو العجز عن الرد يظهر بوكس الواتساب
         this.addMessage(
           'bot',
           errorText,
           'https://wa.me/201507316744',
-          isAr ? 'تواصل مباشرة عبر واتساب 💬' : 'Chat on WhatsApp 💬',
+          isAr ? 'تواصل مع الفريق عبر واتساب (01507316744) 💬' : 'Chat on WhatsApp (01507316744) 💬',
           true
         );
         this.cdr.markForCheck();
@@ -175,6 +178,42 @@ export class ChatbotComponent {
     if (this.isTyping) return;
     this.userInput = chip.query;
     this.sendMessage();
+  }
+
+  /**
+   * يفحص ما إذا كان رد المساعد يعبر عن عدم توفر المعلومة أو العجز عن الإجابة
+   */
+  private isUnableToAnswer(answer: string): boolean {
+    if (!answer) return true;
+    const lower = answer.toLowerCase();
+
+    const arabicPatterns = [
+      /مش (عندي|متاحة|متوفرة|موجودة)/,
+      /غير (متاحة|متوفرة|موجودة)/,
+      /لا (أملك|أمتلك|نملك|تتوفر|يتوفر|يوجد|أستطيع|يمكنني|أعرف)/,
+      /ليس (لدي|لدينا|عندي)/,
+      /ما عندي/,
+      /خارج (نطاق|معرفتي|اختصاص)/,
+      /عجزت? عن/,
+      /غير قادر/,
+      /صعوبة في معالجة/,
+      /نواجه صعوبة/
+    ];
+
+    const englishPatterns = [
+      /not available/,
+      /don't have|do not have|does not have/,
+      /no information/,
+      /unable to (answer|help|provide|process)/,
+      /cannot (answer|help|provide|assist)/,
+      /outside (the scope|my knowledge|our knowledge)/,
+      /trouble processing/
+    ];
+
+    return (
+      arabicPatterns.some((pattern) => pattern.test(answer)) ||
+      englishPatterns.some((pattern) => pattern.test(lower))
+    );
   }
 
   private addMessage(
